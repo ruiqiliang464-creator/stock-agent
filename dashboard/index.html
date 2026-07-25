@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Agent 每日市场情报</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card-hover: #334155;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #3b82f6;
+      --accent-glow: #60a5fa;
+      --up: #ef4444;
+      --down: #22c55e;
+      --flat: #94a3b8;
+      --high-conf: #22c55e;
+      --mid-conf: #f59e0b;
+      --low-conf: #ef4444;
+      --border: #334155;
+      --radius: 12px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .header .date-info {
+      font-size: 14px;
+      color: #dbeafe;
+    }
+    .header .refresh-btn {
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .header .refresh-btn:hover { background: rgba(255,255,255,0.35); }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 10px 18px;
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .tab:hover { background: var(--card-hover); color: var(--text); }
+    .tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ── Market Overview Cards ── */
+    .market-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .overview-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      border: 1px solid var(--border);
+      transition: transform 0.2s;
+    }
+    .overview-card:hover { transform: translateY(-2px); }
+    .overview-card .market-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .overview-card .avg-change {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .overview-card .up-down {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── Table ── */
+    .data-section {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .data-section h3 {
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 12px;
+      color: var(--text-dim);
+      background: #162032;
+      font-weight: 500;
+    }
+    td {
+      padding: 10px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid #1a2744;
+    }
+    tr:hover td { background: rgba(59,130,246,0.05); }
+    .price { font-weight: 500; }
+    .change-up { color: var(--up); font-weight: 500; }
+    .change-down { color: var(--down); font-weight: 500; }
+    .change-flat { color: var(--flat); }
+
+    /* ── Analysis Cards ── */
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 640px) { .analysis-grid { grid-template-columns: 1fr; } }
+
+    .analysis-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .analysis-card.risk {
+      border-color: #7f1d1d;
+      background: linear-gradient(180deg, #1c1118 0%, var(--card) 30%);
+    }
+    .analysis-card.opportunity {
+      border-color: #14532d;
+      background: linear-gradient(180deg, #0f1f15 0%, var(--card) 30%);
+    }
+    .analysis-card h3 {
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+    .analysis-card.risk h3 { color: var(--up); }
+    .analysis-card.opportunity h3 { color: var(--down); }
+
+    .analysis-item {
+      padding: 12px 18px;
+      border-bottom: 1px solid #1a2744;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .confidence-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .confidence-high { color: var(--high-conf); background: rgba(34,197,94,0.15); }
+    .confidence-mid { color: var(--mid-conf); background: rgba(245,158,11,0.15); }
+    .confidence-low { color: var(--low-conf); background: rgba(239,68,68,0.15); }
+    .analysis-text { font-size: 13px; color: var(--text); }
+
+    /* ── Trend Section ── */
+    .trend-section {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .trend-section h3 {
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    /* ── Loading ── */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+      color: var(--text-muted);
+    }
+    .loading .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Error ── */
+    .error {
+      background: #1c1118;
+      border: 1px solid #7f1d1d;
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      color: #fca5a5;
+      margin-bottom: 20px;
+    }
+
+    /* ── Confidence Legend ── */
+    .legend {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .legend strong { color: var(--text); }
+
+    /* ── Subscribe hint ── */
+    .subscribe-hint {
+      background: linear-gradient(135deg, #1e3a5f, #1e293b);
+      border-radius: var(--radius);
+      border: 1px solid #2563eb;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .subscribe-hint .icon { font-size: 24px; }
+    .subscribe-hint .text { font-size: 14px; color: var(--text); }
+    .subscribe-hint .text small { color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>Stock Agent 每日市场情报</h1>
+      <div class="date-info" id="dateInfo">加载中...</div>
+    </div>
+    <button class="refresh-btn" onclick="loadData()">刷新数据</button>
+  </div>
+
+  <!-- Subscribe Hint -->
+  <div class="subscribe-hint">
+    <div class="icon">📧</div>
+    <div class="text">
+      每日 6:00 自动推送市场报告到邮箱
+      <br><small>需要订阅？请在 GitHub 仓库的 data/subscribers.json 中添加您的邮箱</small>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loadingIndicator">
+    <div class="spinner"></div>
+    正在加载最新数据...
+  </div>
+
+  <!-- Error -->
+  <div class="error" id="errorBlock" style="display:none"></div>
+
+  <!-- Market Overview Cards -->
+  <div class="market-overview" id="overviewCards" style="display:none"></div>
+
+  <!-- Tabs -->
+  <div class="tabs" id="marketTabs" style="display:none">
+    <div class="tab active" data-market="all" onclick="switchTab('all')">全部</div>
+    <div class="tab" data-market="us" onclick="switchTab('us')">🇺🇸 美股</div>
+    <div class="tab" data-market="cn" onclick="switchTab('cn')">🇨🇳 A股</div>
+    <div class="tab" data-market="crypto" onclick="switchTab('crypto')">🪙 数字货币</div>
+    <div class="tab" data-market="commodity" onclick="switchTab('commodity')">📊 大宗商品</div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="data-section" id="dataTable" style="display:none">
+    <h3 id="tableTitle">行情数据</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>名称</th>
+          <th>代码</th>
+          <th>最新价</th>
+          <th>涨跌幅</th>
+          <th>最高</th>
+          <th>最低</th>
+          <th>成交量</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Trend Section -->
+  <div class="trend-section" id="trendSection" style="display:none">
+    <h3>📈 趋势分析</h3>
+    <div id="trendContent"></div>
+  </div>
+
+  <!-- Analysis Grid -->
+  <div class="analysis-grid" id="analysisGrid" style="display:none">
+    <div class="analysis-card opportunity" id="oppCard">
+      <h3>💡 机会提示</h3>
+      <div id="oppContent"></div>
+    </div>
+    <div class="analysis-card risk" id="riskCard">
+      <h3>⚠️ 风险预警</h3>
+      <div id="riskContent"></div>
+    </div>
+  </div>
+
+  <!-- Confidence Legend -->
+  <div class="legend" id="legendBlock" style="display:none">
+    <strong>置信度说明</strong>：
+    <span class="confidence-tag confidence-high">高</span> 多信号确认或异常波动显著；
+    <span class="confidence-tag confidence-mid">中</span> 单信号较强支撑；
+    <span class="confidence-tag confidence-low">低</span> 信号较弱仅供参考
+    <br><small style="color:var(--text-dim)">涨红跌绿 — 采用中国市场惯例</small>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Stock Agent 每日推送 | 数据仅供参考，不构成投资建议 | Powered by GitHub Actions
+  </div>
+</div>
+
+<script>
+  // ── Configuration ──
+  // 修改此 URL 为你的 GitHub 仓库地址（公开仓库）
+  const DATA_SOURCE = 'https://raw.githubusercontent.com/__USERNAME__/stock-agent/main/data/latest.json';
+  // 如果 CloudStudio 部署，可改为本地路径: './data/latest.json'
+
+  const MARKET_NAMES = {
+    us: '🇺🇸 美股',
+    cn: '🇨🇳 A股',
+    crypto: '🪙 数字货币',
+    commodity: '📊 大宗商品'
+  };
+
+  let currentData = null;
+  let currentTab = 'all';
+
+  // ── Load Data ──
+  async function loadData() {
+    const loading = document.getElementById('loadingIndicator');
+    const error = document.getElementById('errorBlock');
+    loading.style.display = 'flex';
+    error.style.display = 'none';
+
+    // 隐藏所有内容区域
+    document.querySelectorAll('#overviewCards,#marketTabs,#dataTable,#trendSection,#analysisGrid,#legendBlock').forEach(el => el.style.display = 'none');
+
+    try {
+      // 尝试多个数据源
+      let response;
+      const sources = [
+        DATA_SOURCE,
+        './data/latest.json',
+        '../data/latest.json'
+      ];
+
+      for (const src of sources) {
+        try {
+          response = await fetch(src, { cache: 'no-store' });
+          if (response.ok) break;
+        } catch (e) { continue; }
+      }
+
+      if (!response || !response.ok) {
+        throw new Error('无法从任何数据源获取数据');
+      }
+
+      currentData = await response.json();
+      renderData();
+    } catch (e) {
+      error.textContent = '数据加载失败: ' + e.message;
+      error.style.display = 'block';
+    } finally {
+      loading.style.display = 'none';
+    }
+  }
+
+  // ── Render ──
+  function renderData() {
+    if (!currentData) return;
+
+    // Header date
+    document.getElementById('dateInfo').textContent =
+      currentData.date + ' · 更新于 ' + new Date(currentData.updatedAt).toLocaleString('zh-CN');
+
+    // Overview cards
+    renderOverview();
+
+    // Tabs
+    document.getElementById('marketTabs').style.display = 'flex';
+
+    // Table
+    renderTable();
+
+    // Analysis
+    renderTrends();
+    renderOpportunities();
+    renderRisks();
+
+    // Show all
+    document.querySelectorAll('#overviewCards,#dataTable,#trendSection,#analysisGrid,#legendBlock').forEach(el => el.style.display = '');
+  }
+
+  function renderOverview() {
+    const container = document.getElementById('overviewCards');
+    const summary = currentData.analysis?.summary || {};
+    let html = '';
+
+    for (const [market, info] of Object.entries(summary)) {
+      const avgChange = info.avgChange;
+      const colorClass = avgChange > 0 ? 'change-up' : avgChange < 0 ? 'change-down' : 'change-flat';
+      const sign = avgChange > 0 ? '+' : '';
+      html += `
+        <div class="overview-card">
+          <div class="market-label">${MARKET_NAMES[market] || market}</div>
+          <div class="avg-change ${colorClass}">${sign}${avgChange.toFixed(2)}%</div>
+          <div class="up-down">涨 ${info.upCount} / 跌 ${info.downCount} / 平 ${info.flatCount}</div>
+        </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    const title = document.getElementById('tableTitle');
+    const markets = currentData.markets || {};
+
+    title.textContent = currentTab === 'all' ? '全市场行情' : (MARKET_NAMES[currentTab] || currentTab) + '行情';
+
+    let items = [];
+    if (currentTab === 'all') {
+      for (const [mkt, list] of Object.entries(markets)) {
+        items.push(...list.map(d => ({ ...d, market: mkt })));
+      }
+    } else {
+      items = markets[currentTab] || [];
+    }
+
+    // Sort by change_pct (descending)
+    items.sort((a, b) => b.change_pct - a.change_pct);
+
+    let rows = '';
+    for (const item of items) {
+      const pct = item.change_pct;
+      const colorClass = pct > 0 ? 'change-up' : pct < 0 ? 'change-down' : 'change-flat';
+      const arrow = pct > 0 ? '↑' : pct < 0 ? '↓' : '—';
+      const sign = pct > 0 ? '+' : '';
+      const vol = item.volume ? formatVolume(item.volume) : '—';
+
+      rows += `<tr>
+        <td>${item.name || item.symbol}</td>
+        <td style="color:var(--text-dim)">${item.symbol}</td>
+        <td class="price">${item.price?.toFixed(2) || '—'}</td>
+        <td class="${colorClass}">${arrow} ${sign}${pct?.toFixed(2) || '0'}%</td>
+        <td style="color:var(--text-dim)">${item.high?.toFixed(2) || '—'}</td>
+        <td style="color:var(--text-dim)">${item.low?.toFixed(2) || '—'}</td>
+        <td style="color:var(--text-dim)">${vol}</td>
+      </tr>`;
+    }
+
+    tbody.innerHTML = rows || '<tr><td colspan="7" style="text-align:center;color:var(--text-dim)">暂无数据</td></tr>';
+  }
+
+  function renderTrends() {
+    const container = document.getElementById('trendContent');
+    const trends = (currentData.analysis?.trends || []).filter(t => t.type === 'market_trend');
+
+    if (trends.length === 0) {
+      container.innerHTML = '<div style="padding:16px;color:var(--text-dim)">暂无趋势信号</div>';
+      return;
+    }
+
+    let html = '';
+    for (const t of trends) {
+      const confClass = t.confidence === '高' ? 'confidence-high' : t.confidence === '中' ? 'confidence-mid' : 'confidence-low';
+      html += `<div class="analysis-item">
+        <span class="confidence-tag ${confClass}">置信度:${t.confidence}</span>
+        <span class="analysis-text">${t.description}</span>
+      </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  function renderOpportunities() {
+    const container = document.getElementById('oppContent');
+    const opps = currentData.analysis?.opportunities || [];
+
+    if (opps.length === 0) {
+      container.innerHTML = '<div style="padding:16px;color:var(--text-dim)">暂无机会信号</div>';
+      return;
+    }
+
+    let html = '';
+    for (const o of opps.slice(0, 8)) {
+      const confClass = o.confidence === '高' ? 'confidence-high' : o.confidence === '中' ? 'confidence-mid' : 'confidence-low';
+      html += `<div class="analysis-item">
+        <span class="confidence-tag ${confClass}">置信度:${o.confidence}</span>
+        <span class="analysis-text">${o.description}</span>
+      </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  function renderRisks() {
+    const container = document.getElementById('riskContent');
+    const risks = currentData.analysis?.risks || [];
+
+    if (risks.length === 0) {
+      container.innerHTML = '<div style="padding:16px;color:var(--text-dim)">暂无风险信号 🎉</div>';
+      return;
+    }
+
+    let html = '';
+    for (const r of risks.slice(0, 8)) {
+      const confClass = r.confidence === '高' ? 'confidence-high' : r.confidence === '中' ? 'confidence-mid' : 'confidence-low';
+      html += `<div class="analysis-item">
+        <span class="confidence-tag ${confClass}">置信度:${r.confidence}</span>
+        <span class="analysis-text">${r.description}</span>
+      </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  function switchTab(market) {
+    currentTab = market;
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.market === market);
+    });
+    renderTable();
+  }
+
+  function formatVolume(v) {
+    if (v >= 1e9) return (v / 1e9).toFixed(1) + 'B';
+    if (v >= 1e6) return (v / 1e6).toFixed(1) + 'M';
+    if (v >= 1e3) return (v / 1e3).toFixed(1) + 'K';
+    return v.toFixed(0);
+  }
+
+  // ── Init ──
+  loadData();
+  // 每5分钟自动刷新
+  setInterval(loadData, 5 * 60 * 1000);
+</script>
+
+</body>
+</html>

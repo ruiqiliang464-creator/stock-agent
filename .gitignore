@@ -1,0 +1,4 @@
+node_modules/
+data/stock_agent.db
+*.log
+.env

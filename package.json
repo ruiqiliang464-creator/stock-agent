@@ -1,0 +1,26 @@
+{
+  "name": "stock-agent",
+  "version": "1.0.0",
+  "description": "股票信息聚合Agent - 自动化采集、分析、报告推送系统",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "collect": "node backend/scheduler/collect.js",
+    "process": "node backend/scheduler/process.js",
+    "analyze": "node backend/scheduler/analyze.js",
+    "report": "node backend/scheduler/report.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.7.0",
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
+    "sql.js": "^1.14.1"
+  }
+}

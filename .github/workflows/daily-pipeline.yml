@@ -1,0 +1,42 @@
+name: Daily Market Pipeline
+
+on:
+  # 每天 22:00 UTC = 6:00 AM CST (北京时间)
+  schedule:
+    - cron: '0 22 * * *'
+  # 允许手动触发（用于测试）
+  workflow_dispatch:
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Run full pipeline (collect → process → analyze → report)
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_HOST: smtp.qq.com
+          SMTP_PORT: 465
+        run: node backend/runner-github.js all
+
+      - name: Commit updated data files
+        run: |
+          git config user.name "Stock Agent Bot"
+          git config user.email "bot@stock-agent.dev"
+          git add data/latest.json data/raw_*.json data/processed_*.json data/analysis_*.json || true
+          git diff --staged --quiet || git commit -m "📊 Update market data $(date -u +%Y-%m-%d)"
+          git push
