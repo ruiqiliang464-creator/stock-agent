@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Agent - 每日市场情报</title>
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.4/dist/tailwind.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    body { font-family: 'Inter', -apple-system, sans-serif; }
+    .fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-active { background: #2563eb; color: white; }
+    .tab-inactive { background: #f1f5f9; color: #666; }
+    .market-card { transition: all 0.2s ease; }
+    .market-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .up { color: #dc2626; }
+    .down { color: #16a34a; }
+    .flat { color: #6b7280; }
+    .confidence-high { background: #dcfce7; color: #22c55e; }
+    .confidence-mid { background: #fef3c7; color: #f59e0b; }
+    .confidence-low { background: #fee2e2; color: #ef4444; }
+    .loader { border: 3px solid #e5e7eb; border-top: 3px solid #2563eb; border-radius: 50%; width: 24px; height: 24px; animation: spin 0.8s linear infinite; display: inline-block; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .toast { position: fixed; top: 20px; right: 20px; z-index: 1000; padding: 12px 20px; border-radius: 8px; font-size: 14px; transition: all 0.3s; }
+    .toast-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .toast-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .nav-link { cursor: pointer; padding: 8px 16px; border-radius: 8px; font-size: 14px; transition: all 0.2s; }
+    .nav-link:hover { background: #f1f5f9; }
+    .nav-link.active { background: #2563eb; color: white; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- 导航栏 -->
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-semibold text-sm">SA</div>
+        <span class="font-semibold text-gray-800">Stock Agent</span>
+      </div>
+      <div class="flex items-center gap-2" id="navLinks">
+        <div class="nav-link active" onclick="showPage('dashboard')">数据看板</div>
+        <div class="nav-link" onclick="showPage('reports')">历史报告</div>
+        <div class="nav-link" onclick="showPage('settings')">设置</div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-sm text-gray-500" id="userDisplay"></span>
+        <button onclick="logout()" class="text-sm text-red-500 hover:text-red-600 hidden" id="logoutBtn">退出</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 登录/注册页面 -->
+  <div id="authPage" class="max-w-md mx-auto mt-20 p-8 bg-white rounded-2xl shadow-sm border border-gray-100 fade-in">
+    <div class="text-center mb-8">
+      <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">SA</div>
+      <h1 class="text-xl font-semibold text-gray-800">Stock Agent</h1>
+      <p class="text-sm text-gray-500 mt-2">每日市场情报，准时推送至你的邮箱</p>
+    </div>
+
+    <!-- 登录表单 -->
+    <div id="loginForm">
+      <div class="space-y-4">
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">用户名 / 邮箱</label>
+          <input type="text" id="loginUsername" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none text-sm" placeholder="输入用户名或邮箱">
+        </div>
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">密码</label>
+          <input type="password" id="loginPassword" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none text-sm" placeholder="输入密码">
+        </div>
+        <button onclick="doLogin()" class="w-full py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition text-sm">登录</button>
+      </div>
+      <p class="text-center text-sm text-gray-500 mt-4">没有账号？<span onclick="toggleAuth('register')" class="text-blue-600 cursor-pointer">注册一个</span></p>
+    </div>
+
+    <!-- 注册表单 -->
+    <div id="registerForm" class="hidden">
+      <div class="space-y-4">
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">用户名</label>
+          <input type="text" id="regUsername" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none text-sm" placeholder="输入用户名">
+        </div>
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">邮箱（接收推送报告）</label>
+          <input type="email" id="regEmail" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none text-sm" placeholder="your_email@qq.com">
+        </div>
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">密码（至少6位）</label>
+          <input type="password" id="regPassword" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none text-sm" placeholder="设置密码">
+        </div>
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">推送邮箱（可选，默认使用注册邮箱）</label>
+          <input type="email" id="regPushEmail" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none text-sm" placeholder="可指定其他邮箱接收报告">
+        </div>
+        <button onclick="doRegister()" class="w-full py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition text-sm">注册</button>
+      </div>
+      <p class="text-center text-sm text-gray-500 mt-4">已有账号？<span onclick="toggleAuth('login')" class="text-blue-600 cursor-pointer">登录</span></p>
+    </div>
+  </div>
+
+  <!-- 数据看板 -->
+  <div id="dashboardPage" class="max-w-7xl mx-auto px-4 py-6 hidden fade-in">
+    <!-- 市场Tab切换 -->
+    <div class="flex gap-2 mb-6" id="marketTabs">
+      <button class="px-4 py-2 rounded-lg font-medium text-sm tab-active" onclick="switchMarket('overview')">全部概览</button>
+      <button class="px-4 py-2 rounded-lg font-medium text-sm tab-inactive" onclick="switchMarket('us')">🇺🇸 美股</button>
+      <button class="px-4 py-2 rounded-lg font-medium text-sm tab-inactive" onclick="switchMarket('cn')">🇨🇳 A股</button>
+      <button class="px-4 py-2 rounded-lg font-medium text-sm tab-inactive" onclick="switchMarket('crypto')">🪙 数字货币</button>
+      <button class="px-4 py-2 rounded-lg font-medium text-sm tab-inactive" onclick="switchMarket('commodity')">📊 大宗商品</button>
+    </div>
+
+    <!-- 数据内容区域 -->
+    <div id="dashboardContent">
+      <div class="text-center py-20 text-gray-400">
+        <div class="loader mx-auto mb-4"></div>
+        <p>正在加载数据...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 历史报告 -->
+  <div id="reportsPage" class="max-w-4xl mx-auto px-4 py-6 hidden fade-in">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">历史报告</h2>
+    <div id="reportsList" class="space-y-3">
+      <div class="text-center py-10 text-gray-400">加载中...</div>
+    </div>
+  </div>
+
+  <!-- 设置页面 -->
+  <div id="settingsPage" class="max-w-lg mx-auto px-4 py-6 hidden fade-in">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">推送设置</h2>
+    <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+      <div>
+        <label class="text-sm text-gray-600 block mb-1">推送邮箱</label>
+        <input type="email" id="settingPushEmail" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-400 outline-none text-sm">
+      </div>
+      <div>
+        <label class="text-sm text-gray-600 block mb-1">推送时间</label>
+        <select id="settingPushTime" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-400 outline-none text-sm">
+          <option value="08:30">08:30 (推荐)</option>
+          <option value="09:00">09:00</option>
+          <option value="09:30">09:30</option>
+          <option value="10:00">10:00</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-3">
+        <input type="checkbox" id="settingPushEnabled" checked class="w-4 h-4 rounded border-gray-300 text-blue-600">
+        <label class="text-sm text-gray-600">开启每日推送</label>
+      </div>
+      <button onclick="saveSettings()" class="w-full py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition text-sm">保存设置</button>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 p-6 mt-4">
+      <h3 class="text-sm font-semibold text-gray-700 mb-3">关注列表（自定义）</h3>
+      <p class="text-xs text-gray-500 mb-3">输入代码，逗号分隔（如：AAPL,MSFT,NVDA）</p>
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs text-gray-500 block mb-1">美股关注</label>
+          <input type="text" id="settingWatchUS" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs" placeholder="AAPL,MSFT,NVDA">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500 block mb-1">A股关注</label>
+          <input type="text" id="settingWatchCN" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs" placeholder="600519,000858,601318">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500 block mb-1">数字货币关注</label>
+          <input type="text" id="settingWatchCrypto" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs" placeholder="bitcoin,ethereum,solana">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast通知 -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script>
+    // ===== 全局状态 =====
+    let token = localStorage.getItem('stock_agent_token');
+    let currentUser = null;
+    let currentMarket = 'overview';
+    let currentData = {};
+
+    // ===== 页面路由 =====
+    function showPage(page) {
+      document.getElementById('authPage').classList.add('hidden');
+      document.getElementById('dashboardPage').classList.add('hidden');
+      document.getElementById('reportsPage').classList.add('hidden');
+      document.getElementById('settingsPage').classList.add('hidden');
+
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+      if (page === 'dashboard') {
+        document.getElementById('dashboardPage').classList.remove('hidden');
+        document.querySelectorAll('.nav-link')[0].classList.add('active');
+        loadDashboard();
+      } else if (page === 'reports') {
+        document.getElementById('reportsPage').classList.remove('hidden');
+        document.querySelectorAll('.nav-link')[1].classList.add('active');
+        loadReports();
+      } else if (page === 'settings') {
+        document.getElementById('settingsPage').classList.remove('hidden');
+        document.querySelectorAll('.nav-link')[2].classList.add('active');
+        loadSettings();
+      }
+    }
+
+    function checkAuth() {
+      if (token) {
+        document.getElementById('authPage').classList.add('hidden');
+        document.getElementById('logoutBtn').classList.remove('hidden');
+        fetchUserInfo();
+        showPage('dashboard');
+      } else {
+        document.getElementById('authPage').classList.remove('hidden');
+        document.getElementById('dashboardPage').classList.add('hidden');
+        document.getElementById('reportsPage').classList.add('hidden');
+        document.getElementById('settingsPage').classList.add('hidden');
+        document.getElementById('logoutBtn').classList.add('hidden');
+        document.getElementById('userDisplay').textContent = '';
+      }
+    }
+
+    // ===== API调用 =====
+    async function api(method, url, body = null) {
+      const opts = {
+        method,
+        headers: { 'Content-Type': 'application/json' }
+      };
+      if (token) opts.headers['Authorization'] = `Bearer ${token}`;
+      if (body) opts.body = JSON.stringify(body);
+
+      const resp = await fetch(`/api${url}`, opts);
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || '请求失败');
+      return data;
+    }
+
+    // ===== 认证 =====
+    function toggleAuth(mode) {
+      if (mode === 'register') {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.remove('hidden');
+      } else {
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+      }
+    }
+
+    async function doLogin() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      if (!username || !password) return showToast('请填写用户名和密码', 'error');
+
+      try {
+        const data = await api('POST', '/auth/login', { username, password });
+        token = data.token;
+        currentUser = data.user;
+        localStorage.setItem('stock_agent_token', token);
+        showToast('登录成功', 'success');
+        checkAuth();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function doRegister() {
+      const username = document.getElementById('regUsername').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const pushEmail = document.getElementById('regPushEmail').value.trim();
+
+      if (!username || !email || !password) return showToast('请填写完整信息', 'error');
+      if (password.length < 6) return showToast('密码至少6位', 'error');
+
+      try {
+        const data = await api('POST', '/auth/register', { username, email, password, pushEmail });
+        token = data.token;
+        currentUser = data.user;
+        localStorage.setItem('stock_agent_token', token);
+        showToast('注册成功', 'success');
+        checkAuth();
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    function logout() {
+      token = null;
+      currentUser = null;
+      localStorage.removeItem('stock_agent_token');
+      checkAuth();
+      showToast('已退出登录', 'success');
+    }
+
+    async function fetchUserInfo() {
+      try {
+        const data = await api('GET', '/auth/me');
+        currentUser = data.user;
+        document.getElementById('userDisplay').textContent = currentUser.username;
+      } catch {
+        logout();
+      }
+    }
+
+    // ===== 数据看板 =====
+    async function loadDashboard() {
+      const container = document.getElementById('dashboardContent');
+      container.innerHTML = '<div class="text-center py-20 text-gray-400"><div class="loader mx-auto mb-4"></div><p>正在加载数据...</p></div>';
+
+      try {
+        if (currentMarket === 'overview') {
+          const data = await api('GET', '/data/overview');
+          currentData = data.overview;
+          renderOverview(currentData, data.date);
+        } else {
+          const data = await api('GET', `/data/market/${currentMarket}`);
+          currentData = data.data;
+          renderMarketDetail(currentMarket, currentData, data.date);
+        }
+      } catch (e) {
+        container.innerHTML = `<div class="text-center py-20 text-red-400"><p>数据加载失败: ${e.message}</p></div>`;
+      }
+    }
+
+    function switchMarket(market) {
+      currentMarket = market;
+      document.querySelectorAll('#marketTabs button').forEach(btn => {
+        btn.className = btn.className.replace('tab-active', 'tab-inactive');
+      });
+      const idx = ['overview', 'us', 'cn', 'crypto', 'commodity'].indexOf(market);
+      document.querySelectorAll('#marketTabs button')[idx].className =
+        document.querySelectorAll('#marketTabs button')[idx].className.replace('tab-inactive', 'tab-active');
+      loadDashboard();
+    }
+
+    const MARKET_NAMES = { us: '美股', cn: 'A股', crypto: '数字货币', commodity: '大宗商品' };
+    const MARKET_ICONS = { us: '🇺🇸', cn: '🇨🇳', crypto: '🪙', commodity: '📊' };
+
+    function changeClass(pct) {
+      if (pct > 0) return 'up';
+      if (pct < 0) return 'down';
+      return 'flat';
+    }
+
+    function renderOverview(data, date) {
+      const container = document.getElementById('dashboardContent');
+      let html = `<p class="text-sm text-gray-500 mb-4">数据更新时间: ${date}</p>`;
+
+      for (const [market, items] of Object.entries(data)) {
+        html += `
+        <div class="bg-white rounded-xl border border-gray-200 p-5 mb-4 market-card">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-medium text-gray-800">${MARKET_ICONS[market]} ${MARKET_NAMES[market]}</h3>
+            <button onclick="switchMarket('${market}')" class="text-xs text-blue-600 hover:text-blue-700">查看详情 →</button>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-red-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">涨幅领先</p>
+              ${items.topGainers.slice(0, 3).map(g => `
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-700">${g.name}</span>
+                  <span class="up font-medium">+${g.change_pct.toFixed(2)}%</span>
+                </div>
+              `).join('')}
+            </div>
+            <div class="bg-green-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">跌幅领先</p>
+              ${items.topLosers.slice(0, 3).map(l => `
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-700">${l.name}</span>
+                  <span class="down font-medium">${l.change_pct.toFixed(2)}%</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function renderMarketDetail(market, data, date) {
+      const container = document.getElementById('dashboardContent');
+      if (!data || data.length === 0) {
+        container.innerHTML = `<div class="text-center py-20 text-gray-400"><p>${MARKET_NAMES[market]}暂无今日数据</p></div>`;
+        return;
+      }
+
+      const upCount = data.filter(d => d.change_pct > 0).length;
+      const avgChange = data.reduce((s, d) => s + d.change_pct, 0) / data.length;
+
+      let html = `
+        <p class="text-sm text-gray-500 mb-4">${MARKET_ICONS[market]} ${MARKET_NAMES[market]} | ${date} | ${data.length}条数据 | 上涨${upCount}条 | 平均${avgChange > 0 ? '+' : ''}${avgChange.toFixed(2)}%</p>
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <table class="w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs text-gray-500 font-medium">名称</th>
+                <th class="px-4 py-3 text-left text-xs text-gray-500 font-medium">代码</th>
+                <th class="px-4 py-3 text-right text-xs text-gray-500 font-medium">价格</th>
+                <th class="px-4 py-3 text-right text-xs text-gray-500 font-medium">涨跌幅</th>
+                <th class="px-4 py-3 text-right text-xs text-gray-500 font-medium">最高</th>
+                <th class="px-4 py-3 text-right text-xs text-gray-500 font-medium">最低</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(d => `
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="px-4 py-3 text-sm text-gray-800">${d.name || d.symbol}</td>
+                  <td class="px-4 py-3 text-xs text-gray-500">${d.symbol}</td>
+                  <td class="px-4 py-3 text-sm text-right font-medium">${d.price.toFixed(2)}</td>
+                  <td class="px-4 py-3 text-sm text-right font-medium ${changeClass(d.change_pct)}">${d.change_pct > 0 ? '+' : ''}${d.change_pct.toFixed(2)}%</td>
+                  <td class="px-4 py-3 text-xs text-right text-gray-500">${d.high?.toFixed(2) || '-'}</td>
+                  <td class="px-4 py-3 text-xs text-right text-gray-500">${d.low?.toFixed(2) || '-'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>`;
+
+      container.innerHTML = html;
+    }
+
+    // ===== 历史报告 =====
+    async function loadReports() {
+      const container = document.getElementById('reportsList');
+      container.innerHTML = '<div class="text-center py-10 text-gray-400">加载中...</div>';
+
+      try {
+        const data = await api('GET', '/reports/history?limit=30');
+        if (data.reports.length === 0) {
+          container.innerHTML = '<div class="text-center py-10 text-gray-400">暂无历史报告</div>';
+          return;
+        }
+
+        container.innerHTML = data.reports.map(r => `
+          <div class="bg-white rounded-lg border border-gray-200 p-4 hover:bg-gray-50 cursor-pointer" onclick="viewReport('${r.date}')">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="font-medium text-gray-800">${r.date}</span>
+                <span class="text-xs text-gray-500 ml-2">${r.summary || ''}</span>
+              </div>
+              <span class="text-xs text-blue-600">查看详情 →</span>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        container.innerHTML = `<div class="text-center py-10 text-red-400">加载失败: ${e.message}</div>`;
+      }
+    }
+
+    async function viewReport(date) {
+      try {
+        const data = await api('GET', `/reports/${date}`);
+        if (data.report?.html_content) {
+          const modal = document.createElement('div');
+          modal.className = 'fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4';
+          modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+          modal.innerHTML = `
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="font-semibold text-gray-800">${date} 市场情报</h2>
+                <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">✕</button>
+              </div>
+              ${data.report.html_content}
+            </div>`;
+          document.body.appendChild(modal);
+        }
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    // ===== 设置 =====
+    async function loadSettings() {
+      try {
+        const data = await api('GET', '/settings');
+        const s = data.settings;
+        document.getElementById('settingPushEmail').value = currentUser?.pushEmail || currentUser?.email || '';
+        document.getElementById('settingPushTime').value = s.push_time || '08:30';
+        document.getElementById('settingPushEnabled').checked = s.push_enabled;
+        document.getElementById('settingWatchUS').value = (s.watchlist_us || []).join(',');
+        document.getElementById('settingWatchCN').value = (s.watchlist_cn || []).join(',');
+        document.getElementById('settingWatchCrypto').value = (s.watchlist_crypto || []).join(',');
+      } catch (e) {
+        showToast('设置加载失败', 'error');
+      }
+    }
+
+    async function saveSettings() {
+      try {
+        // 先更新推送邮箱
+        await api('PUT', '/auth/push-email', {
+          pushEmail: document.getElementById('settingPushEmail').value.trim()
+        });
+
+        // 更新设置
+        await api('PUT', '/settings', {
+          push_time: document.getElementById('settingPushTime').value,
+          push_enabled: document.getElementById('settingPushEnabled').checked,
+          watchlist_us: document.getElementById('settingWatchUS').value.split(',').filter(Boolean),
+          watchlist_cn: document.getElementById('settingWatchCN').value.split(',').filter(Boolean),
+          watchlist_crypto: document.getElementById('settingWatchCrypto').value.split(',').filter(Boolean)
+        });
+
+        showToast('设置保存成功', 'success');
+      } catch (e) {
+        showToast(e.message, 'error');
+      }
+    }
+
+    // ===== Toast =====
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = `toast toast-${type}`;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    // ===== 初始化 =====
+    checkAuth();
+  </script>
+</body>
+</html>
