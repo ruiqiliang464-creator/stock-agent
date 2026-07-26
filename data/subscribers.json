@@ -5,6 +5,12 @@
       "pushEmail": "3339726915@qq.com",
       "enabled": true,
       "name": "用户"
+    },
+    {
+      "email": "ruiqiliang464@gmail.com",
+      "pushEmail": "ruiqiliang464@gmail.com",
+      "enabled": true,
+      "name": "用户2"
     }
   ]
 }

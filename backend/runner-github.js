@@ -208,9 +208,16 @@ async function reportAndPush(analysis) {
       const mailOpts = {
         from: `"Stock Agent 每日情报" <${SMTP_USER}>`,
         to: target,
-        subject: `每日市场情报 ${today}`,
+        subject: `📊 每日市场情报 ${today}`,
         html: htmlContent,
-        text: `每日市场情报 ${today} - 请查看HTML版本获取完整内容`
+        text: `每日市场情报 ${today} - 请查看HTML版本获取完整内容`,
+        headers: {
+          'X-Mailer': 'StockAgent-Nodemailer',
+          'List-ID': 'Stock Agent Daily Report <stock-agent.ruiqiliang464-creator>',
+          'Precedence': 'bulk',
+          'X-Auto-Response-Suppress': 'OOF, AutoReply',
+          'Auto-Submitted': 'auto-generated'
+        }
       };
       try {
         const info = await transporter.sendMail(mailOpts);
