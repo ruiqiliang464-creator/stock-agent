@@ -276,11 +276,7 @@ async function main() {
   const task = process.argv[2] || 'all';
   const tasks = task === 'all' ? ['collect', 'process', 'analyze', 'report'] : [task];
 
-  // 防重复：完整管道今天已跑过就跳过（手动指定单步不受限）
-  if (task === 'all' && alreadyRanToday()) {
-    console.log(`[Pipeline] ⏭️ 今天(${today})的管道已执行完毕，跳过重复运行`);
-    return;
-  }
+  // 注：不再防重复，允许每天多次运行（覆盖更新 latest.json），以支持多时段推送
 
   console.log(`[Pipeline] 开始: ${tasks.join(' → ')}  日期: ${today}`);
 
