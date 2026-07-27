@@ -137,7 +137,7 @@ def fetch_with_eastmoney():
     try:
         url = f'https://push2.eastmoney.com/api/qt/ulist.np/get?secids={secid_str}&fields=f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18'
         headers = {'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.eastmoney.com/'}
-        resp = requests.get(url, headers=headers, timeout=10)
+        resp = requests.get(url, headers=headers, timeout=30)
         data = resp.json()
 
         diff = data.get('data', {}).get('diff', [])
@@ -175,23 +175,41 @@ def run():
     """运行A股采集: akshare主力 → 东方财富备用"""
     print('[CN Stock Collector] 开始采集A股数据...')
 
-    # 先尝试 akshare（主力）
-    results = fetch_with_akshare()
+    # 先尝试 akshare（主力），最多重试3次
+    results = []
+    for attempt in range(3):
+        results = fetch_with_akshare()
+        if len(results) >= len(DEFAULT_INDEX + DEFAULT_STOCKS) * 0.5:
+            break
+        if attempt < 2:
+            print(f'[CN Stock] akshare 第{attempt+1}次尝试数据不足({len(results)}条)，等待5秒后重试')
+            time.sleep(5)
 
-    # 如果 akshare 结果不足，用东方财富补充
+    # 如果 akshare 结果不足，用东方财富补充，最多重试3次
     if len(results) < len(DEFAULT_INDEX + DEFAULT_STOCKS) * 0.5:
         print(f'[CN Stock] akshare 数据不足({len(results)}条)，用东方财富补充')
-        em_results = fetch_with_eastmoney()
-        # 补充缺失的标的
-        existing_codes = {r['symbol'] for r in results}
-        for r in em_results:
-            if r['symbol'] not in existing_codes:
-                results.append(r)
+        for attempt in range(3):
+            em_results = fetch_with_eastmoney()
+            if em_results:
+                existing_codes = {r['symbol'] for r in results}
+                for r in em_results:
+                    if r['symbol'] not in existing_codes:
+                        results.append(r)
+                break
+            if attempt < 2:
+                print(f'[CN Stock] 东方财富第{attempt+1}次尝试失败，等待5秒后重试')
+                time.sleep(5)
 
     # 如果 akshare 完全失败，全量用东方财富
     if len(results) == 0:
         print('[CN Stock] akshare 无数据，全量切换东方财富')
-        results = fetch_with_eastmoney()
+        for attempt in range(3):
+            results = fetch_with_eastmoney()
+            if results:
+                break
+            if attempt < 2:
+                print(f'[CN Stock] 东方财富全量第{attempt+1}次尝试失败，等待5秒后重试')
+                time.sleep(5)
 
     print(f'[CN Stock Collector] 采集完成, 共 {len(results)} 条')
     return results

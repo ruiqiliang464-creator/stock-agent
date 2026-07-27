@@ -198,7 +198,7 @@ def fetch_with_eastmoney_futures():
     try:
         url = f'https://push2.eastmoney.com/api/qt/ulist.np/get?secids={secids}&fields=f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18'
         headers = {'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.eastmoney.com/'}
-        resp = requests.get(url, headers=headers, timeout=10)
+        resp = requests.get(url, headers=headers, timeout=30)
         data = resp.json()
 
         diff = data.get('data', {}).get('diff', [])
