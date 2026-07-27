@@ -1,6 +1,6 @@
 {
   "date": "2026-07-27",
-  "updatedAt": "2026-07-27T03:58:34.322Z",
+  "updatedAt": "2026-07-27T04:42:37.859Z",
   "markets": {
     "us": [
       {
@@ -472,290 +472,224 @@
       {
         "symbol": "BTC",
         "name": "Bitcoin",
-        "price": 65234,
-        "change_pct": 1.1,
-        "volume": 16360598536,
+        "price": 65302,
+        "change_pct": 1.2,
+        "volume": 16559065856,
         "high": 65489,
         "low": 64243,
-        "open": 64482.06,
-        "prev_close": 64482.06
+        "open": 64419.05,
+        "prev_close": 64419.05
       },
       {
         "symbol": "ETH",
         "name": "Ethereum",
-        "price": 1945.04,
-        "change_pct": 3.4,
-        "volume": 6846872489,
+        "price": 1953.11,
+        "change_pct": 3.6,
+        "volume": 7220010054,
         "high": 1960.36,
         "low": 1877.1,
-        "open": 1885.72,
-        "prev_close": 1885.72
+        "open": 1885.55,
+        "prev_close": 1885.55
       },
       {
         "symbol": "USDT",
         "name": "Tether",
-        "price": 0.999211,
+        "price": 0.999199,
         "change_pct": 0,
-        "volume": 30193538180,
+        "volume": 30707833708,
         "high": 0.999422,
         "low": 0.999146,
-        "open": 0.99920776,
-        "prev_close": 0.99920776
+        "open": 0.9992073345607289,
+        "prev_close": 0.9992073345607289
       },
       {
         "symbol": "BNB",
         "name": "BNB",
-        "price": 572.69,
+        "price": 572.97,
         "change_pct": 0.5,
-        "volume": 388936425,
+        "volume": 392088412,
         "high": 575.87,
-        "low": 569.49,
-        "open": 570.36,
-        "prev_close": 570.36
+        "low": 569.71,
+        "open": 570.9300000000001,
+        "prev_close": 570.9300000000001
       },
       {
         "symbol": "USDC",
         "name": "USDC",
-        "price": 0.999714,
+        "price": 0.99969,
         "change_pct": 0,
-        "volume": 7581991684,
+        "volume": 7836613933,
         "high": 1.001,
         "low": 0.999679,
-        "open": 0.9997333891702482,
-        "prev_close": 0.9997333891702482
+        "open": 0.9997418175768215,
+        "prev_close": 0.9997418175768215
       },
       {
         "symbol": "XRP",
         "name": "XRP",
         "price": 1.11,
-        "change_pct": 0.5,
-        "volume": 605245535,
+        "change_pct": 0.6,
+        "volume": 611608948,
         "high": 1.12,
         "low": 1.095,
-        "open": 1.1048699000000002,
-        "prev_close": 1.1048699000000002
+        "open": 1.10265812,
+        "prev_close": 1.10265812
       },
       {
         "symbol": "SOL",
         "name": "Solana",
-        "price": 76.28,
-        "change_pct": 2.1,
-        "volume": 1135801246,
+        "price": 76.26,
+        "change_pct": 2,
+        "volume": 1151626171,
         "high": 76.95,
         "low": 74.71,
-        "open": 74.99,
-        "prev_close": 74.99
+        "open": 75.02000000000001,
+        "prev_close": 75.02000000000001
       },
       {
         "symbol": "TRX",
         "name": "TRON",
-        "price": 0.331201,
-        "change_pct": 0,
-        "volume": 269536058,
+        "price": 0.331372,
+        "change_pct": 0.1,
+        "volume": 269609532,
         "high": 0.332743,
         "low": 0.330332,
-        "open": 0.33107346000000004,
-        "prev_close": 0.33107346000000004
+        "open": 0.331119,
+        "prev_close": 0.331119
       },
       {
         "symbol": "DOGE",
         "name": "Dogecoin",
-        "price": 0.072759,
+        "price": 0.072745,
         "change_pct": 0.6,
-        "volume": 507119750,
+        "volume": 495232099,
         "high": 0.073881,
-        "low": 0.072491,
-        "open": 0.07296179716778395,
-        "prev_close": 0.07296179716778395
+        "low": 0.072484,
+        "open": 0.07349625937243534,
+        "prev_close": 0.07349625937243534
       },
       {
         "symbol": "LINK",
         "name": "Chainlink",
-        "price": 8.76,
-        "change_pct": 4.1,
-        "volume": 194500927,
+        "price": 8.77,
+        "change_pct": 4.2,
+        "volume": 194124086,
         "high": 8.82,
         "low": 8.4,
-        "open": 8.448247,
-        "prev_close": 8.448247
+        "open": 8.445439,
+        "prev_close": 8.445439
       },
       {
         "symbol": "XLM",
         "name": "Stellar",
-        "price": 0.181534,
-        "change_pct": 2,
-        "volume": 90464976,
+        "price": 0.181614,
+        "change_pct": 2.4,
+        "volume": 89571514,
         "high": 0.183199,
         "low": 0.17716,
-        "open": 0.17792591,
-        "prev_close": 0.17792591
+        "open": 0.17780105,
+        "prev_close": 0.17780105
       },
       {
         "symbol": "ADA",
         "name": "Cardano",
-        "price": 0.165097,
-        "change_pct": -0.2,
-        "volume": 144890923,
+        "price": 0.165727,
+        "change_pct": 0,
+        "volume": 147910537,
         "high": 0.166412,
         "low": 0.164132,
-        "open": 0.16557351825256217,
-        "prev_close": 0.16557351825256217
+        "open": 0.1654961,
+        "prev_close": 0.1654961
       },
       {
         "symbol": "LTC",
         "name": "Litecoin",
-        "price": 47.32,
-        "change_pct": 1.5,
-        "volume": 225754675,
+        "price": 47.39,
+        "change_pct": 1.4,
+        "volume": 226574426,
         "high": 48.2,
         "low": 46.62,
-        "open": 46.711307,
-        "prev_close": 46.711307
+        "open": 46.83368,
+        "prev_close": 46.83368
       },
       {
         "symbol": "AVAX",
         "name": "Avalanche",
-        "price": 6.68,
-        "change_pct": -1.3,
-        "volume": 130820973,
+        "price": 6.69,
+        "change_pct": -1.4,
+        "volume": 129850892,
         "high": 6.82,
         "low": 6.65,
-        "open": 6.7531905364930065,
-        "prev_close": 6.7531905364930065
+        "open": 6.791053126178432,
+        "prev_close": 6.791053126178432
       },
       {
         "symbol": "UNI",
         "name": "Uniswap",
-        "price": 3.89,
-        "change_pct": 7.1,
-        "volume": 190508963,
+        "price": 3.9,
+        "change_pct": 6.2,
+        "volume": 192588014,
         "high": 3.95,
         "low": 3.65,
-        "open": 3.6736310000000003,
-        "prev_close": 3.6736310000000003
+        "open": 3.662351,
+        "prev_close": 3.662351
       },
       {
         "symbol": "NEAR",
         "name": "NEAR Protocol",
-        "price": 1.86,
-        "change_pct": 3.2,
-        "volume": 99553801,
-        "high": 1.85,
+        "price": 1.84,
+        "change_pct": 3.4,
+        "volume": 93467052,
+        "high": 1.86,
         "low": 1.79,
-        "open": 1.8023440000000002,
-        "prev_close": 1.8023440000000002
+        "open": 1.787784,
+        "prev_close": 1.787784
       },
       {
         "symbol": "DOT",
         "name": "Polkadot",
-        "price": 0.816135,
-        "change_pct": 0.1,
-        "volume": 54472014,
+        "price": 0.81685,
+        "change_pct": -0.2,
+        "volume": 53646309,
         "high": 0.830529,
         "low": 0.8151,
-        "open": 0.8225996625725945,
-        "prev_close": 0.8225996625725945
+        "open": 0.822538855225877,
+        "prev_close": 0.822538855225877
       },
       {
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "price": 7.01,
-        "change_pct": 2.9,
-        "volume": 50336120,
+        "price": 7.02,
+        "change_pct": 2,
+        "volume": 50445111,
         "high": 7.18,
-        "low": 6.84,
-        "open": 6.851831,
-        "prev_close": 6.851831
+        "low": 6.85,
+        "open": 6.924035999999999,
+        "prev_close": 6.924035999999999
       },
       {
         "symbol": "FIL",
         "name": "Filecoin",
-        "price": 0.751524,
-        "change_pct": 2.7,
-        "volume": 46340315,
+        "price": 0.748854,
+        "change_pct": 1.8,
+        "volume": 46615981,
         "high": 0.754574,
         "low": 0.734668,
-        "open": 0.7418294999999999,
-        "prev_close": 0.7418294999999999
+        "open": 0.74124603,
+        "prev_close": 0.74124603
       }
     ],
     "commodity": [
       {
-        "symbol": "GOLD",
-        "name": "黄金ETF",
-        "price": 371.9,
-        "change_pct": 0.1,
-        "volume": 3784137,
-        "high": 374.49,
-        "low": 371.03,
-        "open": 371.9,
-        "prev_close": 371.52
-      },
-      {
-        "symbol": "SILVER",
-        "name": "白银ETF",
-        "price": 52.59,
-        "change_pct": 1.02,
-        "volume": 11081758,
-        "high": 53.325,
-        "low": 52.3,
-        "open": 52.59,
-        "prev_close": 52.06
-      },
-      {
-        "symbol": "CRUDE_OIL",
-        "name": "原油ETF",
-        "price": 136.69,
-        "change_pct": -2.01,
-        "volume": 8907633,
-        "high": 137.81,
-        "low": 133.53,
-        "open": 136.69,
-        "prev_close": 139.49
-      },
-      {
-        "symbol": "COPPER",
-        "name": "铜ETF",
-        "price": 77.72,
-        "change_pct": -0.83,
-        "volume": 2103665,
-        "high": 78.84,
-        "low": 77.38,
-        "open": 77.72,
-        "prev_close": 78.37
-      },
-      {
-        "symbol": "CORN",
-        "name": "玉米ETF",
-        "price": 18.3,
-        "change_pct": -0.05,
-        "volume": 342399,
-        "high": 18.365,
-        "low": 18.079,
-        "open": 18.3,
-        "prev_close": 18.31
-      },
-      {
-        "symbol": "SOYBEAN",
-        "name": "大豆ETF",
-        "price": 26.28,
-        "change_pct": 0.73,
-        "volume": 46827,
-        "high": 26.37,
-        "low": 26.11,
-        "open": 26.28,
-        "prev_close": 26.09
-      },
-      {
-        "symbol": "WHEAT",
-        "name": "小麦ETF",
-        "price": 25.22,
-        "change_pct": -1.6,
-        "volume": 1037941,
-        "high": 25.225,
-        "low": 24.53,
-        "open": 25.22,
-        "prev_close": 25.63
+        "symbol": "UNKNOWN",
+        "name": "沪金主连",
+        "price": 891.1,
+        "change_pct": 0.87,
+        "volume": 89169,
+        "high": 897.18,
+        "low": 882.68,
+        "open": 884,
+        "prev_close": 881.18
       }
     ]
   },
@@ -834,45 +768,45 @@
         "type": "individual_strong",
         "symbol": "ETH",
         "name": "Ethereum",
-        "description": "Ethereum(ETH)涨幅3.4%，表现强势",
+        "description": "Ethereum(ETH)涨幅3.6%，表现强势",
         "confidence": "中",
-        "price": 1945.04,
-        "change_pct": 3.4
+        "price": 1953.11,
+        "change_pct": 3.6
       },
       {
         "market": "crypto",
         "type": "individual_strong",
         "symbol": "LINK",
         "name": "Chainlink",
-        "description": "Chainlink(LINK)涨幅4.1%，表现强势",
+        "description": "Chainlink(LINK)涨幅4.2%，表现强势",
         "confidence": "中",
-        "price": 8.76,
-        "change_pct": 4.1
+        "price": 8.77,
+        "change_pct": 4.2
       },
       {
         "market": "crypto",
         "type": "individual_strong",
         "symbol": "UNI",
         "name": "Uniswap",
-        "description": "Uniswap(UNI)涨幅7.1%，表现强势",
+        "description": "Uniswap(UNI)涨幅6.2%，表现强势",
         "confidence": "高",
-        "price": 3.89,
-        "change_pct": 7.1
+        "price": 3.9,
+        "change_pct": 6.2
       },
       {
         "market": "crypto",
         "type": "individual_strong",
         "symbol": "NEAR",
         "name": "NEAR Protocol",
-        "description": "NEAR Protocol(NEAR)涨幅3.2%，表现强势",
+        "description": "NEAR Protocol(NEAR)涨幅3.4%，表现强势",
         "confidence": "中",
-        "price": 1.86,
-        "change_pct": 3.2
+        "price": 1.84,
+        "change_pct": 3.4
       },
       {
         "market": "commodity",
         "type": "market_trend",
-        "description": "大宗商品整体偏弱，上涨占比43%",
+        "description": "大宗商品整体强势上涨，上涨占比100%",
         "confidence": "中"
       }
     ],
@@ -942,40 +876,40 @@
         "type": "breakout_watch",
         "symbol": "SOL",
         "name": "Solana",
-        "description": "Solana温和上涨2.1%，留意突破信号",
+        "description": "Solana温和上涨2%，留意突破信号",
         "confidence": "低",
-        "price": 76.28,
-        "change_pct": 2.1
+        "price": 76.26,
+        "change_pct": 2
       },
       {
         "market": "crypto",
         "type": "breakout_watch",
         "symbol": "XLM",
         "name": "Stellar",
-        "description": "Stellar温和上涨2%，留意突破信号",
+        "description": "Stellar温和上涨2.4%，留意突破信号",
         "confidence": "低",
-        "price": 0.181534,
-        "change_pct": 2
+        "price": 0.181614,
+        "change_pct": 2.4
       },
       {
         "market": "crypto",
         "type": "breakout_watch",
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "description": "Ethereum Classic温和上涨2.9%，留意突破信号",
+        "description": "Ethereum Classic温和上涨2%，留意突破信号",
         "confidence": "低",
-        "price": 7.01,
-        "change_pct": 2.9
+        "price": 7.02,
+        "change_pct": 2
       },
       {
         "market": "crypto",
         "type": "breakout_watch",
         "symbol": "FIL",
         "name": "Filecoin",
-        "description": "Filecoin温和上涨2.7%，留意突破信号",
+        "description": "Filecoin温和上涨1.8%，留意突破信号",
         "confidence": "低",
-        "price": 0.751524,
-        "change_pct": 2.7
+        "price": 0.748854,
+        "change_pct": 1.8
       }
     ],
     "risks": [
@@ -1030,39 +964,39 @@
         "upCount": 14,
         "downCount": 2,
         "flatCount": 3,
-        "avgChange": 1.59,
+        "avgChange": 1.49,
         "maxUp": {
           "symbol": "UNI",
           "name": "Uniswap",
-          "change_pct": 7.1
+          "change_pct": 6.2
         },
         "maxDown": {
           "symbol": "AVAX",
           "name": "Avalanche",
-          "change_pct": -1.3
+          "change_pct": -1.4
         }
       },
       "commodity": {
-        "total": 7,
-        "upCount": 3,
-        "downCount": 4,
+        "total": 1,
+        "upCount": 1,
+        "downCount": 0,
         "flatCount": 0,
-        "avgChange": -0.38,
+        "avgChange": 0.87,
         "maxUp": {
-          "symbol": "SILVER",
-          "name": "白银ETF",
-          "change_pct": 1.02
+          "symbol": "UNKNOWN",
+          "name": "沪金主连",
+          "change_pct": 0.87
         },
         "maxDown": {
-          "symbol": "CRUDE_OIL",
-          "name": "原油ETF",
-          "change_pct": -2.01
+          "symbol": "UNKNOWN",
+          "name": "沪金主连",
+          "change_pct": 0.87
         }
       }
     }
   },
   "report": {
-    "summary": "美股: 平均-0.36%, 涨跌比11:9 | A股: 平均+0.47%, 涨跌比12:10 | 数字货币: 平均+1.59%, 涨跌比14:2 | 大宗商品: 平均-0.38%, 涨跌比3:4 | 风险预警: 1条 | 机会提示: 10条"
+    "summary": "美股: 平均-0.36%, 涨跌比11:9 | A股: 平均+0.47%, 涨跌比12:10 | 数字货币: 平均+1.49%, 涨跌比14:2 | 大宗商品: 平均+0.87%, 涨跌比1:0 | 风险预警: 1条 | 机会提示: 10条"
   },
   "emailResults": [
     {
