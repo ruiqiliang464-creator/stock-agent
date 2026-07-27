@@ -1,4 +1,17 @@
 {
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/trigger.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/trigger",
+      "dest": "/api/trigger.js"
+    }
+  ],
   "crons": [
     {
       "path": "/api/trigger",

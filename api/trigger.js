@@ -10,7 +10,7 @@ const REPO_OWNER = 'ruiqiliang464-creator';
 const REPO_NAME = 'stock-agent';
 const WORKFLOW_ID = 'daily-pipeline.yml';
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // 安全验证：只接受 GET（Vercel Cron 调用）和 POST（手动测试）
   if (req.method !== 'GET' && req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -58,4 +58,4 @@ export default async function handler(req, res) {
       error: err.message
     });
   }
-}
+};
