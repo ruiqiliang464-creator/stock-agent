@@ -261,10 +261,26 @@ async function reportAndPush(analysis) {
   return { sent, total: results.length };
 }
 
+// ── 防重复执行：如果今天的管道已成功完成，跳过 ──
+function alreadyRanToday() {
+  const latestPath = path.join(DATA_DIR, 'latest.json');
+  if (!fs.existsSync(latestPath)) return false;
+  try {
+    const data = JSON.parse(fs.readFileSync(latestPath, 'utf-8'));
+    return data.date === today;
+  } catch { return false; }
+}
+
 // ── 主入口 ──
 async function main() {
   const task = process.argv[2] || 'all';
   const tasks = task === 'all' ? ['collect', 'process', 'analyze', 'report'] : [task];
+
+  // 防重复：完整管道今天已跑过就跳过（手动指定单步不受限）
+  if (task === 'all' && alreadyRanToday()) {
+    console.log(`[Pipeline] ⏭️ 今天(${today})的管道已执行完毕，跳过重复运行`);
+    return;
+  }
 
   console.log(`[Pipeline] 开始: ${tasks.join(' → ')}  日期: ${today}`);
 
