@@ -8,6 +8,8 @@ import json
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.utils import formataddr, formatdate
+from email.header import Header
 from datetime import datetime
 
 MARKET_NAMES = {'us': '美股', 'cn': 'A股', 'crypto': '数字货币', 'commodity': '大宗商品'}
@@ -209,9 +211,12 @@ def send_email(smtp_user, smtp_pass, smtp_host, smtp_port, subscribers, html_con
                 continue
 
             msg = MIMEMultipart('alternative')
-            msg['From'] = f'Stock Agent 每日情报 <{smtp_user}>'
+            # 使用 formataddr 正确编码 From header (RFC5322/RFC2047)
+            msg['From'] = formataddr(('Stock Agent Daily Report', smtp_user))
             msg['To'] = target
-            msg['Subject'] = f'📊 每日市场情报 {today}'
+            # Subject 使用 Header 正确编码中文和emoji
+            msg['Subject'] = Header(f'每日市场情报 {today}', 'utf-8')
+            msg['Date'] = formatdate(localtime=True)
             msg['X-Mailer'] = 'StockAgent-Python'
             msg['List-ID'] = 'Stock Agent Daily Report <stock-agent.ruiqiliang464-creator>'
             msg['Precedence'] = 'bulk'
