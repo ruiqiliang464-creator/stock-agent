@@ -1,14 +1,11 @@
 name: Daily Market Pipeline
 
 on:
-  # 多重定时保障：GitHub Actions scheduled runs 经常延迟或跳过
-  # 加 4 个 cron 时间点确保至少有一个能触发
+  # GitHub 内部 cron 不靠谱，仅保留 1 个作为备用
+  # 主要靠外部 cron-job.org 触发 workflow_dispatch
   schedule:
-    - cron: '0 22 * * *'     # 6:00 AM CST (主时间)
-    - cron: '30 22 * * *'    # 6:30 AM CST (兜底1)
-    - cron: '0 23 * * *'     # 7:00 AM CST (兜底2)
-    - cron: '30 23 * * *'    # 7:30 AM CST (兜底3)
-  # 允许手动触发（用于测试）
+    - cron: '0 22 * * *'     # 6:00 AM CST (备用)
+  # 外部触发 + 手动测试
   workflow_dispatch:
 
 jobs:
