@@ -3,7 +3,8 @@ cn_stock.py — A股数据采集
 
 数据源：
   主力: akshare (Python库, 最全的A股数据源)
-  备用: 东方财富API (同花顺等行情接口)
+  备用1: 东方财富API (同花顺等行情接口)
+  备用2: yfinance (Yahoo Finance国际接口, 可从境外IP访问)
 
 采集标的: 3大指数 + 20只热门个股
 """
@@ -12,6 +13,7 @@ import akshare as ak
 import requests
 import json
 import time
+import yfinance as yf
 
 # A股关注列表
 DEFAULT_INDEX = [
@@ -137,7 +139,7 @@ def fetch_with_eastmoney():
     try:
         url = f'https://push2.eastmoney.com/api/qt/ulist.np/get?secids={secid_str}&fields=f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18'
         headers = {'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.eastmoney.com/'}
-        resp = requests.get(url, headers=headers, timeout=30)
+        resp = requests.get(url, headers=headers, timeout=(10, 30))
         data = resp.json()
 
         diff = data.get('data', {}).get('diff', [])
@@ -171,22 +173,123 @@ def fetch_with_eastmoney():
     return results
 
 
+def fetch_with_yfinance():
+    """用 yfinance 获取A股行情（第三备用，可从境外IP访问）
+
+    Yahoo Finance 对中国股票使用后缀:
+      上海证券交易所: .SS (如 600519.SS)
+      深圳证券交易所: .SZ (如 000858.SZ)
+    """
+    results = []
+
+    # yfinance 指数代码映射 (Yahoo Finance 对指数使用不同格式)
+    index_yf_map = {
+        '000001': '000001.SS',   # 上证指数
+        '399001': '399001.SZ',   # 深证成指
+        '399006': '399006.SZ',   # 创业板指
+    }
+
+    # 先处理指数
+    for item in DEFAULT_INDEX:
+        code = item['code']
+        yf_symbol = index_yf_map.get(code)
+        if not yf_symbol:
+            continue
+
+        try:
+            ticker = yf.Ticker(yf_symbol)
+            hist = ticker.history(period='5d')
+
+            if hist is not None and len(hist) > 0:
+                latest = hist.iloc[-1]
+                prev_close = float(hist.iloc[-2].get('Close', 0)) if len(hist) > 1 else float(latest.get('Close', 0))
+                price = float(latest.get('Close', 0))
+
+                if price > 0:
+                    change_pct = round((price - prev_close) / prev_close * 100, 2) if prev_close > 0 else 0
+                    results.append({
+                        'market': 'cn',
+                        'symbol': code,
+                        'name': item['name'],
+                        'price': round(price, 2),
+                        'change_pct': change_pct,
+                        'volume': int(latest.get('Volume', 0) or 0),
+                        'high': float(latest.get('High', 0) or price),
+                        'low': float(latest.get('Low', 0) or price),
+                        'open': float(latest.get('Open', 0) or price),
+                        'prev_close': round(prev_close, 2),
+                        'market_cap': 0,
+                        'extra': json.dumps({'source': 'yfinance_cn_index'})
+                    })
+                    print(f'[CN Stock] yfinance指数: {item["name"]}({yf_symbol}) {price:.2f} ({change_pct:+.2f}%)')
+            else:
+                print(f'[CN Stock] yfinance指数 {yf_symbol} 无数据')
+        except Exception as e:
+            print(f'[CN Stock] yfinance指数 {yf_symbol} 失败: {e}')
+
+    # 再处理个股
+    for item in DEFAULT_STOCKS:
+        code = item['code']
+        market_prefix = item['market']
+
+        if market_prefix == 'sh':
+            yf_symbol = f'{code}.SS'
+        else:
+            yf_symbol = f'{code}.SZ'
+
+        try:
+            ticker = yf.Ticker(yf_symbol)
+            hist = ticker.history(period='5d')
+
+            if hist is not None and len(hist) > 0:
+                latest = hist.iloc[-1]
+                prev_close = float(hist.iloc[-2].get('Close', 0)) if len(hist) > 1 else float(latest.get('Close', 0))
+                price = float(latest.get('Close', 0))
+
+                if price > 0:
+                    change_pct = round((price - prev_close) / prev_close * 100, 2) if prev_close > 0 else 0
+                    results.append({
+                        'market': 'cn',
+                        'symbol': code,
+                        'name': item['name'],
+                        'price': round(price, 2),
+                        'change_pct': change_pct,
+                        'volume': int(latest.get('Volume', 0) or 0),
+                        'high': float(latest.get('High', 0) or price),
+                        'low': float(latest.get('Low', 0) or price),
+                        'open': float(latest.get('Open', 0) or price),
+                        'prev_close': round(prev_close, 2),
+                        'market_cap': 0,
+                        'extra': json.dumps({'source': 'yfinance_cn_stock'})
+                    })
+                    print(f'[CN Stock] yfinance个股: {item["name"]}({yf_symbol}) {price:.2f} ({change_pct:+.2f}%)')
+            else:
+                print(f'[CN Stock] yfinance个股 {yf_symbol} 无数据')
+        except Exception as e:
+            print(f'[CN Stock] yfinance个股 {yf_symbol} 失败: {e}')
+
+    return results
+
+
 def run():
-    """运行A股采集: akshare主力 → 东方财富备用"""
+    """运行A股采集: akshare主力 → 东方财富备用 → yfinance第三备用"""
     print('[CN Stock Collector] 开始采集A股数据...')
+
+    total_target = len(DEFAULT_INDEX + DEFAULT_STOCKS)
+    half_target = total_target * 0.5
 
     # 先尝试 akshare（主力），最多重试3次
     results = []
     for attempt in range(3):
         results = fetch_with_akshare()
-        if len(results) >= len(DEFAULT_INDEX + DEFAULT_STOCKS) * 0.5:
+        if len(results) >= half_target:
             break
         if attempt < 2:
             print(f'[CN Stock] akshare 第{attempt+1}次尝试数据不足({len(results)}条)，等待5秒后重试')
             time.sleep(5)
 
     # 如果 akshare 结果不足，用东方财富补充，最多重试3次
-    if len(results) < len(DEFAULT_INDEX + DEFAULT_STOCKS) * 0.5:
+    if len(results) < half_target:
         print(f'[CN Stock] akshare 数据不足({len(results)}条)，用东方财富补充')
         for attempt in range(3):
             em_results = fetch_with_eastmoney()
@@ -200,16 +303,20 @@ def run():
                 print(f'[CN Stock] 东方财富第{attempt+1}次尝试失败，等待5秒后重试')
                 time.sleep(5)
 
-    # 如果 akshare 完全失败，全量用东方财富
+    # 如果东方财富也不足，用 yfinance 补充
+    if len(results) < half_target:
+        print(f'[CN Stock] 东方财富数据不足({len(results)}条)，用yfinance补充')
+        yf_results = fetch_with_yfinance()
+        if yf_results:
+            existing_codes = {r['symbol'] for r in results}
+            for r in yf_results:
+                if r['symbol'] not in existing_codes:
+                    results.append(r)
+
+    # 如果全部失败，全量用 yfinance
     if len(results) == 0:
-        print('[CN Stock] akshare 无数据，全量切换东方财富')
-        for attempt in range(3):
-            results = fetch_with_eastmoney()
-            if results:
-                break
-            if attempt < 2:
-                print(f'[CN Stock] 东方财富全量第{attempt+1}次尝试失败，等待5秒后重试')
-                time.sleep(5)
+        print('[CN Stock] 全部数据源失败，全量切换yfinance')
+        results = fetch_with_yfinance()
 
     print(f'[CN Stock Collector] 采集完成, 共 {len(results)} 条')
     return results
