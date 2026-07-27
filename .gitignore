@@ -5,3 +5,6 @@ data/stock_agent.db
 config/default.env
 .workbuddy/
 .vercel/
+.venv/
+pylibs/
+__pycache__/

@@ -1,0 +1,197 @@
+"""
+cn_stock.py — A股数据采集
+
+数据源：
+  主力: akshare (Python库, 最全的A股数据源)
+  备用: 东方财富API (同花顺等行情接口)
+
+采集标的: 3大指数 + 20只热门个股
+"""
+
+import akshare as ak
+import requests
+import json
+import time
+
+# A股关注列表
+DEFAULT_INDEX = [
+    {'code': '000001', 'name': '上证指数', 'market': 'sh'},
+    {'code': '399001', 'name': '深证成指', 'market': 'sz'},
+    {'code': '399006', 'name': '创业板指', 'market': 'sz'},
+]
+
+DEFAULT_STOCKS = [
+    {'code': '600519', 'name': '贵州茅台', 'market': 'sh'},
+    {'code': '000858', 'name': '五粮液', 'market': 'sz'},
+    {'code': '601318', 'name': '中国平安', 'market': 'sh'},
+    {'code': '000333', 'name': '美的集团', 'market': 'sz'},
+    {'code': '600036', 'name': '招商银行', 'market': 'sh'},
+    {'code': '601012', 'name': '隆基绿能', 'market': 'sh'},
+    {'code': '002594', 'name': '比亚迪', 'market': 'sz'},
+    {'code': '000001', 'name': '平安银行', 'market': 'sz'},
+    {'code': '600900', 'name': '长江电力', 'market': 'sh'},
+    {'code': '300750', 'name': '宁德时代', 'market': 'sz'},
+    {'code': '601899', 'name': '紫金矿业', 'market': 'sh'},
+    {'code': '002415', 'name': '海康威视', 'market': 'sz'},
+    {'code': '600276', 'name': '恒瑞医药', 'market': 'sh'},
+    {'code': '000651', 'name': '格力电器', 'market': 'sz'},
+    {'code': '603259', 'name': '药明康德', 'market': 'sh'},
+    {'code': '002714', 'name': '牧原股份', 'market': 'sz'},
+    {'code': '688981', 'name': '中芯国际', 'market': 'sh'},
+    {'code': '300059', 'name': '东方财富', 'market': 'sz'},
+    {'code': '600030', 'name': '中信证券', 'market': 'sh'},
+    {'code': '601398', 'name': '工商银行', 'market': 'sh'},
+]
+
+
+def fetch_with_akshare():
+    """用 akshare 获取A股行情（主力数据源）"""
+    results = []
+    all_items = DEFAULT_INDEX + DEFAULT_STOCKS
+
+    for item in all_items:
+        code = item['code']
+        market_prefix = item['market']
+
+        try:
+            # akshare 获取个股实时行情
+            # 指数用 stock_zh_index_daily_em, 个股用 stock_zh_a_spot_em
+            if market_prefix in ('sh', 'sz') and code.startswith(('399', '0000')):
+                # 指数行情
+                try:
+                    df = ak.stock_zh_index_daily_em(symbol=f'{market_prefix}{code}')
+                    if df is not None and len(df) > 0:
+                        latest = df.iloc[-1]
+                        price = float(latest.get('close', 0))
+                        prev_close = float(df.iloc[-2].get('close', 0)) if len(df) > 1 else price
+                        change_pct = round((price - prev_close) / prev_close * 100, 2) if prev_close > 0 else 0
+                        results.append({
+                            'market': 'cn',
+                            'symbol': code,
+                            'name': item['name'],
+                            'price': round(price, 2),
+                            'change_pct': change_pct,
+                            'volume': int(latest.get('volume', 0) or 0),
+                            'high': float(latest.get('high', 0) or price),
+                            'low': float(latest.get('low', 0) or price),
+                            'open': float(latest.get('open', 0) or price),
+                            'prev_close': round(prev_close, 2),
+                            'market_cap': 0,
+                            'extra': json.dumps({'source': 'akshare_index'})
+                        })
+                        print(f'[CN Stock] akshare指数: {item["name"]} {price:.2f} ({change_pct:+.2f}%)')
+                except Exception as e:
+                    print(f'[CN Stock] akshare指数 {code} 失败: {e}')
+            else:
+                # 个股行情 - 用批量接口效率更高
+                pass  # 批量在下面处理
+
+        except Exception as e:
+            print(f'[CN Stock] akshare {code} 失败: {e}')
+
+    # 批量获取A股个股行情
+    try:
+        df = ak.stock_zh_a_spot_em()
+        if df is not None and len(df) > 0:
+            stock_codes = {item['code']: item['name'] for item in DEFAULT_STOCKS}
+            for row in df.itertuples():
+                row_code = str(row.代码)
+                if row_code in stock_codes:
+                    price = float(row.最新价 or 0)
+                    change_pct = float(row.涨跌幅 or 0)
+                    prev_close = float(row.昨收 or 0)
+                    if price > 0:
+                        results.append({
+                            'market': 'cn',
+                            'symbol': row_code,
+                            'name': stock_codes[row_code],
+                            'price': round(price, 2),
+                            'change_pct': round(change_pct, 2),
+                            'volume': int(row.成交量 or 0),
+                            'high': float(row.最高 or 0),
+                            'low': float(row.最低 or 0),
+                            'open': float(row.今开 or 0),
+                            'prev_close': round(prev_close, 2),
+                            'market_cap': float(row.总市值 or 0),
+                            'extra': json.dumps({'source': 'akshare_spot'})
+                        })
+                        print(f'[CN Stock] akshare个股: {stock_codes[row_code]} {price:.2f} ({change_pct:+.2f}%)')
+    except Exception as e:
+        print(f'[CN Stock] akshare批量个股失败: {e}')
+
+    return results
+
+
+def fetch_with_eastmoney():
+    """用东方财富API获取A股行情（备用数据源，兼容同花顺接口）"""
+    results = []
+    all_items = DEFAULT_INDEX + DEFAULT_STOCKS
+
+    # 东方财富实时行情API (批量)
+    secids = []
+    for item in all_items:
+        prefix = '1' if item['market'] == 'sh' else '0'
+        secids.append(f'{prefix}.{item["code"]}')
+
+    secid_str = ','.join(secids)
+    try:
+        url = f'https://push2.eastmoney.com/api/qt/ulist.np/get?secids={secid_str}&fields=f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18'
+        headers = {'User-Agent': 'Mozilla/5.0', 'Referer': 'https://www.eastmoney.com/'}
+        resp = requests.get(url, headers=headers, timeout=10)
+        data = resp.json()
+
+        diff = data.get('data', {}).get('diff', [])
+        if diff and isinstance(diff, list):
+            name_map = {item['code']: item['name'] for item in all_items}
+            for item in diff:
+                code = item.get('f12', '')
+                name = item.get('f14', '') or name_map.get(code, code)
+                price = item.get('f2', 0) / 100 if isinstance(item.get('f2'), (int, float)) else 0
+                change_pct = item.get('f3', 0) / 100 if isinstance(item.get('f3'), (int, float)) else 0
+                prev_close = item.get('f18', 0) / 100 if isinstance(item.get('f18'), (int, float)) else 0
+
+                if price > 0 and code:
+                    results.append({
+                        'market': 'cn',
+                        'symbol': code,
+                        'name': name,
+                        'price': round(price, 2),
+                        'change_pct': round(change_pct, 2),
+                        'volume': int(item.get('f5', 0) or 0),
+                        'high': round(item.get('f15', 0) / 100, 2) if isinstance(item.get('f15'), (int, float)) else round(price, 2),
+                        'low': round(item.get('f16', 0) / 100, 2) if isinstance(item.get('f16'), (int, float)) else round(price, 2),
+                        'open': round(item.get('f17', 0) / 100, 2) if isinstance(item.get('f17'), (int, float)) else round(price, 2),
+                        'prev_close': round(prev_close, 2),
+                        'market_cap': 0,
+                        'extra': json.dumps({'source': 'eastmoney'})
+                    })
+    except Exception as e:
+        print(f'[CN Stock] 东方财富API失败: {e}')
+
+    return results
+
+
+def run():
+    """运行A股采集: akshare主力 → 东方财富备用"""
+    print('[CN Stock Collector] 开始采集A股数据...')
+
+    # 先尝试 akshare（主力）
+    results = fetch_with_akshare()
+
+    # 如果 akshare 结果不足，用东方财富补充
+    if len(results) < len(DEFAULT_INDEX + DEFAULT_STOCKS) * 0.5:
+        print(f'[CN Stock] akshare 数据不足({len(results)}条)，用东方财富补充')
+        em_results = fetch_with_eastmoney()
+        # 补充缺失的标的
+        existing_codes = {r['symbol'] for r in results}
+        for r in em_results:
+            if r['symbol'] not in existing_codes:
+                results.append(r)
+
+    # 如果 akshare 完全失败，全量用东方财富
+    if len(results) == 0:
+        print('[CN Stock] akshare 无数据，全量切换东方财富')
+        results = fetch_with_eastmoney()
+
+    print(f'[CN Stock Collector] 采集完成, 共 {len(results)} 条')
+    return results
