@@ -4,3 +4,4 @@ data/stock_agent.db
 .env
 config/default.env
 .workbuddy/
+.vercel/
