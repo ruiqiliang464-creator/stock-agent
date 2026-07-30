@@ -1,6 +1,6 @@
 {
-  "date": "2026-07-29",
-  "updatedAt": "2026-07-29T22:05:31.453324",
+  "date": "2026-07-30",
+  "updatedAt": "2026-07-30T04:39:47.726165",
   "markets": {
     "us": [
       {
@@ -228,567 +228,567 @@
       {
         "symbol": "000001",
         "name": "上证指数",
-        "price": 3828.47,
-        "change_pct": 0.4,
-        "volume": 571226391,
-        "high": 3845.77,
-        "low": 3782.48,
-        "open": 3823.29,
-        "prev_close": 3813.31
+        "price": 3784.55,
+        "change_pct": -1.15,
+        "volume": 362473851,
+        "high": 3839.34,
+        "low": 3783.06,
+        "open": 3812.11,
+        "prev_close": 3828.47
       },
       {
         "symbol": "399001",
         "name": "深证成指",
-        "price": 13658.44,
-        "change_pct": 1.1,
-        "volume": 675056731,
-        "high": 13756.71,
-        "low": 13267.64,
-        "open": 13498.75,
-        "prev_close": 13509.68
+        "price": 13141.22,
+        "change_pct": -3.79,
+        "volume": 439707551,
+        "high": 13619.03,
+        "low": 13130.12,
+        "open": 13531.07,
+        "prev_close": 13658.44
       },
       {
         "symbol": "399006",
         "name": "创业板指",
-        "price": 3378.7,
-        "change_pct": 1.55,
-        "volume": 208319482,
-        "high": 3411.03,
-        "low": 3249.65,
-        "open": 3333.48,
-        "prev_close": 3327.03
+        "price": 3179.58,
+        "change_pct": -5.89,
+        "volume": 132984036,
+        "high": 3353.81,
+        "low": 3175.78,
+        "open": 3331.32,
+        "prev_close": 3378.7
       },
       {
         "symbol": "600519",
         "name": "贵州茅台",
-        "price": 1321.0,
-        "change_pct": 0.08,
-        "volume": 62330,
-        "high": 1343.48,
-        "low": 1312.06,
-        "open": 1333.83,
-        "prev_close": 1320.0
+        "price": 1358.65,
+        "change_pct": 2.85,
+        "volume": 45118,
+        "high": 1362.0,
+        "low": 1322.0,
+        "open": 1323.0,
+        "prev_close": 1321.0
       },
       {
         "symbol": "000858",
         "name": "五 粮 液",
-        "price": 75.17,
-        "change_pct": 0.49,
-        "volume": 407417,
-        "high": 75.86,
-        "low": 74.69,
-        "open": 74.92,
-        "prev_close": 74.8
+        "price": 78.65,
+        "change_pct": 4.63,
+        "volume": 492578,
+        "high": 78.84,
+        "low": 75.01,
+        "open": 75.1,
+        "prev_close": 75.17
       },
       {
         "symbol": "601318",
         "name": "中国平安",
-        "price": 54.3,
-        "change_pct": 0.18,
-        "volume": 871119,
-        "high": 54.7,
-        "low": 53.71,
-        "open": 54.47,
-        "prev_close": 54.2
+        "price": 55.07,
+        "change_pct": 1.42,
+        "volume": 519912,
+        "high": 55.2,
+        "low": 54.06,
+        "open": 54.06,
+        "prev_close": 54.3
       },
       {
         "symbol": "000333",
         "name": "美的集团",
-        "price": 87.01,
-        "change_pct": 1.92,
-        "volume": 478144,
-        "high": 87.5,
-        "low": 85.1,
-        "open": 85.35,
-        "prev_close": 85.37
+        "price": 87.8,
+        "change_pct": 0.91,
+        "volume": 188395,
+        "high": 88.0,
+        "low": 86.5,
+        "open": 87.01,
+        "prev_close": 87.01
       },
       {
         "symbol": "600036",
         "name": "招商银行",
-        "price": 39.66,
-        "change_pct": 0.18,
-        "volume": 1148712,
-        "high": 40.07,
-        "low": 39.49,
-        "open": 39.98,
-        "prev_close": 39.59
+        "price": 40.15,
+        "change_pct": 1.24,
+        "volume": 678897,
+        "high": 40.19,
+        "low": 39.55,
+        "open": 39.66,
+        "prev_close": 39.66
       },
       {
         "symbol": "601012",
         "name": "隆基绿能",
-        "price": 12.81,
-        "change_pct": 1.03,
-        "volume": 1468053,
-        "high": 13.06,
-        "low": 12.51,
-        "open": 12.86,
-        "prev_close": 12.68
+        "price": 13.03,
+        "change_pct": 1.72,
+        "volume": 1118971,
+        "high": 13.28,
+        "low": 12.69,
+        "open": 12.7,
+        "prev_close": 12.81
       },
       {
         "symbol": "002594",
         "name": "比亚迪",
-        "price": 94.85,
-        "change_pct": 1.61,
-        "volume": 514457,
-        "high": 96.27,
-        "low": 93.1,
-        "open": 93.55,
-        "prev_close": 93.35
+        "price": 95.3,
+        "change_pct": 0.47,
+        "volume": 274823,
+        "high": 96.66,
+        "low": 94.75,
+        "open": 94.92,
+        "prev_close": 94.85
       },
       {
         "symbol": "600900",
         "name": "长江电力",
-        "price": 28.93,
-        "change_pct": -0.48,
-        "volume": 1314441,
-        "high": 29.57,
-        "low": 28.7,
-        "open": 29.5,
-        "prev_close": 29.07
+        "price": 29.47,
+        "change_pct": 1.87,
+        "volume": 1128799,
+        "high": 29.53,
+        "low": 28.81,
+        "open": 28.85,
+        "prev_close": 28.93
       },
       {
         "symbol": "300750",
         "name": "宁德时代",
-        "price": 396.84,
-        "change_pct": 1.53,
-        "volume": 404359,
-        "high": 401.86,
-        "low": 381.38,
+        "price": 399.3,
+        "change_pct": 0.62,
+        "volume": 213313,
+        "high": 402.85,
+        "low": 389.8,
         "open": 390.0,
-        "prev_close": 390.86
+        "prev_close": 396.84
       },
       {
         "symbol": "601899",
         "name": "紫金矿业",
-        "price": 32.15,
-        "change_pct": 1.45,
-        "volume": 2156163,
-        "high": 32.29,
-        "low": 31.18,
-        "open": 31.94,
-        "prev_close": 31.69
+        "price": 32.33,
+        "change_pct": 0.56,
+        "volume": 1754053,
+        "high": 33.18,
+        "low": 32.2,
+        "open": 32.63,
+        "prev_close": 32.15
       },
       {
         "symbol": "002415",
         "name": "海康威视",
-        "price": 35.74,
-        "change_pct": -1.11,
-        "volume": 1263005,
-        "high": 36.51,
-        "low": 34.78,
-        "open": 36.46,
-        "prev_close": 36.14
+        "price": 35.29,
+        "change_pct": -1.26,
+        "volume": 543286,
+        "high": 36.09,
+        "low": 35.15,
+        "open": 35.59,
+        "prev_close": 35.74
       },
       {
         "symbol": "600276",
         "name": "恒瑞医药",
-        "price": 53.89,
-        "change_pct": 1.13,
-        "volume": 684657,
-        "high": 54.44,
-        "low": 52.72,
-        "open": 54.0,
-        "prev_close": 53.29
+        "price": 53.67,
+        "change_pct": -0.41,
+        "volume": 359091,
+        "high": 54.36,
+        "low": 53.42,
+        "open": 54.05,
+        "prev_close": 53.89
       },
       {
         "symbol": "000651",
         "name": "格力电器",
-        "price": 41.65,
-        "change_pct": 2.08,
-        "volume": 744511,
-        "high": 41.9,
-        "low": 40.79,
-        "open": 40.79,
-        "prev_close": 40.8
+        "price": 41.89,
+        "change_pct": 0.58,
+        "volume": 255364,
+        "high": 41.93,
+        "low": 41.4,
+        "open": 41.6,
+        "prev_close": 41.65
       },
       {
         "symbol": "603259",
         "name": "药明康德",
-        "price": 126.5,
-        "change_pct": 2.83,
-        "volume": 547765,
-        "high": 127.8,
-        "low": 123.25,
-        "open": 127.78,
-        "prev_close": 123.02
+        "price": 122.0,
+        "change_pct": -3.56,
+        "volume": 351417,
+        "high": 126.63,
+        "low": 121.41,
+        "open": 126.6,
+        "prev_close": 126.5
       },
       {
         "symbol": "002714",
         "name": "牧原股份",
-        "price": 38.88,
-        "change_pct": -1.07,
-        "volume": 536829,
-        "high": 39.85,
-        "low": 38.61,
-        "open": 39.3,
-        "prev_close": 39.3
+        "price": 39.41,
+        "change_pct": 1.36,
+        "volume": 560417,
+        "high": 40.3,
+        "low": 38.56,
+        "open": 38.78,
+        "prev_close": 38.88
       },
       {
         "symbol": "688981",
         "name": "中芯国际",
-        "price": 130.9,
-        "change_pct": -4.24,
-        "volume": 683856,
-        "high": 138.88,
-        "low": 128.0,
-        "open": 138.31,
-        "prev_close": 136.7
+        "price": 123.05,
+        "change_pct": -6.0,
+        "volume": 478338,
+        "high": 130.79,
+        "low": 122.0,
+        "open": 128.68,
+        "prev_close": 130.9
       },
       {
         "symbol": "300059",
         "name": "东方财富",
-        "price": 19.9,
-        "change_pct": 2.47,
-        "volume": 3082897,
-        "high": 20.1,
-        "low": 19.3,
-        "open": 19.39,
-        "prev_close": 19.42
+        "price": 20.02,
+        "change_pct": 0.6,
+        "volume": 1823206,
+        "high": 20.29,
+        "low": 19.76,
+        "open": 19.8,
+        "prev_close": 19.9
       },
       {
         "symbol": "600030",
         "name": "中信证券",
-        "price": 28.5,
-        "change_pct": 1.46,
-        "volume": 1507019,
-        "high": 28.54,
-        "low": 27.83,
-        "open": 28.09,
-        "prev_close": 28.09
+        "price": 28.27,
+        "change_pct": -0.81,
+        "volume": 738271,
+        "high": 28.6,
+        "low": 28.15,
+        "open": 28.28,
+        "prev_close": 28.5
       },
       {
         "symbol": "601398",
         "name": "工商银行",
-        "price": 7.95,
-        "change_pct": -0.25,
-        "volume": 4269615,
-        "high": 8.04,
-        "low": 7.88,
-        "open": 8.03,
-        "prev_close": 7.97
+        "price": 8.14,
+        "change_pct": 2.39,
+        "volume": 2971730,
+        "high": 8.16,
+        "low": 7.91,
+        "open": 7.94,
+        "prev_close": 7.95
       }
     ],
     "crypto": [
       {
         "symbol": "BTC",
         "name": "Bitcoin",
-        "price": 63844.0,
-        "change_pct": -0.2,
-        "volume": 28464724832.0,
+        "price": 64080.0,
+        "change_pct": 0.4,
+        "volume": 28129582117.0,
         "high": 64660.0,
         "low": 63247.0,
-        "open": 63673.16,
-        "prev_close": 63673.16
+        "open": 63935.42,
+        "prev_close": 63935.42
       },
       {
         "symbol": "ETH",
         "name": "Ethereum",
-        "price": 1899.08,
-        "change_pct": -1.2,
-        "volume": 10608228253.0,
+        "price": 1905.84,
+        "change_pct": 0.1,
+        "volume": 10042246392.0,
         "high": 1926.22,
         "low": 1875.4,
-        "open": 1907.82,
-        "prev_close": 1907.82
+        "open": 1909.42,
+        "prev_close": 1909.42
       },
       {
         "symbol": "BNB",
         "name": "BNB",
-        "price": 569.12,
-        "change_pct": -0.5,
-        "volume": 486746681.0,
-        "high": 572.82,
+        "price": 571.67,
+        "change_pct": 0.5,
+        "volume": 521524140.0,
+        "high": 576.73,
         "low": 565.06,
-        "open": 568.0,
-        "prev_close": 568.0
+        "open": 568.78,
+        "prev_close": 568.78
       },
       {
         "symbol": "XRP",
         "name": "XRP",
         "price": 1.07,
-        "change_pct": 0.9,
-        "volume": 1410682229.0,
+        "change_pct": -0.3,
+        "volume": 1243242421.0,
         "high": 1.092,
-        "low": 1.059,
-        "open": 1.06,
-        "prev_close": 1.06
+        "low": 1.062,
+        "open": 1.09,
+        "prev_close": 1.09
       },
       {
         "symbol": "SOL",
         "name": "Solana",
-        "price": 73.21,
-        "change_pct": -1.3,
-        "volume": 1807443295.0,
+        "price": 73.63,
+        "change_pct": 0.2,
+        "volume": 1687056289.0,
         "high": 74.42,
         "low": 72.36,
-        "open": 73.29,
-        "prev_close": 73.29
+        "open": 73.61,
+        "prev_close": 73.61
       },
       {
         "symbol": "TRX",
         "name": "TRON",
-        "price": 0.325916,
-        "change_pct": 0.5,
-        "volume": 339876327.0,
+        "price": 0.325495,
+        "change_pct": 0.2,
+        "volume": 350490828.0,
         "high": 0.32727,
-        "low": 0.324077,
-        "open": 0.324164,
-        "prev_close": 0.324164
+        "low": 0.324841,
+        "open": 0.325095,
+        "prev_close": 0.325095
       },
       {
         "symbol": "DOGE",
         "name": "Dogecoin",
-        "price": 0.06991,
-        "change_pct": -1.2,
-        "volume": 530885445.0,
-        "high": 0.07107,
+        "price": 0.07012,
+        "change_pct": -0.7,
+        "volume": 473835646.0,
+        "high": 0.070985,
         "low": 0.069009,
-        "open": 0.070189,
-        "prev_close": 0.070189
+        "open": 0.070604,
+        "prev_close": 0.070604
       },
       {
         "symbol": "LINK",
         "name": "Chainlink",
-        "price": 8.26,
-        "change_pct": -1.7,
-        "volume": 204054384.0,
-        "high": 8.5,
+        "price": 8.32,
+        "change_pct": -0.9,
+        "volume": 187042442.0,
+        "high": 8.47,
         "low": 8.17,
-        "open": 8.36,
-        "prev_close": 8.36
+        "open": 8.38,
+        "prev_close": 8.38
       },
       {
         "symbol": "ADA",
         "name": "Cardano",
-        "price": 0.162897,
-        "change_pct": 1.6,
-        "volume": 358277957.0,
+        "price": 0.162331,
+        "change_pct": -1.8,
+        "volume": 281968871.0,
         "high": 0.168334,
-        "low": 0.160392,
-        "open": 0.160747,
-        "prev_close": 0.160747
+        "low": 0.160526,
+        "open": 0.163499,
+        "prev_close": 0.163499
       },
       {
         "symbol": "XLM",
         "name": "Stellar",
-        "price": 0.171254,
-        "change_pct": -1.6,
-        "volume": 118481919.0,
-        "high": 0.175403,
+        "price": 0.171839,
+        "change_pct": -1.0,
+        "volume": 110065636.0,
+        "high": 0.174884,
         "low": 0.16878,
-        "open": 0.172603,
-        "prev_close": 0.172603
+        "open": 0.173751,
+        "prev_close": 0.173751
       },
       {
         "symbol": "LTC",
         "name": "Litecoin",
-        "price": 44.87,
-        "change_pct": -3.6,
-        "volume": 230908424.0,
-        "high": 46.34,
+        "price": 45.4,
+        "change_pct": -1.5,
+        "volume": 230689955.0,
+        "high": 45.69,
         "low": 44.34,
-        "open": 45.94,
-        "prev_close": 45.94
+        "open": 45.28,
+        "prev_close": 45.28
       },
       {
         "symbol": "AVAX",
         "name": "Avalanche",
-        "price": 6.39,
-        "change_pct": -3.1,
-        "volume": 173636636.0,
-        "high": 6.62,
-        "low": 6.31,
-        "open": 6.53,
-        "prev_close": 6.53
+        "price": 6.44,
+        "change_pct": -0.3,
+        "volume": 161954612.0,
+        "high": 6.52,
+        "low": 6.32,
+        "open": 6.42,
+        "prev_close": 6.42
       },
       {
         "symbol": "SHIB",
         "name": "Shiba Inu",
         "price": 5e-06,
-        "change_pct": 0.4,
-        "volume": 157212332.0,
+        "change_pct": 0.7,
+        "volume": 144637583.0,
         "high": 4.85e-06,
-        "low": 4.54e-06,
+        "low": 4.56e-06,
         "open": 5e-06,
         "prev_close": 5e-06
       },
       {
         "symbol": "UNI",
         "name": "Uniswap",
-        "price": 3.95,
-        "change_pct": 1.0,
-        "volume": 285051011.0,
+        "price": 4.01,
+        "change_pct": 5.4,
+        "volume": 296344215.0,
         "high": 4.07,
-        "low": 3.74,
-        "open": 3.87,
-        "prev_close": 3.87
+        "low": 3.79,
+        "open": 3.82,
+        "prev_close": 3.82
       },
       {
         "symbol": "NEAR",
         "name": "NEAR Protocol",
-        "price": 1.6,
-        "change_pct": -3.6,
-        "volume": 209979819.0,
-        "high": 1.66,
+        "price": 1.63,
+        "change_pct": 0.1,
+        "volume": 207674021.0,
+        "high": 1.64,
         "low": 1.57,
-        "open": 1.64,
-        "prev_close": 1.64
+        "open": 1.61,
+        "prev_close": 1.61
       },
       {
         "symbol": "DOT",
         "name": "Polkadot",
-        "price": 0.761566,
-        "change_pct": -0.4,
-        "volume": 88997046.0,
+        "price": 0.763492,
+        "change_pct": 0.4,
+        "volume": 82563917.0,
         "high": 0.775326,
         "low": 0.752392,
-        "open": 0.75873,
-        "prev_close": 0.75873
+        "open": 0.762241,
+        "prev_close": 0.762241
       },
       {
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "price": 6.66,
-        "change_pct": -1.6,
-        "volume": 29736651.0,
+        "price": 6.72,
+        "change_pct": 1.0,
+        "volume": 26948502.0,
         "high": 6.76,
         "low": 6.59,
-        "open": 6.71,
-        "prev_close": 6.71
+        "open": 6.67,
+        "prev_close": 6.67
       },
       {
         "symbol": "FIL",
         "name": "Filecoin",
-        "price": 0.670059,
-        "change_pct": -5.2,
-        "volume": 70443749.0,
-        "high": 0.710347,
+        "price": 0.681844,
+        "change_pct": -1.3,
+        "volume": 66825582.0,
+        "high": 0.696997,
         "low": 0.657819,
-        "open": 0.700328,
-        "prev_close": 0.700328
+        "open": 0.693882,
+        "prev_close": 0.693882
       },
       {
         "symbol": "APT",
         "name": "Aptos",
-        "price": 0.559814,
-        "change_pct": -4.7,
-        "volume": 42147595.0,
-        "high": 0.589504,
+        "price": 0.564049,
+        "change_pct": -1.9,
+        "volume": 38381694.0,
+        "high": 0.577142,
         "low": 0.551401,
-        "open": 0.584288,
-        "prev_close": 0.584288
+        "open": 0.573871,
+        "prev_close": 0.573871
       }
     ],
     "commodity": [
       {
         "symbol": "GOLD",
         "name": "黄金期货",
-        "price": 4126.0,
-        "change_pct": 2.61,
-        "volume": 178364,
-        "high": 4176.8,
-        "low": 4053.9,
-        "open": 4020.9,
-        "prev_close": 4020.9
+        "price": 4110.5,
+        "change_pct": -0.39,
+        "volume": 22497,
+        "high": 4158.0,
+        "low": 4107.6,
+        "open": 4126.7,
+        "prev_close": 4126.7
       },
       {
         "symbol": "SILVER",
         "name": "白银期货",
-        "price": 57.9,
-        "change_pct": 0.9,
-        "volume": 40292,
-        "high": 59.54,
-        "low": 56.92,
-        "open": 57.38,
-        "prev_close": 57.38
+        "price": 57.67,
+        "change_pct": -0.53,
+        "volume": 5551,
+        "high": 58.89,
+        "low": 57.56,
+        "open": 57.97,
+        "prev_close": 57.97
       },
       {
         "symbol": "CRUDE_OIL",
         "name": "原油期货(WTI)",
-        "price": 84.6,
-        "change_pct": 5.7,
-        "volume": 304832,
-        "high": 85.57,
-        "low": 79.92,
-        "open": 80.04,
-        "prev_close": 80.04
+        "price": 83.78,
+        "change_pct": -1.03,
+        "volume": 21374,
+        "high": 84.72,
+        "low": 83.21,
+        "open": 84.65,
+        "prev_close": 84.65
       },
       {
         "symbol": "BRENT",
         "name": "原油期货(布伦特)",
-        "price": 90.54,
-        "change_pct": 6.58,
-        "volume": 12901,
-        "high": 91.05,
-        "low": 84.95,
-        "open": 84.95,
-        "prev_close": 84.95
+        "price": 89.8,
+        "change_pct": -0.76,
+        "volume": 461,
+        "high": 90.49,
+        "low": 89.11,
+        "open": 90.49,
+        "prev_close": 90.49
       },
       {
         "symbol": "NATURAL_GAS",
         "name": "天然气期货",
         "price": 2.73,
-        "change_pct": 1.86,
-        "volume": 107189,
-        "high": 2.76,
-        "low": 2.67,
-        "open": 2.68,
-        "prev_close": 2.68
+        "change_pct": 0.0,
+        "volume": 1837,
+        "high": 2.73,
+        "low": 2.72,
+        "open": 2.73,
+        "prev_close": 2.73
       },
       {
         "symbol": "COPPER",
         "name": "铜期货",
-        "price": 6.35,
-        "change_pct": 0.17,
-        "volume": 39740,
+        "price": 6.37,
+        "change_pct": 0.27,
+        "volume": 5997,
         "high": 6.43,
-        "low": 6.28,
-        "open": 6.34,
-        "prev_close": 6.34
+        "low": 6.35,
+        "open": 6.35,
+        "prev_close": 6.35
       },
       {
         "symbol": "ALUMINUM",
         "name": "铝期货",
-        "price": 3366.0,
-        "change_pct": -0.77,
-        "volume": 157,
-        "high": 3398.75,
-        "low": 3350.75,
-        "open": 3392.0,
-        "prev_close": 3392.0
+        "price": 3376.5,
+        "change_pct": 0.98,
+        "volume": 3,
+        "high": 3391.0,
+        "low": 3343.75,
+        "open": 3343.75,
+        "prev_close": 3343.75
       },
       {
         "symbol": "CORN",
         "name": "玉米期货",
-        "price": 471.0,
-        "change_pct": -2.18,
-        "volume": 212169,
-        "high": 483.5,
-        "low": 470.75,
-        "open": 481.5,
-        "prev_close": 481.5
+        "price": 469.0,
+        "change_pct": -0.42,
+        "volume": 23246,
+        "high": 471.75,
+        "low": 468.5,
+        "open": 471.0,
+        "prev_close": 471.0
       },
       {
         "symbol": "SOYBEAN",
         "name": "大豆期货",
-        "price": 1191.5,
-        "change_pct": -2.54,
-        "volume": 156953,
-        "high": 1225.0,
-        "low": 1190.0,
-        "open": 1222.5,
-        "prev_close": 1222.5
+        "price": 1188.25,
+        "change_pct": -0.36,
+        "volume": 17894,
+        "high": 1193.75,
+        "low": 1184.25,
+        "open": 1192.5,
+        "prev_close": 1192.5
       },
       {
         "symbol": "WHEAT",
         "name": "小麦期货",
-        "price": 660.0,
-        "change_pct": -1.01,
-        "volume": 54385,
-        "high": 672.25,
+        "price": 661.5,
+        "change_pct": 0.23,
+        "volume": 3790,
+        "high": 667.0,
         "low": 658.25,
-        "open": 666.75,
-        "prev_close": 666.75
+        "open": 660.0,
+        "prev_close": 660.0
       }
     ]
   },
@@ -863,100 +863,80 @@
       {
         "market": "cn",
         "type": "market_trend",
-        "description": "A股整体强势上涨，上涨占比77%",
+        "description": "A股整体偏强，上涨占比64%",
         "confidence": "中"
+      },
+      {
+        "market": "cn",
+        "type": "individual_strong",
+        "symbol": "000858",
+        "name": "五 粮 液",
+        "description": "五 粮 液(000858)涨幅4.63%，表现强势",
+        "confidence": "中",
+        "price": 78.65,
+        "change_pct": 4.63
+      },
+      {
+        "market": "cn",
+        "type": "individual_weak",
+        "symbol": "399001",
+        "name": "深证成指",
+        "description": "深证成指(399001)跌幅-3.79%，表现疲弱",
+        "confidence": "中",
+        "price": 13141.22,
+        "change_pct": -3.79
+      },
+      {
+        "market": "cn",
+        "type": "individual_weak",
+        "symbol": "399006",
+        "name": "创业板指",
+        "description": "创业板指(399006)跌幅-5.89%，表现疲弱",
+        "confidence": "高",
+        "price": 3179.58,
+        "change_pct": -5.89
+      },
+      {
+        "market": "cn",
+        "type": "individual_weak",
+        "symbol": "603259",
+        "name": "药明康德",
+        "description": "药明康德(603259)跌幅-3.56%，表现疲弱",
+        "confidence": "中",
+        "price": 122.0,
+        "change_pct": -3.56
       },
       {
         "market": "cn",
         "type": "individual_weak",
         "symbol": "688981",
         "name": "中芯国际",
-        "description": "中芯国际(688981)跌幅-4.24%，表现疲弱",
-        "confidence": "中",
-        "price": 130.9,
-        "change_pct": -4.24
+        "description": "中芯国际(688981)跌幅-6.0%，表现疲弱",
+        "confidence": "高",
+        "price": 123.05,
+        "change_pct": -6.0
       },
       {
         "market": "crypto",
         "type": "market_trend",
-        "description": "数字货币整体普遍下跌，上涨占比26%",
+        "description": "数字货币整体偏强，上涨占比53%",
         "confidence": "中"
       },
       {
         "market": "crypto",
-        "type": "individual_weak",
-        "symbol": "LTC",
-        "name": "Litecoin",
-        "description": "Litecoin(LTC)跌幅-3.6%，表现疲弱",
-        "confidence": "中",
-        "price": 44.87,
-        "change_pct": -3.6
-      },
-      {
-        "market": "crypto",
-        "type": "individual_weak",
-        "symbol": "AVAX",
-        "name": "Avalanche",
-        "description": "Avalanche(AVAX)跌幅-3.1%，表现疲弱",
-        "confidence": "中",
-        "price": 6.39,
-        "change_pct": -3.1
-      },
-      {
-        "market": "crypto",
-        "type": "individual_weak",
-        "symbol": "NEAR",
-        "name": "NEAR Protocol",
-        "description": "NEAR Protocol(NEAR)跌幅-3.6%，表现疲弱",
-        "confidence": "中",
-        "price": 1.6,
-        "change_pct": -3.6
-      },
-      {
-        "market": "crypto",
-        "type": "individual_weak",
-        "symbol": "FIL",
-        "name": "Filecoin",
-        "description": "Filecoin(FIL)跌幅-5.2%，表现疲弱",
+        "type": "individual_strong",
+        "symbol": "UNI",
+        "name": "Uniswap",
+        "description": "Uniswap(UNI)涨幅5.4%，表现强势",
         "confidence": "高",
-        "price": 0.670059,
-        "change_pct": -5.2
-      },
-      {
-        "market": "crypto",
-        "type": "individual_weak",
-        "symbol": "APT",
-        "name": "Aptos",
-        "description": "Aptos(APT)跌幅-4.7%，表现疲弱",
-        "confidence": "中",
-        "price": 0.559814,
-        "change_pct": -4.7
+        "price": 4.01,
+        "change_pct": 5.4
       },
       {
         "market": "commodity",
         "type": "market_trend",
-        "description": "大宗商品整体偏强，上涨占比60%",
+        "description": "大宗商品整体偏弱，上涨占比30%",
         "confidence": "中"
-      },
-      {
-        "market": "commodity",
-        "type": "individual_strong",
-        "symbol": "CRUDE_OIL",
-        "name": "原油期货(WTI)",
-        "description": "原油期货(WTI)(CRUDE_OIL)涨幅5.7%，表现强势",
-        "confidence": "高",
-        "price": 84.6,
-        "change_pct": 5.7
-      },
-      {
-        "market": "commodity",
-        "type": "individual_strong",
-        "symbol": "BRENT",
-        "name": "原油期货(布伦特)",
-        "description": "原油期货(布伦特)(BRENT)涨幅6.58%，表现强势",
-        "confidence": "高",
-        "price": 90.54,
-        "change_pct": 6.58
       }
     ],
     "opportunities": [
@@ -1052,163 +1032,83 @@
       },
       {
         "market": "cn",
-        "type": "breakout_watch",
+        "type": "dip_buying",
+        "symbol": "399001",
+        "name": "深证成指",
+        "description": "深证成指回调3.79%，关注低吸机会",
+        "confidence": "中",
+        "price": 13141.22,
+        "change_pct": -3.79
+      },
+      {
+        "market": "cn",
+        "type": "dip_buying",
         "symbol": "399006",
         "name": "创业板指",
-        "description": "创业板指温和上涨1.55%，留意突破信号",
+        "description": "创业板指回调5.89%，关注低吸机会",
         "confidence": "低",
-        "price": 3378.7,
-        "change_pct": 1.55
+        "price": 3179.58,
+        "change_pct": -5.89
       },
       {
         "market": "cn",
         "type": "breakout_watch",
-        "symbol": "000333",
-        "name": "美的集团",
-        "description": "美的集团温和上涨1.92%，留意突破信号",
+        "symbol": "600519",
+        "name": "贵州茅台",
+        "description": "贵州茅台温和上涨2.85%，留意突破信号",
         "confidence": "低",
-        "price": 87.01,
-        "change_pct": 1.92
+        "price": 1358.65,
+        "change_pct": 2.85
       },
       {
         "market": "cn",
         "type": "breakout_watch",
-        "symbol": "002594",
-        "name": "比亚迪",
-        "description": "比亚迪温和上涨1.61%，留意突破信号",
+        "symbol": "601012",
+        "name": "隆基绿能",
+        "description": "隆基绿能温和上涨1.72%，留意突破信号",
         "confidence": "低",
-        "price": 94.85,
-        "change_pct": 1.61
+        "price": 13.03,
+        "change_pct": 1.72
       },
       {
         "market": "cn",
         "type": "breakout_watch",
-        "symbol": "300750",
-        "name": "宁德时代",
-        "description": "宁德时代温和上涨1.53%，留意突破信号",
+        "symbol": "600900",
+        "name": "长江电力",
+        "description": "长江电力温和上涨1.87%，留意突破信号",
         "confidence": "低",
-        "price": 396.84,
-        "change_pct": 1.53
+        "price": 29.47,
+        "change_pct": 1.87
       },
       {
         "market": "cn",
-        "type": "breakout_watch",
-        "symbol": "000651",
-        "name": "格力电器",
-        "description": "格力电器温和上涨2.08%，留意突破信号",
-        "confidence": "低",
-        "price": 41.65,
-        "change_pct": 2.08
-      },
-      {
-        "market": "cn",
-        "type": "breakout_watch",
+        "type": "dip_buying",
         "symbol": "603259",
         "name": "药明康德",
-        "description": "药明康德温和上涨2.83%，留意突破信号",
-        "confidence": "低",
-        "price": 126.5,
-        "change_pct": 2.83
+        "description": "药明康德回调3.56%，关注低吸机会",
+        "confidence": "中",
+        "price": 122.0,
+        "change_pct": -3.56
       },
       {
         "market": "cn",
         "type": "dip_buying",
         "symbol": "688981",
         "name": "中芯国际",
-        "description": "中芯国际回调4.24%，关注低吸机会",
-        "confidence": "中",
-        "price": 130.9,
-        "change_pct": -4.24
+        "description": "中芯国际回调6.0%，关注低吸机会",
+        "confidence": "低",
+        "price": 123.05,
+        "change_pct": -6.0
       },
       {
         "market": "cn",
         "type": "breakout_watch",
-        "symbol": "300059",
-        "name": "东方财富",
-        "description": "东方财富温和上涨2.47%，留意突破信号",
+        "symbol": "601398",
+        "name": "工商银行",
+        "description": "工商银行温和上涨2.39%，留意突破信号",
         "confidence": "低",
-        "price": 19.9,
-        "change_pct": 2.47
-      },
-      {
-        "market": "crypto",
-        "type": "breakout_watch",
-        "symbol": "ADA",
-        "name": "Cardano",
-        "description": "Cardano温和上涨1.6%，留意突破信号",
-        "confidence": "低",
-        "price": 0.162897,
-        "change_pct": 1.6
-      },
-      {
-        "market": "crypto",
-        "type": "dip_buying",
-        "symbol": "LTC",
-        "name": "Litecoin",
-        "description": "Litecoin回调3.6%，关注低吸机会",
-        "confidence": "中",
-        "price": 44.87,
-        "change_pct": -3.6
-      },
-      {
-        "market": "crypto",
-        "type": "dip_buying",
-        "symbol": "AVAX",
-        "name": "Avalanche",
-        "description": "Avalanche回调3.1%，关注低吸机会",
-        "confidence": "中",
-        "price": 6.39,
-        "change_pct": -3.1
-      },
-      {
-        "market": "crypto",
-        "type": "dip_buying",
-        "symbol": "NEAR",
-        "name": "NEAR Protocol",
-        "description": "NEAR Protocol回调3.6%，关注低吸机会",
-        "confidence": "中",
-        "price": 1.6,
-        "change_pct": -3.6
-      },
-      {
-        "market": "crypto",
-        "type": "dip_buying",
-        "symbol": "FIL",
-        "name": "Filecoin",
-        "description": "Filecoin回调5.2%，关注低吸机会",
-        "confidence": "低",
-        "price": 0.670059,
-        "change_pct": -5.2
-      },
-      {
-        "market": "crypto",
-        "type": "dip_buying",
-        "symbol": "APT",
-        "name": "Aptos",
-        "description": "Aptos回调4.7%，关注低吸机会",
-        "confidence": "中",
-        "price": 0.559814,
-        "change_pct": -4.7
-      },
-      {
-        "market": "commodity",
-        "type": "breakout_watch",
-        "symbol": "GOLD",
-        "name": "黄金期货",
-        "description": "黄金期货温和上涨2.61%，留意突破信号",
-        "confidence": "低",
-        "price": 4126.0,
-        "change_pct": 2.61
-      },
-      {
-        "market": "commodity",
-        "type": "breakout_watch",
-        "symbol": "NATURAL_GAS",
-        "name": "天然气期货",
-        "description": "天然气期货温和上涨1.86%，留意突破信号",
-        "confidence": "低",
-        "price": 2.73,
-        "change_pct": 1.86
+        "price": 8.14,
+        "change_pct": 2.39
       }
     ],
     "risks": [
@@ -1243,14 +1143,24 @@
         "change_pct": -5.09
       },
       {
-        "market": "crypto",
+        "market": "cn",
         "type": "crash_warning",
-        "symbol": "FIL",
-        "name": "Filecoin",
-        "description": "Filecoin暴跌5.2%，风险极高",
+        "symbol": "399006",
+        "name": "创业板指",
+        "description": "创业板指暴跌5.89%，风险极高",
         "confidence": "高",
-        "price": 0.670059,
-        "change_pct": -5.2
+        "price": 3179.58,
+        "change_pct": -5.89
+      },
+      {
+        "market": "cn",
+        "type": "crash_warning",
+        "symbol": "688981",
+        "name": "中芯国际",
+        "description": "中芯国际暴跌6.0%，风险极高",
+        "confidence": "高",
+        "price": 123.05,
+        "change_pct": -6.0
       }
     ],
     "summary": {
@@ -1273,59 +1183,59 @@
       },
       "cn": {
         "total": 22,
-        "upCount": 17,
-        "downCount": 5,
+        "upCount": 14,
+        "downCount": 8,
         "flatCount": 0,
-        "avgChange": 0.65,
+        "avgChange": -0.07,
         "maxUp": {
-          "symbol": "603259",
-          "name": "药明康德",
-          "change_pct": 2.83
+          "symbol": "000858",
+          "name": "五 粮 液",
+          "change_pct": 4.63
         },
         "maxDown": {
           "symbol": "688981",
           "name": "中芯国际",
-          "change_pct": -4.24
+          "change_pct": -6.0
         }
       },
       "crypto": {
         "total": 19,
-        "upCount": 5,
-        "downCount": 14,
+        "upCount": 10,
+        "downCount": 9,
         "flatCount": 0,
-        "avgChange": -1.34,
+        "avgChange": -0.04,
         "maxUp": {
-          "symbol": "ADA",
-          "name": "Cardano",
-          "change_pct": 1.6
+          "symbol": "UNI",
+          "name": "Uniswap",
+          "change_pct": 5.4
         },
         "maxDown": {
-          "symbol": "FIL",
-          "name": "Filecoin",
-          "change_pct": -5.2
+          "symbol": "APT",
+          "name": "Aptos",
+          "change_pct": -1.9
         }
       },
       "commodity": {
         "total": 10,
-        "upCount": 6,
-        "downCount": 4,
-        "flatCount": 0,
-        "avgChange": 1.13,
+        "upCount": 3,
+        "downCount": 6,
+        "flatCount": 1,
+        "avgChange": -0.2,
         "maxUp": {
-          "symbol": "BRENT",
-          "name": "原油期货(布伦特)",
-          "change_pct": 6.58
+          "symbol": "ALUMINUM",
+          "name": "铝期货",
+          "change_pct": 0.98
         },
         "maxDown": {
-          "symbol": "SOYBEAN",
-          "name": "大豆期货",
-          "change_pct": -2.54
+          "symbol": "CRUDE_OIL",
+          "name": "原油期货(WTI)",
+          "change_pct": -1.03
         }
       }
     }
   },
   "report": {
-    "summary": "美股: 平均-1.37%, 涨跌比6:14 | A股: 平均+0.65%, 涨跌比17:5 | 数字货币: 平均-1.34%, 涨跌比5:14 | 大宗商品: 平均+1.13%, 涨跌比6:4 | 风险预警: 4条 | 机会提示: 25条"
+    "summary": "美股: 平均-1.37%, 涨跌比6:14 | A股: 平均-0.07%, 涨跌比14:8 | 数字货币: 平均-0.04%, 涨跌比10:9 | 大宗商品: 平均-0.20%, 涨跌比3:6 | 风险预警: 5条 | 机会提示: 17条"
   },
   "emailResults": [
     {
