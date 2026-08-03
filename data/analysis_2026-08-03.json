@@ -1,9 +1,229 @@
 {
   "date": "2026-08-03",
-  "updatedAt": "2026-08-03T04:14:36.650327",
-  "markets": {
+  "trends": [
+    {
+      "market": "us",
+      "type": "market_trend",
+      "description": "美股整体偏强，上涨占比55%",
+      "confidence": "中"
+    },
+    {
+      "market": "us",
+      "type": "individual_strong",
+      "symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "description": "Microsoft Corporation(MSFT)涨幅3.02%，表现强势",
+      "confidence": "中",
+      "price": 464.72,
+      "change_pct": 3.02
+    },
+    {
+      "market": "us",
+      "type": "individual_strong",
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc.",
+      "description": "Alphabet Inc.(GOOGL)涨幅6.73%，表现强势",
+      "confidence": "高",
+      "price": 356.13,
+      "change_pct": 6.73
+    },
+    {
+      "market": "us",
+      "type": "individual_strong",
+      "symbol": "AMZN",
+      "name": "Amazon.com, Inc.",
+      "description": "Amazon.com, Inc.(AMZN)涨幅15.32%，表现强势",
+      "confidence": "高",
+      "price": 271.58,
+      "change_pct": 15.32
+    },
+    {
+      "market": "us",
+      "type": "individual_strong",
+      "symbol": "META",
+      "name": "Meta Platforms, Inc.",
+      "description": "Meta Platforms, Inc.(META)涨幅3.28%，表现强势",
+      "confidence": "中",
+      "price": 556.71,
+      "change_pct": 3.28
+    },
+    {
+      "market": "us",
+      "type": "individual_weak",
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "description": "Apple Inc.(AAPL)跌幅-7.35%，表现疲弱",
+      "confidence": "高",
+      "price": 308.91,
+      "change_pct": -7.35
+    },
+    {
+      "market": "cn",
+      "type": "market_trend",
+      "description": "A股整体普遍下跌，上涨占比23%",
+      "confidence": "中"
+    },
+    {
+      "market": "cn",
+      "type": "individual_weak",
+      "symbol": "688981",
+      "name": "中芯国际",
+      "description": "中芯国际(688981)跌幅-4.75%，表现疲弱",
+      "confidence": "中",
+      "price": 118.1,
+      "change_pct": -4.75
+    },
+    {
+      "market": "crypto",
+      "type": "market_trend",
+      "description": "数字货币整体普遍下跌，上涨占比21%",
+      "confidence": "中"
+    },
+    {
+      "market": "commodity",
+      "type": "market_trend",
+      "description": "大宗商品整体普遍下跌，上涨占比25%",
+      "confidence": "中"
+    }
+  ],
+  "opportunities": [
+    {
+      "market": "us",
+      "type": "dip_buying",
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "description": "Apple Inc.回调7.35%，关注低吸机会",
+      "confidence": "低",
+      "price": 308.91,
+      "change_pct": -7.35
+    },
+    {
+      "market": "us",
+      "type": "breakout_watch",
+      "symbol": "NVDA",
+      "name": "NVIDIA Corporation",
+      "description": "NVIDIA Corporation温和上涨2.93%，留意突破信号",
+      "confidence": "低",
+      "price": 200.75,
+      "change_pct": 2.93
+    },
+    {
+      "market": "us",
+      "type": "breakout_watch",
+      "symbol": "CVX",
+      "name": "Chevron Corporation",
+      "description": "Chevron Corporation温和上涨2.35%，留意突破信号",
+      "confidence": "低",
+      "price": 196.83,
+      "change_pct": 2.35
+    },
+    {
+      "market": "cn",
+      "type": "dip_buying",
+      "symbol": "688981",
+      "name": "中芯国际",
+      "description": "中芯国际回调4.75%，关注低吸机会",
+      "confidence": "中",
+      "price": 118.1,
+      "change_pct": -4.75
+    },
+    {
+      "market": "crypto",
+      "type": "breakout_watch",
+      "symbol": "ADA",
+      "name": "Cardano",
+      "description": "Cardano温和上涨2.9%，留意突破信号",
+      "confidence": "低",
+      "price": 0.18538,
+      "change_pct": 2.9
+    }
+  ],
+  "risks": [
+    {
+      "market": "us",
+      "type": "crash_warning",
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "description": "Apple Inc.暴跌7.35%，风险极高",
+      "confidence": "高",
+      "price": 308.91,
+      "change_pct": -7.35
+    }
+  ],
+  "summary": {
+    "us": {
+      "total": 20,
+      "upCount": 11,
+      "downCount": 9,
+      "flatCount": 0,
+      "avgChange": 0.87,
+      "maxUp": {
+        "symbol": "AMZN",
+        "name": "Amazon.com, Inc.",
+        "change_pct": 15.32
+      },
+      "maxDown": {
+        "symbol": "AAPL",
+        "name": "Apple Inc.",
+        "change_pct": -7.35
+      }
+    },
+    "cn": {
+      "total": 22,
+      "upCount": 5,
+      "downCount": 17,
+      "flatCount": 0,
+      "avgChange": -0.78,
+      "maxUp": {
+        "symbol": "600036",
+        "name": "招商银行",
+        "change_pct": 1.39
+      },
+      "maxDown": {
+        "symbol": "688981",
+        "name": "中芯国际",
+        "change_pct": -4.75
+      }
+    },
+    "crypto": {
+      "total": 19,
+      "upCount": 4,
+      "downCount": 15,
+      "flatCount": 0,
+      "avgChange": -0.29,
+      "maxUp": {
+        "symbol": "ADA",
+        "name": "Cardano",
+        "change_pct": 2.9
+      },
+      "maxDown": {
+        "symbol": "XLM",
+        "name": "Stellar",
+        "change_pct": -1.5
+      }
+    },
+    "commodity": {
+      "total": 8,
+      "upCount": 2,
+      "downCount": 6,
+      "flatCount": 0,
+      "avgChange": -0.11,
+      "maxUp": {
+        "symbol": "NATURAL_GAS",
+        "name": "天然气期货",
+        "change_pct": 0.47
+      },
+      "maxDown": {
+        "symbol": "CRUDE_OIL",
+        "name": "原油期货(WTI)",
+        "change_pct": -0.41
+      }
+    }
+  },
+  "grouped": {
     "us": [
       {
+        "market": "us",
         "symbol": "AAPL",
         "name": "Apple Inc.",
         "price": 308.91,
@@ -12,9 +232,12 @@
         "high": 310.69,
         "low": 300.0,
         "open": 304.81,
-        "prev_close": 333.43
+        "prev_close": 333.43,
+        "market_cap": 4537070911488,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "MSFT",
         "name": "Microsoft Corporation",
         "price": 464.72,
@@ -23,9 +246,12 @@
         "high": 466.84,
         "low": 449.552,
         "open": 449.585,
-        "prev_close": 451.1
+        "prev_close": 451.1,
+        "market_cap": 3450799652864,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "GOOGL",
         "name": "Alphabet Inc.",
         "price": 356.13,
@@ -34,9 +260,12 @@
         "high": 358.55,
         "low": 340.0,
         "open": 341.5,
-        "prev_close": 333.66
+        "prev_close": 333.66,
+        "market_cap": 4355446800384,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "AMZN",
         "name": "Amazon.com, Inc.",
         "price": 271.58,
@@ -45,9 +274,12 @@
         "high": 273.23,
         "low": 262.055,
         "open": 264.985,
-        "prev_close": 235.5
+        "prev_close": 235.5,
+        "market_cap": 2921415835648,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "NVDA",
         "name": "NVIDIA Corporation",
         "price": 200.75,
@@ -56,9 +288,12 @@
         "high": 201.97,
         "low": 194.95,
         "open": 198.4405,
-        "prev_close": 195.04
+        "prev_close": 195.04,
+        "market_cap": 4862365925376,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "META",
         "name": "Meta Platforms, Inc.",
         "price": 556.71,
@@ -67,9 +302,12 @@
         "high": 558.33,
         "low": 540.24,
         "open": 543.56,
-        "prev_close": 539.03
+        "prev_close": 539.03,
+        "market_cap": 1418222239744,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "TSLA",
         "name": "Tesla, Inc.",
         "price": 311.21,
@@ -78,9 +316,12 @@
         "high": 315.5,
         "low": 301.97,
         "open": 309.6,
-        "prev_close": 308.85
+        "prev_close": 308.85,
+        "market_cap": 1229138690048,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "JPM",
         "name": "JP Morgan Chase & Co.",
         "price": 351.79,
@@ -89,9 +330,12 @@
         "high": 354.47,
         "low": 349.7,
         "open": 353.3,
-        "prev_close": 350.85
+        "prev_close": 350.85,
+        "market_cap": 935128203264,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "V",
         "name": "Visa Inc.",
         "price": 366.13,
@@ -100,9 +344,12 @@
         "high": 366.88,
         "low": 360.1,
         "open": 363.76,
-        "prev_close": 366.27
+        "prev_close": 366.27,
+        "market_cap": 683582029824,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "WMT",
         "name": "Walmart Inc.",
         "price": 111.2,
@@ -111,9 +358,12 @@
         "high": 111.9,
         "low": 109.9,
         "open": 110.78,
-        "prev_close": 111.1
+        "prev_close": 111.1,
+        "market_cap": 884938375168,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "DIS",
         "name": "Walt Disney Company (The)",
         "price": 96.19,
@@ -122,9 +372,12 @@
         "high": 96.58,
         "low": 95.6,
         "open": 96.075,
-        "prev_close": 96.16
+        "prev_close": 96.16,
+        "market_cap": 167035043840,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "NFLX",
         "name": "Netflix, Inc.",
         "price": 71.71,
@@ -133,9 +386,12 @@
         "high": 72.75,
         "low": 71.105,
         "open": 71.965,
-        "prev_close": 73.17
+        "prev_close": 73.17,
+        "market_cap": 298596106240,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "AMD",
         "name": "Advanced Micro Devices, Inc.",
         "price": 476.15,
@@ -144,9 +400,12 @@
         "high": 515.62,
         "low": 475.76,
         "open": 510.275,
-        "prev_close": 485.39
+        "prev_close": 485.39,
+        "market_cap": 776410431488,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "INTC",
         "name": "Intel Corporation",
         "price": 90.2,
@@ -155,9 +414,12 @@
         "high": 97.9,
         "low": 90.135,
         "open": 96.72,
-        "prev_close": 91.13
+        "prev_close": 91.13,
+        "market_cap": 454968770560,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "BA",
         "name": "Boeing Company (The)",
         "price": 216.14,
@@ -166,9 +428,12 @@
         "high": 221.5,
         "low": 211.31,
         "open": 221.16,
-        "prev_close": 220.9
+        "prev_close": 220.9,
+        "market_cap": 170705747968,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "GS",
         "name": "Goldman Sachs Group, Inc. (The)",
         "price": 1018.38,
@@ -177,9 +442,12 @@
         "high": 1042.89,
         "low": 1008.6004,
         "open": 1034.72,
-        "prev_close": 1024.86
+        "prev_close": 1024.86,
+        "market_cap": 300429672448,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "CVX",
         "name": "Chevron Corporation",
         "price": 196.83,
@@ -188,9 +456,12 @@
         "high": 197.5525,
         "low": 191.54,
         "open": 195.11,
-        "prev_close": 192.31
+        "prev_close": 192.31,
+        "market_cap": 392006172672,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "XOM",
         "name": "ExxonMobil Holdings Corporation",
         "price": 155.44,
@@ -199,9 +470,12 @@
         "high": 156.16,
         "low": 152.14,
         "open": 153.74,
-        "prev_close": 156.97
+        "prev_close": 156.97,
+        "market_cap": 644290576384,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "PFE",
         "name": "Pfizer, Inc.",
         "price": 25.01,
@@ -210,9 +484,12 @@
         "high": 25.18,
         "low": 24.67,
         "open": 24.82,
-        "prev_close": 24.91
+        "prev_close": 24.91,
+        "market_cap": 142543093760,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       },
       {
+        "market": "us",
         "symbol": "UNH",
         "name": "UnitedHealth Group Incorporated",
         "price": 414.4,
@@ -221,11 +498,14 @@
         "high": 422.65,
         "low": 414.16,
         "open": 422.0,
-        "prev_close": 421.47
+        "prev_close": 421.47,
+        "market_cap": 376335040512,
+        "extra": "{\"currency\": \"USD\", \"source\": \"yfinance\"}"
       }
     ],
     "cn": [
       {
+        "market": "cn",
         "symbol": "000001",
         "name": "上证指数",
         "price": 3809.65,
@@ -234,9 +514,12 @@
         "high": 3827.64,
         "low": 3801.7,
         "open": 3812.61,
-        "prev_close": 3832.26
+        "prev_close": 3832.26,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "399001",
         "name": "深证成指",
         "price": 13517.62,
@@ -245,9 +528,12 @@
         "high": 13570.51,
         "low": 13419.96,
         "open": 13497.1,
-        "prev_close": 13578.93
+        "prev_close": 13578.93,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "399006",
         "name": "创业板指",
         "price": 3329.13,
@@ -256,9 +542,12 @@
         "high": 3342.17,
         "low": 3280.84,
         "open": 3320.09,
-        "prev_close": 3343.96
+        "prev_close": 3343.96,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "600519",
         "name": "贵州茅台",
         "price": 1351.0,
@@ -267,9 +556,12 @@
         "high": 1363.35,
         "low": 1346.0,
         "open": 1350.6,
-        "prev_close": 1350.6
+        "prev_close": 1350.6,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "000858",
         "name": "五 粮 液",
         "price": 77.85,
@@ -278,9 +570,12 @@
         "high": 78.66,
         "low": 77.5,
         "open": 78.0,
-        "prev_close": 78.0
+        "prev_close": 78.0,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "601318",
         "name": "中国平安",
         "price": 55.15,
@@ -289,9 +584,12 @@
         "high": 55.45,
         "low": 54.7,
         "open": 54.8,
-        "prev_close": 54.9
+        "prev_close": 54.9,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "000333",
         "name": "美的集团",
         "price": 86.25,
@@ -300,9 +598,12 @@
         "high": 87.97,
         "low": 86.12,
         "open": 87.39,
-        "prev_close": 87.6
+        "prev_close": 87.6,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "600036",
         "name": "招商银行",
         "price": 40.17,
@@ -311,9 +612,12 @@
         "high": 40.42,
         "low": 39.8,
         "open": 39.88,
-        "prev_close": 39.62
+        "prev_close": 39.62,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "601012",
         "name": "隆基绿能",
         "price": 13.17,
@@ -322,9 +626,12 @@
         "high": 13.37,
         "low": 12.98,
         "open": 13.0,
-        "prev_close": 12.99
+        "prev_close": 12.99,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "002594",
         "name": "比亚迪",
         "price": 95.35,
@@ -333,9 +640,12 @@
         "high": 96.59,
         "low": 94.9,
         "open": 96.03,
-        "prev_close": 95.77
+        "prev_close": 95.77,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "600900",
         "name": "长江电力",
         "price": 28.96,
@@ -344,9 +654,12 @@
         "high": 29.2,
         "low": 28.75,
         "open": 28.99,
-        "prev_close": 29.09
+        "prev_close": 29.09,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "300750",
         "name": "宁德时代",
         "price": 393.27,
@@ -355,9 +668,12 @@
         "high": 395.88,
         "low": 389.6,
         "open": 392.6,
-        "prev_close": 395.3
+        "prev_close": 395.3,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "601899",
         "name": "紫金矿业",
         "price": 32.28,
@@ -366,9 +682,12 @@
         "high": 32.94,
         "low": 31.69,
         "open": 32.7,
-        "prev_close": 32.95
+        "prev_close": 32.95,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "002415",
         "name": "海康威视",
         "price": 38.0,
@@ -377,9 +696,12 @@
         "high": 39.18,
         "low": 37.51,
         "open": 37.7,
-        "prev_close": 37.65
+        "prev_close": 37.65,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "600276",
         "name": "恒瑞医药",
         "price": 52.98,
@@ -388,9 +710,12 @@
         "high": 54.32,
         "low": 52.89,
         "open": 53.87,
-        "prev_close": 54.08
+        "prev_close": 54.08,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "000651",
         "name": "格力电器",
         "price": 41.22,
@@ -399,9 +724,12 @@
         "high": 42.28,
         "low": 41.19,
         "open": 42.18,
-        "prev_close": 42.3
+        "prev_close": 42.3,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "603259",
         "name": "药明康德",
         "price": 127.3,
@@ -410,9 +738,12 @@
         "high": 132.38,
         "low": 126.15,
         "open": 129.2,
-        "prev_close": 128.43
+        "prev_close": 128.43,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "002714",
         "name": "牧原股份",
         "price": 39.19,
@@ -421,9 +752,12 @@
         "high": 39.9,
         "low": 38.83,
         "open": 39.2,
-        "prev_close": 39.26
+        "prev_close": 39.26,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "688981",
         "name": "中芯国际",
         "price": 118.1,
@@ -432,9 +766,12 @@
         "high": 123.41,
         "low": 117.77,
         "open": 123.0,
-        "prev_close": 123.99
+        "prev_close": 123.99,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "300059",
         "name": "东方财富",
         "price": 19.91,
@@ -443,9 +780,12 @@
         "high": 20.08,
         "low": 19.83,
         "open": 20.0,
-        "prev_close": 20.17
+        "prev_close": 20.17,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "600030",
         "name": "中信证券",
         "price": 28.1,
@@ -454,9 +794,12 @@
         "high": 28.3,
         "low": 28.06,
         "open": 28.19,
-        "prev_close": 28.43
+        "prev_close": 28.43,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       },
       {
+        "market": "cn",
         "symbol": "601398",
         "name": "工商银行",
         "price": 7.84,
@@ -465,11 +808,14 @@
         "high": 8.01,
         "low": 7.74,
         "open": 7.93,
-        "prev_close": 7.99
+        "prev_close": 7.99,
+        "market_cap": 0,
+        "extra": "{\"source\": \"eastmoney\"}"
       }
     ],
     "crypto": [
       {
+        "market": "crypto",
         "symbol": "BTC",
         "name": "Bitcoin",
         "price": 62789.0,
@@ -478,9 +824,12 @@
         "high": 63701.0,
         "low": 62798.0,
         "open": 63417.53,
-        "prev_close": 63417.53
+        "prev_close": 63417.53,
+        "market_cap": 1259609378423.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "ETH",
         "name": "Ethereum",
         "price": 1855.37,
@@ -489,9 +838,12 @@
         "high": 1895.26,
         "low": 1848.83,
         "open": 1876.33,
-        "prev_close": 1876.33
+        "prev_close": 1876.33,
+        "market_cap": 223843845451.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "BNB",
         "name": "BNB",
         "price": 582.93,
@@ -500,9 +852,12 @@
         "high": 590.14,
         "low": 580.94,
         "open": 583.66,
-        "prev_close": 583.66
+        "prev_close": 583.66,
+        "market_cap": 77619600820.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "XRP",
         "name": "XRP",
         "price": 1.07,
@@ -511,9 +866,12 @@
         "high": 1.091,
         "low": 1.069,
         "open": 1.08,
-        "prev_close": 1.08
+        "prev_close": 1.08,
+        "market_cap": 66883521303.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "SOL",
         "name": "Solana",
         "price": 72.8,
@@ -522,9 +880,12 @@
         "high": 74.12,
         "low": 72.67,
         "open": 73.44,
-        "prev_close": 73.44
+        "prev_close": 73.44,
+        "market_cap": 42298536763.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "TRX",
         "name": "TRON",
         "price": 0.325743,
@@ -533,9 +894,12 @@
         "high": 0.328247,
         "low": 0.325621,
         "open": 0.327651,
-        "prev_close": 0.327651
+        "prev_close": 0.327651,
+        "market_cap": 30913056172.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "DOGE",
         "name": "Dogecoin",
         "price": 0.069779,
@@ -544,9 +908,12 @@
         "high": 0.071326,
         "low": 0.069721,
         "open": 0.070194,
-        "prev_close": 0.070194
+        "prev_close": 0.070194,
+        "market_cap": 10835625245.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "ADA",
         "name": "Cardano",
         "price": 0.18538,
@@ -555,9 +922,12 @@
         "high": 0.191699,
         "low": 0.181746,
         "open": 0.182849,
-        "prev_close": 0.182849
+        "prev_close": 0.182849,
+        "market_cap": 6927091992.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "LINK",
         "name": "Chainlink",
         "price": 8.25,
@@ -566,9 +936,12 @@
         "high": 8.43,
         "low": 8.24,
         "open": 8.38,
-        "prev_close": 8.38
+        "prev_close": 8.38,
+        "market_cap": 6171451788.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "XLM",
         "name": "Stellar",
         "price": 0.170988,
@@ -577,9 +950,12 @@
         "high": 0.177272,
         "low": 0.171012,
         "open": 0.175544,
-        "prev_close": 0.175544
+        "prev_close": 0.175544,
+        "market_cap": 5860301529.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "LTC",
         "name": "Litecoin",
         "price": 44.39,
@@ -588,9 +964,12 @@
         "high": 44.99,
         "low": 44.34,
         "open": 44.6,
-        "prev_close": 44.6
+        "prev_close": 44.6,
+        "market_cap": 3435931143.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "SHIB",
         "name": "Shiba Inu",
         "price": 5e-06,
@@ -599,9 +978,12 @@
         "high": 5.06e-06,
         "low": 4.84e-06,
         "open": 5e-06,
-        "prev_close": 5e-06
+        "prev_close": 5e-06,
+        "market_cap": 2853034022.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "AVAX",
         "name": "Avalanche",
         "price": 6.41,
@@ -610,9 +992,12 @@
         "high": 6.66,
         "low": 6.41,
         "open": 6.51,
-        "prev_close": 6.51
+        "prev_close": 6.51,
+        "market_cap": 2767985441.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "UNI",
         "name": "Uniswap",
         "price": 4.1,
@@ -621,9 +1006,12 @@
         "high": 4.29,
         "low": 4.09,
         "open": 4.17,
-        "prev_close": 4.17
+        "prev_close": 4.17,
+        "market_cap": 2561485701.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "NEAR",
         "name": "NEAR Protocol",
         "price": 1.7,
@@ -632,9 +1020,12 @@
         "high": 1.73,
         "low": 1.69,
         "open": 1.71,
-        "prev_close": 1.71
+        "prev_close": 1.71,
+        "market_cap": 2218296188.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "DOT",
         "name": "Polkadot",
         "price": 0.788927,
@@ -643,9 +1034,12 @@
         "high": 0.799989,
         "low": 0.78754,
         "open": 0.792066,
-        "prev_close": 0.792066
+        "prev_close": 0.792066,
+        "market_cap": 1337640456.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "ETC",
         "name": "Ethereum Classic",
         "price": 6.55,
@@ -654,9 +1048,12 @@
         "high": 6.66,
         "low": 6.54,
         "open": 6.61,
-        "prev_close": 6.61
+        "prev_close": 6.61,
+        "market_cap": 1032704125.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "FIL",
         "name": "Filecoin",
         "price": 0.7143,
@@ -665,9 +1062,12 @@
         "high": 0.723592,
         "low": 0.710312,
         "open": 0.714753,
-        "prev_close": 0.714753
+        "prev_close": 0.714753,
+        "market_cap": 580813016.0,
+        "extra": "{\"source\": \"coingecko\"}"
       },
       {
+        "market": "crypto",
         "symbol": "APT",
         "name": "Aptos",
         "price": 0.557151,
@@ -676,11 +1076,14 @@
         "high": 0.570311,
         "low": 0.556588,
         "open": 0.565203,
-        "prev_close": 0.565203
+        "prev_close": 0.565203,
+        "market_cap": 471275667.0,
+        "extra": "{\"source\": \"coingecko\"}"
       }
     ],
     "commodity": [
       {
+        "market": "commodity",
         "symbol": "GOLD",
         "name": "黄金期货",
         "price": 4121.5,
@@ -689,9 +1092,12 @@
         "high": 4145.5,
         "low": 4102.7,
         "open": 4135.2,
-        "prev_close": 4135.2
+        "prev_close": 4135.2,
+        "market_cap": 0,
+        "extra": "{\"source\": \"yfinance\", \"yf_symbol\": \"GC=F\", \"unit\": \"USD\"}"
       },
       {
+        "market": "commodity",
         "symbol": "SILVER",
         "name": "白银期货",
         "price": 58.42,
@@ -700,9 +1106,12 @@
         "high": 58.88,
         "low": 58.01,
         "open": 58.65,
-        "prev_close": 58.65
+        "prev_close": 58.65,
+        "market_cap": 0,
+        "extra": "{\"source\": \"yfinance\", \"yf_symbol\": \"SI=F\", \"unit\": \"USD\"}"
       },
       {
+        "market": "commodity",
         "symbol": "CRUDE_OIL",
         "name": "原油期货(WTI)",
         "price": 79.77,
@@ -711,9 +1120,12 @@
         "high": 81.3,
         "low": 78.78,
         "open": 80.1,
-        "prev_close": 80.1
+        "prev_close": 80.1,
+        "market_cap": 0,
+        "extra": "{\"source\": \"yfinance\", \"yf_symbol\": \"CL=F\", \"unit\": \"USD\"}"
       },
       {
+        "market": "commodity",
         "symbol": "NATURAL_GAS",
         "name": "天然气期货",
         "price": 2.76,
@@ -722,9 +1134,12 @@
         "high": 2.78,
         "low": 2.71,
         "open": 2.74,
-        "prev_close": 2.74
+        "prev_close": 2.74,
+        "market_cap": 0,
+        "extra": "{\"source\": \"yfinance\", \"yf_symbol\": \"NG=F\", \"unit\": \"USD\"}"
       },
       {
+        "market": "commodity",
         "symbol": "COPPER",
         "name": "铜期货",
         "price": 6.54,
@@ -733,9 +1148,12 @@
         "high": 6.56,
         "low": 6.52,
         "open": 6.55,
-        "prev_close": 6.55
+        "prev_close": 6.55,
+        "market_cap": 0,
+        "extra": "{\"source\": \"yfinance\", \"yf_symbol\": \"HG=F\", \"unit\": \"USD\"}"
       },
       {
+        "market": "commodity",
         "symbol": "CORN",
         "name": "玉米期货",
         "price": 460.5,
@@ -744,9 +1162,12 @@
         "high": 462.0,
         "low": 458.25,
         "open": 461.0,
-        "prev_close": 461.0
+        "prev_close": 461.0,
+        "market_cap": 0,
+        "extra": "{\"source\": \"yfinance\", \"yf_symbol\": \"ZC=F\", \"unit\": \"USD\"}"
       },
       {
+        "market": "commodity",
         "symbol": "SOYBEAN",
         "name": "大豆期货",
         "price": 1182.0,
@@ -755,9 +1176,12 @@
         "high": 1187.25,
         "low": 1175.25,
         "open": 1182.25,
-        "prev_close": 1182.25
+        "prev_close": 1182.25,
+        "market_cap": 0,
+        "extra": "{\"source\": \"yfinance\", \"yf_symbol\": \"ZS=F\", \"unit\": \"USD\"}"
       },
       {
+        "market": "commodity",
         "symbol": "WHEAT",
         "name": "小麦期货",
         "price": 636.0,
@@ -766,313 +1190,10 @@
         "high": 638.25,
         "low": 632.0,
         "open": 635.0,
-        "prev_close": 635.0
+        "prev_close": 635.0,
+        "market_cap": 0,
+        "extra": "{\"source\": \"yfinance\", \"yf_symbol\": \"ZW=F\", \"unit\": \"USD\"}"
       }
     ]
-  },
-  "news": [
-    {
-      "title": "Odds of Federal Reserve rate hike surge as oil prices rip higher",
-      "summary": "Investors are increasingly readying for the Federal Reserve to hike interest rates in September.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/23/fed-interest-rate-odds-oil-jobless-claims.html",
-      "pubDate": "Thu, 23 Jul 2026 20:25:28 GMT",
-      "score": 14
-    },
-    {
-      "title": "Jeffrey Gundlach says the bond market is telling Warsh the Fed has to start acting on inflation",
-      "summary": "Gundlach said the divergent moves across the Treasury curve showed investors' skepticism that the Fed will ultimately follow through.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/29/gundlach-says-the-bond-market-is-signaling-the-fed-has-to-act-on-inflation.html",
-      "pubDate": "Wed, 29 Jul 2026 22:20:18 GMT",
-      "score": 13
-    },
-    {
-      "title": "S&P 500 profit growth is getting even wilder as Amazon makes its mark",
-      "summary": "Amazon is the latest Big Tech company to report abnormally large earnings growth, thanks to paper gains on Anthropic investments.",
-      "source": "MarketWatch Top",
-      "link": "https://www.marketwatch.com/story/s-p-500-profit-growth-is-getting-even-wilder-as-amazon-makes-its-mark-5ddf2082?mod=mw_rss_topstories",
-      "pubDate": "Sun, 02 Aug 2026 14:00:00 GMT",
-      "score": 10
-    },
-    {
-      "title": "Here's my power rankings for the big 4 hyperscalers after this earnings season",
-      "summary": "In his Sunday column, Jim Cramer explains why Amazon is his favorite hyperscaler after second-quarter earnings season.",
-      "source": "CNBC Markets",
-      "link": "https://www.cnbc.com/2026/08/02/heres-my-power-rankings-for-the-big-4-hyperscalers-after-this-earnings-season.html",
-      "pubDate": "Sun, 02 Aug 2026 20:27:44 GMT",
-      "score": 9
-    },
-    {
-      "title": "Shortsighted stock market can no longer brush off war: 'It's too hard to ignore $100 oil'",
-      "summary": "After staying flat as the U.S.-Iran war heated up again, equities tumbled on Thursday after oil prices crossed $100 per barrel.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/23/short-sighted-stock-market-can-no-longer-brush-off-war-investors-say.html",
-      "pubDate": "Fri, 24 Jul 2026 14:10:40 GMT",
-      "score": 9
-    },
-    {
-      "title": "Financial stocks are crushing it. These charts show why the ‘breakout’ rally may have just begun.",
-      "summary": "The breakout to record highs by bank stocks, plus their strong earnings and favorable valuations, suggest more good times ahead for the financial sector.",
-      "source": "MarketWatch Top",
-      "link": "https://www.marketwatch.com/story/financial-stocks-are-crushing-it-these-charts-show-why-the-breakout-rally-may-have-just-begun-6db3cc12?mod=mw_rss_topstories",
-      "pubDate": "Sun, 02 Aug 2026 12:00:00 GMT",
-      "score": 9
-    },
-    {
-      "title": "Fed officials who voted to hike rates say action is needed now against inflation",
-      "summary": "Kashkari and Hammack joined Dallas Fed President Lorie Logan in dissenting against holding the Fed's key overnight borrowing rate steady.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/31/fed-officials-who-voted-to-hike-rates-say-action-is-needed-now-against-inflation.html",
-      "pubDate": "Fri, 31 Jul 2026 14:35:52 GMT",
-      "score": 8
-    },
-    {
-      "title": "Meta likely to highlight smart glasses, avoid social media policy on upcoming earnings call, Kalshi traders say",
-      "summary": "The Facebook and Instagram owner is set to report earnings after the market close on Wednesday.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/28/meta-q2-earnings-call-mentions-kalshi-market-odds-.html",
-      "pubDate": "Tue, 28 Jul 2026 17:40:03 GMT",
-      "score": 8
-    }
-  ],
-  "analysis": {
-    "trends": [
-      {
-        "market": "us",
-        "type": "market_trend",
-        "description": "美股整体偏强，上涨占比55%",
-        "confidence": "中"
-      },
-      {
-        "market": "us",
-        "type": "individual_strong",
-        "symbol": "MSFT",
-        "name": "Microsoft Corporation",
-        "description": "Microsoft Corporation(MSFT)涨幅3.02%，表现强势",
-        "confidence": "中",
-        "price": 464.72,
-        "change_pct": 3.02
-      },
-      {
-        "market": "us",
-        "type": "individual_strong",
-        "symbol": "GOOGL",
-        "name": "Alphabet Inc.",
-        "description": "Alphabet Inc.(GOOGL)涨幅6.73%，表现强势",
-        "confidence": "高",
-        "price": 356.13,
-        "change_pct": 6.73
-      },
-      {
-        "market": "us",
-        "type": "individual_strong",
-        "symbol": "AMZN",
-        "name": "Amazon.com, Inc.",
-        "description": "Amazon.com, Inc.(AMZN)涨幅15.32%，表现强势",
-        "confidence": "高",
-        "price": 271.58,
-        "change_pct": 15.32
-      },
-      {
-        "market": "us",
-        "type": "individual_strong",
-        "symbol": "META",
-        "name": "Meta Platforms, Inc.",
-        "description": "Meta Platforms, Inc.(META)涨幅3.28%，表现强势",
-        "confidence": "中",
-        "price": 556.71,
-        "change_pct": 3.28
-      },
-      {
-        "market": "us",
-        "type": "individual_weak",
-        "symbol": "AAPL",
-        "name": "Apple Inc.",
-        "description": "Apple Inc.(AAPL)跌幅-7.35%，表现疲弱",
-        "confidence": "高",
-        "price": 308.91,
-        "change_pct": -7.35
-      },
-      {
-        "market": "cn",
-        "type": "market_trend",
-        "description": "A股整体普遍下跌，上涨占比23%",
-        "confidence": "中"
-      },
-      {
-        "market": "cn",
-        "type": "individual_weak",
-        "symbol": "688981",
-        "name": "中芯国际",
-        "description": "中芯国际(688981)跌幅-4.75%，表现疲弱",
-        "confidence": "中",
-        "price": 118.1,
-        "change_pct": -4.75
-      },
-      {
-        "market": "crypto",
-        "type": "market_trend",
-        "description": "数字货币整体普遍下跌，上涨占比21%",
-        "confidence": "中"
-      },
-      {
-        "market": "commodity",
-        "type": "market_trend",
-        "description": "大宗商品整体普遍下跌，上涨占比25%",
-        "confidence": "中"
-      }
-    ],
-    "opportunities": [
-      {
-        "market": "us",
-        "type": "dip_buying",
-        "symbol": "AAPL",
-        "name": "Apple Inc.",
-        "description": "Apple Inc.回调7.35%，关注低吸机会",
-        "confidence": "低",
-        "price": 308.91,
-        "change_pct": -7.35
-      },
-      {
-        "market": "us",
-        "type": "breakout_watch",
-        "symbol": "NVDA",
-        "name": "NVIDIA Corporation",
-        "description": "NVIDIA Corporation温和上涨2.93%，留意突破信号",
-        "confidence": "低",
-        "price": 200.75,
-        "change_pct": 2.93
-      },
-      {
-        "market": "us",
-        "type": "breakout_watch",
-        "symbol": "CVX",
-        "name": "Chevron Corporation",
-        "description": "Chevron Corporation温和上涨2.35%，留意突破信号",
-        "confidence": "低",
-        "price": 196.83,
-        "change_pct": 2.35
-      },
-      {
-        "market": "cn",
-        "type": "dip_buying",
-        "symbol": "688981",
-        "name": "中芯国际",
-        "description": "中芯国际回调4.75%，关注低吸机会",
-        "confidence": "中",
-        "price": 118.1,
-        "change_pct": -4.75
-      },
-      {
-        "market": "crypto",
-        "type": "breakout_watch",
-        "symbol": "ADA",
-        "name": "Cardano",
-        "description": "Cardano温和上涨2.9%，留意突破信号",
-        "confidence": "低",
-        "price": 0.18538,
-        "change_pct": 2.9
-      }
-    ],
-    "risks": [
-      {
-        "market": "us",
-        "type": "crash_warning",
-        "symbol": "AAPL",
-        "name": "Apple Inc.",
-        "description": "Apple Inc.暴跌7.35%，风险极高",
-        "confidence": "高",
-        "price": 308.91,
-        "change_pct": -7.35
-      }
-    ],
-    "summary": {
-      "us": {
-        "total": 20,
-        "upCount": 11,
-        "downCount": 9,
-        "flatCount": 0,
-        "avgChange": 0.87,
-        "maxUp": {
-          "symbol": "AMZN",
-          "name": "Amazon.com, Inc.",
-          "change_pct": 15.32
-        },
-        "maxDown": {
-          "symbol": "AAPL",
-          "name": "Apple Inc.",
-          "change_pct": -7.35
-        }
-      },
-      "cn": {
-        "total": 22,
-        "upCount": 5,
-        "downCount": 17,
-        "flatCount": 0,
-        "avgChange": -0.78,
-        "maxUp": {
-          "symbol": "600036",
-          "name": "招商银行",
-          "change_pct": 1.39
-        },
-        "maxDown": {
-          "symbol": "688981",
-          "name": "中芯国际",
-          "change_pct": -4.75
-        }
-      },
-      "crypto": {
-        "total": 19,
-        "upCount": 4,
-        "downCount": 15,
-        "flatCount": 0,
-        "avgChange": -0.29,
-        "maxUp": {
-          "symbol": "ADA",
-          "name": "Cardano",
-          "change_pct": 2.9
-        },
-        "maxDown": {
-          "symbol": "XLM",
-          "name": "Stellar",
-          "change_pct": -1.5
-        }
-      },
-      "commodity": {
-        "total": 8,
-        "upCount": 2,
-        "downCount": 6,
-        "flatCount": 0,
-        "avgChange": -0.11,
-        "maxUp": {
-          "symbol": "NATURAL_GAS",
-          "name": "天然气期货",
-          "change_pct": 0.47
-        },
-        "maxDown": {
-          "symbol": "CRUDE_OIL",
-          "name": "原油期货(WTI)",
-          "change_pct": -0.41
-        }
-      }
-    }
-  },
-  "report": {
-    "summary": "美股: 平均+0.87%, 涨跌比11:9 | A股: 平均-0.78%, 涨跌比5:17 | 数字货币: 平均-0.29%, 涨跌比4:15 | 大宗商品: 平均-0.11%, 涨跌比2:6 | 风险预警: 1条 | 机会提示: 5条"
-  },
-  "emailResults": [
-    {
-      "email": "3339726915@qq.com",
-      "success": true
-    },
-    {
-      "email": "ruiqiliang464@gmail.com",
-      "success": true
-    },
-    {
-      "email": "leeangel902@hotmail.com",
-      "success": true
-    }
-  ]
+  }
 }
