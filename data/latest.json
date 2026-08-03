@@ -1,6 +1,6 @@
 {
   "date": "2026-08-03",
-  "updatedAt": "2026-08-03T04:14:36.650327",
+  "updatedAt": "2026-08-03T04:21:06.869348",
   "markets": {
     "us": [
       {
@@ -472,42 +472,42 @@
       {
         "symbol": "BTC",
         "name": "Bitcoin",
-        "price": 62789.0,
+        "price": 62858.0,
         "change_pct": -0.9,
-        "volume": 15621240253.0,
+        "volume": 15631080689.0,
         "high": 63701.0,
         "low": 62798.0,
-        "open": 63417.53,
-        "prev_close": 63417.53
+        "open": 63420.61,
+        "prev_close": 63420.61
       },
       {
         "symbol": "ETH",
         "name": "Ethereum",
-        "price": 1855.37,
+        "price": 1857.37,
         "change_pct": -1.0,
-        "volume": 4756440723.0,
+        "volume": 4754697864.0,
         "high": 1895.26,
         "low": 1848.83,
-        "open": 1876.33,
-        "prev_close": 1876.33
+        "open": 1875.71,
+        "prev_close": 1875.71
       },
       {
         "symbol": "BNB",
         "name": "BNB",
-        "price": 582.93,
+        "price": 583.38,
         "change_pct": 0.4,
-        "volume": 445064568.0,
+        "volume": 443713407.0,
         "high": 590.14,
         "low": 580.94,
-        "open": 583.66,
-        "prev_close": 583.66
+        "open": 583.49,
+        "prev_close": 583.49
       },
       {
         "symbol": "XRP",
         "name": "XRP",
         "price": 1.07,
         "change_pct": -0.4,
-        "volume": 784330558.0,
+        "volume": 786982599.0,
         "high": 1.091,
         "low": 1.069,
         "open": 1.08,
@@ -516,86 +516,86 @@
       {
         "symbol": "SOL",
         "name": "Solana",
-        "price": 72.8,
+        "price": 72.92,
         "change_pct": -0.4,
-        "volume": 974111427.0,
+        "volume": 972708311.0,
         "high": 74.12,
         "low": 72.67,
-        "open": 73.44,
-        "prev_close": 73.44
+        "open": 73.46,
+        "prev_close": 73.46
       },
       {
         "symbol": "TRX",
         "name": "TRON",
-        "price": 0.325743,
+        "price": 0.3259,
         "change_pct": -0.7,
-        "volume": 290579234.0,
+        "volume": 290913035.0,
         "high": 0.328247,
         "low": 0.325621,
-        "open": 0.327651,
-        "prev_close": 0.327651
+        "open": 0.327732,
+        "prev_close": 0.327732
       },
       {
         "symbol": "DOGE",
         "name": "Dogecoin",
-        "price": 0.069779,
+        "price": 0.069876,
         "change_pct": -0.3,
-        "volume": 377442055.0,
+        "volume": 378427686.0,
         "high": 0.071326,
         "low": 0.069721,
-        "open": 0.070194,
-        "prev_close": 0.070194
+        "open": 0.070205,
+        "prev_close": 0.070205
       },
       {
         "symbol": "ADA",
         "name": "Cardano",
-        "price": 0.18538,
+        "price": 0.185988,
         "change_pct": 2.9,
-        "volume": 593462473.0,
+        "volume": 590258849.0,
         "high": 0.191699,
         "low": 0.181746,
-        "open": 0.182849,
-        "prev_close": 0.182849
+        "open": 0.183467,
+        "prev_close": 0.183467
       },
       {
         "symbol": "LINK",
         "name": "Chainlink",
-        "price": 8.25,
+        "price": 8.27,
         "change_pct": -0.3,
-        "volume": 172205997.0,
+        "volume": 171891170.0,
         "high": 8.43,
         "low": 8.24,
-        "open": 8.38,
-        "prev_close": 8.38
+        "open": 8.39,
+        "prev_close": 8.39
       },
       {
         "symbol": "XLM",
         "name": "Stellar",
-        "price": 0.170988,
+        "price": 0.171299,
         "change_pct": -1.5,
-        "volume": 105934119.0,
+        "volume": 103585159.0,
         "high": 0.177272,
         "low": 0.171012,
-        "open": 0.175544,
-        "prev_close": 0.175544
+        "open": 0.176737,
+        "prev_close": 0.176737
       },
       {
         "symbol": "LTC",
         "name": "Litecoin",
-        "price": 44.39,
+        "price": 44.41,
         "change_pct": -0.5,
-        "volume": 124660761.0,
+        "volume": 124606211.0,
         "high": 44.99,
         "low": 44.34,
-        "open": 44.6,
-        "prev_close": 44.6
+        "open": 44.59,
+        "prev_close": 44.59
       },
       {
         "symbol": "SHIB",
         "name": "Shiba Inu",
         "price": 5e-06,
         "change_pct": -1.1,
-        "volume": 94806491.0,
+        "volume": 93720569.0,
         "high": 5.06e-06,
         "low": 4.84e-06,
         "open": 5e-06,
@@ -604,20 +604,20 @@
       {
         "symbol": "AVAX",
         "name": "Avalanche",
-        "price": 6.41,
+        "price": 6.42,
         "change_pct": 1.5,
-        "volume": 242789281.0,
+        "volume": 243456789.0,
         "high": 6.66,
         "low": 6.41,
-        "open": 6.51,
-        "prev_close": 6.51
+        "open": 6.52,
+        "prev_close": 6.52
       },
       {
         "symbol": "UNI",
         "name": "Uniswap",
-        "price": 4.1,
+        "price": 4.11,
         "change_pct": -0.7,
-        "volume": 186829519.0,
+        "volume": 186294046.0,
         "high": 4.29,
         "low": 4.09,
         "open": 4.17,
@@ -626,9 +626,9 @@
       {
         "symbol": "NEAR",
         "name": "NEAR Protocol",
-        "price": 1.7,
+        "price": 1.71,
         "change_pct": -0.1,
-        "volume": 124265569.0,
+        "volume": 121357382.0,
         "high": 1.73,
         "low": 1.69,
         "open": 1.71,
@@ -637,55 +637,55 @@
       {
         "symbol": "DOT",
         "name": "Polkadot",
-        "price": 0.788927,
+        "price": 0.791486,
         "change_pct": -1.0,
-        "volume": 67450789.0,
+        "volume": 67596957.0,
         "high": 0.799989,
         "low": 0.78754,
-        "open": 0.792066,
-        "prev_close": 0.792066
+        "open": 0.792899,
+        "prev_close": 0.792899
       },
       {
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "price": 6.55,
+        "price": 6.57,
         "change_pct": -0.7,
-        "volume": 26932581.0,
+        "volume": 27074574.0,
         "high": 6.66,
         "low": 6.54,
-        "open": 6.61,
-        "prev_close": 6.61
+        "open": 6.6,
+        "prev_close": 6.6
       },
       {
         "symbol": "FIL",
         "name": "Filecoin",
-        "price": 0.7143,
+        "price": 0.715714,
         "change_pct": 0.4,
-        "volume": 38119193.0,
+        "volume": 38108631.0,
         "high": 0.723592,
         "low": 0.710312,
-        "open": 0.714753,
-        "prev_close": 0.714753
+        "open": 0.715206,
+        "prev_close": 0.715206
       },
       {
         "symbol": "APT",
         "name": "Aptos",
-        "price": 0.557151,
+        "price": 0.557841,
         "change_pct": -1.1,
-        "volume": 25656310.0,
+        "volume": 25306350.0,
         "high": 0.570311,
         "low": 0.556588,
-        "open": 0.565203,
-        "prev_close": 0.565203
+        "open": 0.564698,
+        "prev_close": 0.564698
       }
     ],
     "commodity": [
       {
         "symbol": "GOLD",
         "name": "黄金期货",
-        "price": 4121.5,
-        "change_pct": -0.33,
-        "volume": 18079,
+        "price": 4121.1,
+        "change_pct": -0.34,
+        "volume": 18252,
         "high": 4145.5,
         "low": 4102.7,
         "open": 4135.2,
@@ -694,9 +694,9 @@
       {
         "symbol": "SILVER",
         "name": "白银期货",
-        "price": 58.42,
-        "change_pct": -0.4,
-        "volume": 3204,
+        "price": 58.48,
+        "change_pct": -0.29,
+        "volume": 3240,
         "high": 58.88,
         "low": 58.01,
         "open": 58.65,
@@ -705,9 +705,9 @@
       {
         "symbol": "CRUDE_OIL",
         "name": "原油期货(WTI)",
-        "price": 79.77,
-        "change_pct": -0.41,
-        "volume": 36603,
+        "price": 79.8,
+        "change_pct": -0.37,
+        "volume": 36779,
         "high": 81.3,
         "low": 78.78,
         "open": 80.1,
@@ -717,8 +717,8 @@
         "symbol": "NATURAL_GAS",
         "name": "天然气期货",
         "price": 2.76,
-        "change_pct": 0.47,
-        "volume": 5023,
+        "change_pct": 0.62,
+        "volume": 5070,
         "high": 2.78,
         "low": 2.71,
         "open": 2.74,
@@ -729,7 +729,7 @@
         "name": "铜期货",
         "price": 6.54,
         "change_pct": -0.23,
-        "volume": 3951,
+        "volume": 3996,
         "high": 6.56,
         "low": 6.52,
         "open": 6.55,
@@ -740,7 +740,7 @@
         "name": "玉米期货",
         "price": 460.5,
         "change_pct": -0.11,
-        "volume": 19363,
+        "volume": 19372,
         "high": 462.0,
         "low": 458.25,
         "open": 461.0,
@@ -751,7 +751,7 @@
         "name": "大豆期货",
         "price": 1182.0,
         "change_pct": -0.02,
-        "volume": 14750,
+        "volume": 14754,
         "high": 1187.25,
         "low": 1175.25,
         "open": 1182.25,
@@ -762,7 +762,7 @@
         "name": "小麦期货",
         "price": 636.0,
         "change_pct": 0.16,
-        "volume": 3714,
+        "volume": 3716,
         "high": 638.25,
         "low": 632.0,
         "open": 635.0,
@@ -772,27 +772,12 @@
   },
   "news": [
     {
-      "title": "Odds of Federal Reserve rate hike surge as oil prices rip higher",
-      "summary": "Investors are increasingly readying for the Federal Reserve to hike interest rates in September.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/23/fed-interest-rate-odds-oil-jobless-claims.html",
-      "pubDate": "Thu, 23 Jul 2026 20:25:28 GMT",
-      "score": 14
-    },
-    {
-      "title": "Jeffrey Gundlach says the bond market is telling Warsh the Fed has to start acting on inflation",
-      "summary": "Gundlach said the divergent moves across the Treasury curve showed investors' skepticism that the Fed will ultimately follow through.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/29/gundlach-says-the-bond-market-is-signaling-the-fed-has-to-act-on-inflation.html",
-      "pubDate": "Wed, 29 Jul 2026 22:20:18 GMT",
-      "score": 13
-    },
-    {
       "title": "S&P 500 profit growth is getting even wilder as Amazon makes its mark",
       "summary": "Amazon is the latest Big Tech company to report abnormally large earnings growth, thanks to paper gains on Anthropic investments.",
       "source": "MarketWatch Top",
       "link": "https://www.marketwatch.com/story/s-p-500-profit-growth-is-getting-even-wilder-as-amazon-makes-its-mark-5ddf2082?mod=mw_rss_topstories",
       "pubDate": "Sun, 02 Aug 2026 14:00:00 GMT",
+      "time": "08/02 22:00",
       "score": 10
     },
     {
@@ -801,14 +786,7 @@
       "source": "CNBC Markets",
       "link": "https://www.cnbc.com/2026/08/02/heres-my-power-rankings-for-the-big-4-hyperscalers-after-this-earnings-season.html",
       "pubDate": "Sun, 02 Aug 2026 20:27:44 GMT",
-      "score": 9
-    },
-    {
-      "title": "Shortsighted stock market can no longer brush off war: 'It's too hard to ignore $100 oil'",
-      "summary": "After staying flat as the U.S.-Iran war heated up again, equities tumbled on Thursday after oil prices crossed $100 per barrel.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/23/short-sighted-stock-market-can-no-longer-brush-off-war-investors-say.html",
-      "pubDate": "Fri, 24 Jul 2026 14:10:40 GMT",
+      "time": "08/03 04:27",
       "score": 9
     },
     {
@@ -817,23 +795,53 @@
       "source": "MarketWatch Top",
       "link": "https://www.marketwatch.com/story/financial-stocks-are-crushing-it-these-charts-show-why-the-breakout-rally-may-have-just-begun-6db3cc12?mod=mw_rss_topstories",
       "pubDate": "Sun, 02 Aug 2026 12:00:00 GMT",
+      "time": "08/02 20:00",
       "score": 9
     },
     {
-      "title": "Fed officials who voted to hike rates say action is needed now against inflation",
-      "summary": "Kashkari and Hammack joined Dallas Fed President Lorie Logan in dissenting against holding the Fed's key overnight borrowing rate steady.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/31/fed-officials-who-voted-to-hike-rates-say-action-is-needed-now-against-inflation.html",
-      "pubDate": "Fri, 31 Jul 2026 14:35:52 GMT",
+      "title": "Investors are rotating into financial stocks. The Fed’s next move could determine how far the rally runs.",
+      "summary": "Financial stocks have been among the market’s best performers this month.. The Fed’s next move, however, may determine how much further the rotation can run.",
+      "source": "MarketWatch Top",
+      "link": "https://www.marketwatch.com/story/investors-are-rotating-into-financial-stocks-the-feds-next-move-could-determine-how-far-the-rally-runs-662c63df?mod=mw_rss_topstories",
+      "pubDate": "Sun, 02 Aug 2026 12:00:00 GMT",
+      "time": "08/02 20:00",
       "score": 8
     },
     {
-      "title": "Meta likely to highlight smart glasses, avoid social media policy on upcoming earnings call, Kalshi traders say",
-      "summary": "The Facebook and Instagram owner is set to report earnings after the market close on Wednesday.",
-      "source": "CNBC Top News",
-      "link": "https://www.cnbc.com/2026/07/28/meta-q2-earnings-call-mentions-kalshi-market-odds-.html",
-      "pubDate": "Tue, 28 Jul 2026 17:40:03 GMT",
-      "score": 8
+      "title": "Stocks Finish Higher as Amazon Leads Megacaps Higher",
+      "summary": "The S&P 500 Index ($SPX ) (SPY ) on Friday closed up +0.70%, the Dow Jones Industrial Average ($DOWI ) (DIA ) closed up +0.53%, and the Nasdaq 100 Index ($IUXX ) (QQQ ) closed up +0.60%.. September E-mini S&P futures (ESU26 ) rose +0.69%, and September E-mini Nasdaq futures...",
+      "source": "Nasdaq Stocks",
+      "link": "https://www.nasdaq.com/articles/stocks-finish-higher-amazon-leads-megacaps-higher",
+      "pubDate": "Sun, 02 Aug 2026 21:43:10 +0000",
+      "time": "08/03 05:43",
+      "score": 6
+    },
+    {
+      "title": "Here’s what’s worth streaming in August 2026 on Netflix, Hulu, HBO Max and more",
+      "summary": "Turn off your brain and enjoy new seasons of Apple’s ‘Ted Lasso,’ Amazon’s ‘Reacher,’ Netflix’s ‘Outer Banks’ and much more",
+      "source": "MarketWatch Top",
+      "link": "https://www.marketwatch.com/story/heres-whats-worth-streaming-in-august-2026-on-netflix-hulu-hbo-max-and-more-21b78a08?mod=mw_rss_topstories",
+      "pubDate": "Sun, 02 Aug 2026 15:19:00 GMT",
+      "time": "08/02 23:19",
+      "score": 6
+    },
+    {
+      "title": "If Social Security’s funding crisis is the elephant in the room, this is the mouse everyone has overlooked. You have been warned.",
+      "summary": "“Delaying Social Security until 70 results in an increased monthly payment — and that comes with proportionally higher cost-of-living adjustments.”",
+      "source": "MarketWatch Top",
+      "link": "https://www.marketwatch.com/story/if-social-securitys-funding-crisis-is-the-elephant-in-the-room-this-is-the-mouse-everyone-has-overlooked-you-have-been-warned-b95c450d?mod=mw_rss_topstories",
+      "pubDate": "Sun, 02 Aug 2026 13:30:00 GMT",
+      "time": "08/02 21:30",
+      "score": 6
+    },
+    {
+      "title": "Investors scored on Iran war's oil market boom. Staying long the trade will get trickier",
+      "summary": "Oil price volatility caused by U.S.-Iran war created big market winners, but for buy-and-hold investors, there are better long-term energy themes to monitor.",
+      "source": "CNBC Markets",
+      "link": "https://www.cnbc.com/2026/08/02/oil-prices-iran-war-energy-market.html",
+      "pubDate": "Sun, 02 Aug 2026 13:00:01 GMT",
+      "time": "08/02 21:00",
+      "score": 6
     }
   ],
   "analysis": {
@@ -971,7 +979,7 @@
         "name": "Cardano",
         "description": "Cardano温和上涨2.9%，留意突破信号",
         "confidence": "低",
-        "price": 0.18538,
+        "price": 0.185988,
         "change_pct": 2.9
       }
     ],
@@ -1044,22 +1052,22 @@
         "upCount": 2,
         "downCount": 6,
         "flatCount": 0,
-        "avgChange": -0.11,
+        "avgChange": -0.07,
         "maxUp": {
           "symbol": "NATURAL_GAS",
           "name": "天然气期货",
-          "change_pct": 0.47
+          "change_pct": 0.62
         },
         "maxDown": {
           "symbol": "CRUDE_OIL",
           "name": "原油期货(WTI)",
-          "change_pct": -0.41
+          "change_pct": -0.37
         }
       }
     }
   },
   "report": {
-    "summary": "美股: 平均+0.87%, 涨跌比11:9 | A股: 平均-0.78%, 涨跌比5:17 | 数字货币: 平均-0.29%, 涨跌比4:15 | 大宗商品: 平均-0.11%, 涨跌比2:6 | 风险预警: 1条 | 机会提示: 5条"
+    "summary": "美股: 平均+0.87%, 涨跌比11:9 | A股: 平均-0.78%, 涨跌比5:17 | 数字货币: 平均-0.29%, 涨跌比4:15 | 大宗商品: 平均-0.07%, 涨跌比2:6 | 风险预警: 1条 | 机会提示: 5条"
   },
   "emailResults": [
     {
