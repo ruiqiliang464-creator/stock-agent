@@ -67,8 +67,42 @@ def generate_analysis_items(items, type_name):
     return result
 
 
-def generate_report(analysis):
+def generate_news_section(news_items):
+    """生成今日要闻区块 HTML"""
+    if not news_items:
+        return ''
+
+    cards = ''
+    for i, item in enumerate(news_items):
+        title = item.get('title', '')
+        summary = item.get('summary', '')
+        source = item.get('source', '')
+        link = item.get('link', '')
+
+        # 序号圆圈
+        cards += f'''
+        <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #e5e7eb">
+            <div style="flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#1e40af;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">{i+1}</div>
+            <div style="flex:1">
+                <div style="font-size:14px;font-weight:500;color:#1e293b;margin-bottom:4px">{title}</div>
+                <div style="font-size:13px;color:#64748b;line-height:1.5">{summary}</div>
+                <div style="font-size:11px;color:#94a3b8;margin-top:4px">来源: {source}</div>
+            </div>
+        </div>'''
+
+    return f'''
+    <div style="background:#fffbeb;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #fde68a">
+        <h3 style="font-size:15px;font-weight:600;margin:0 0 8px 0;color:#92400e">📰 今日要闻</h3>
+        <p style="font-size:12px;color:#b45309;margin:0 0 12px 0">以下为可能影响市场走势的重大新闻</p>
+        {cards}
+    </div>'''
+
+
+def generate_report(analysis, news_items=None):
     """生成HTML邮件报告"""
+    if news_items is None:
+        news_items = []
+
     today = analysis.get('date', '')
     date_display = today.replace('-', '/')
 
@@ -146,7 +180,7 @@ def generate_report(analysis):
     # 数据来源说明
     source_note = '''
         <div style="background:#f8fafc;border-radius:12px;padding:12px;margin-bottom:16px;border:1px solid #e5e7eb;font-size:12px;color:#888">
-            <p style="margin:0"><strong>数据来源</strong>：美股(yfinance/CNBC) | A股(akshare/同花顺) | 数字货币(Binance) | 大宗商品(akshare/yfinance)</p>
+            <p style="margin:0"><strong>数据来源</strong>：美股(yfinance/CNBC) | A股(akshare/同花顺) | 数字货币(Binance) | 大宗商品(akshare/yfinance) | 要闻(CNBC/Reuters/MarketWatch等RSS)</p>
         </div>'''
 
     html = f'''
@@ -157,6 +191,7 @@ def generate_report(analysis):
         </div>
 
         <div style="padding:20px">
+            {generate_news_section(news_items)}
             {market_sections}
             {trend_section}
             {opp_section}

@@ -66,8 +66,12 @@ def collect():
     from collectors_py.cn_stock import run as cn_run
     from collectors_py.crypto import run as crypto_run
     from collectors_py.commodity import run as commodity_run
+    from collectors_py.news import run as news_run
 
     all_data = []
+    news_data = []
+
+    # 并行采集四大市场数据
     collectors = {
         'us': us_run,
         'cn': cn_run,
@@ -75,7 +79,6 @@ def collect():
         'commodity': commodity_run
     }
 
-    # 并行采集
     results = {}
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = {executor.submit(func): name for name, func in collectors.items()}
@@ -94,13 +97,26 @@ def collect():
         if data:
             all_data.extend(data)
 
+    # 采集金融要闻 (单独执行，避免阻塞市场数据采集)
+    try:
+        news_data = news_run()
+    except Exception as e:
+        print(f'  news: 0 条 ({e})')
+        news_data = []
+
     # 保存原始数据
     raw_path = os.path.join(DATA_DIR, f'raw_{today}.json')
     with open(raw_path, 'w', encoding='utf-8') as f:
         json.dump(all_data, f, ensure_ascii=False, indent=2)
 
-    print(f'[Pipeline] 采集完成: {all_data.__len__()} 条')
-    return all_data
+    # 保存新闻数据
+    if news_data:
+        news_path = os.path.join(DATA_DIR, f'news_{today}.json')
+        with open(news_path, 'w', encoding='utf-8') as f:
+            json.dump(news_data, f, ensure_ascii=False, indent=2)
+
+    print(f'[Pipeline] 采集完成: {len(all_data)} 条数据, {len(news_data)} 条要闻')
+    return all_data, news_data
 
 
 # ── Step 2: 清洗整合 ──
@@ -319,13 +335,16 @@ def analyze_data(processed):
 
 
 # ── Step 4: 报告 + 邮件 ──
-def report_and_push(analysis):
+def report_and_push(analysis, news_items=None):
     """生成报告 + 发送邮件 + 保存latest.json"""
     print('\n[Pipeline] ─── Step 4: 报告 + 邮件推送 ──')
 
+    if news_items is None:
+        news_items = []
+
     from formatter_py.report import generate_report, generate_summary, send_email
 
-    html_content = generate_report(analysis)
+    html_content = generate_report(analysis, news_items)
     summary_text = generate_summary(analysis)
 
     # 读取订阅者
@@ -352,6 +371,7 @@ def report_and_push(analysis):
         'date': today,
         'updatedAt': datetime.now().isoformat(),
         'markets': {},
+        'news': news_items,
         'analysis': {
             'trends': analysis.get('trends', []),
             'opportunities': analysis.get('opportunities', []),
@@ -397,13 +417,14 @@ def main():
     print(f'[Pipeline] 开始: {" → ".join(tasks)}  日期: {today}')
 
     raw_data = None
+    news_data = []
     processed_data = None
     analysis_data = None
 
     for t in tasks:
         try:
             if t == 'collect':
-                raw_data = collect()
+                raw_data, news_data = collect()
             elif t == 'process':
                 if not raw_data:
                     p = os.path.join(DATA_DIR, f'raw_{today}.json')
@@ -431,7 +452,7 @@ def main():
                         with open(p, 'r', encoding='utf-8') as f:
                             analysis_data = json.load(f)
                 if analysis_data:
-                    report_and_push(analysis_data)
+                    report_and_push(analysis_data, news_data)
                 else:
                     print('[Pipeline] 无分析数据，跳过推送')
         except Exception as e:
