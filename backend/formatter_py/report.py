@@ -78,6 +78,10 @@ def generate_news_section(news_items):
         summary = item.get('summary', '')
         source = item.get('source', '')
         link = item.get('link', '')
+        news_time = item.get('time', '')
+
+        # 时间标签 (如果有)
+        time_badge = f'<span style="font-size:11px;color:#94a3b8;margin-top:4px">来源: {source}' + (f' · {news_time}' if news_time else '') + '</span>'
 
         # 序号圆圈
         cards += f'''
@@ -86,14 +90,14 @@ def generate_news_section(news_items):
             <div style="flex:1">
                 <div style="font-size:14px;font-weight:500;color:#1e293b;margin-bottom:4px">{title}</div>
                 <div style="font-size:13px;color:#64748b;line-height:1.5">{summary}</div>
-                <div style="font-size:11px;color:#94a3b8;margin-top:4px">来源: {source}</div>
+                <div style="margin-top:4px">{time_badge}</div>
             </div>
         </div>'''
 
     return f'''
     <div style="background:#fffbeb;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #fde68a">
         <h3 style="font-size:15px;font-weight:600;margin:0 0 8px 0;color:#92400e">📰 今日要闻</h3>
-        <p style="font-size:12px;color:#b45309;margin:0 0 12px 0">以下为可能影响市场走势的重大新闻</p>
+        <p style="font-size:12px;color:#b45309;margin:0 0 12px 0">以下为过去24小时内可能影响市场走势的重大新闻</p>
         {cards}
     </div>'''
 

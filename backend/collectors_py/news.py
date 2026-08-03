@@ -18,7 +18,8 @@ import requests
 import json
 import re
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from xml.etree import ElementTree
 
 # ── RSS 源 ──
@@ -129,6 +130,60 @@ def truncate_sentences(text, max_sentences=3):
     if len(sentences) > max_sentences:
         result += '...'
     return result
+
+
+def parse_pub_date(date_str):
+    """解析 RSS/Atom 的发布时间，返回 aware datetime (UTC)
+
+    支持格式:
+      RFC 822: "Mon, 03 Aug 2026 05:30:00 GMT" (RSS 2.0)
+      ISO 8601: "2026-08-03T05:30:00Z" / "2026-08-03T05:30:00+00:00" (Atom)
+    解析失败返回 None。
+    """
+    if not date_str:
+        return None
+    date_str = date_str.strip()
+
+    # 尝试 RFC 822 (RSS 2.0 常见格式)
+    try:
+        dt = parsedate_to_datetime(date_str)
+        if dt is not None:
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt
+    except (TypeError, ValueError):
+        pass
+
+    # 尝试 ISO 8601 (Atom 格式)
+    try:
+        iso_str = date_str.replace('Z', '+00:00')
+        dt = datetime.fromisoformat(iso_str)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+    except (TypeError, ValueError):
+        pass
+
+    return None
+
+
+def is_within_time_window(pub_dt, hours=24):
+    """检查新闻时间是否在 [now-hours, now] 窗口内"""
+    if pub_dt is None:
+        # 无法解析时间的新闻，保守地保留（避免漏掉重要新闻）
+        return True
+    now = datetime.now(timezone.utc)
+    window_start = now - timedelta(hours=hours)
+    return window_start <= pub_dt <= now
+
+
+def format_news_time(pub_dt):
+    """把 datetime 格式化为简短的中文时间显示，如 '08/03 05:30'"""
+    if pub_dt is None:
+        return ''
+    # 转为 UTC+8 (北京时间) 显示
+    cst = pub_dt.astimezone(timezone(timedelta(hours=8)))
+    return cst.strftime('%m/%d %H:%M')
 
 
 def has_keyword(text):
@@ -252,10 +307,44 @@ def run():
 
     print(f'[News Collector] 原始新闻: {len(all_items)} 条')
 
+    # ── 时效性过滤: 只保留过去 24 小时内的新闻 ──
+    # 早上6点推送 → 昨天6点到今天6点
+    # 中午12点推送 → 昨天12点到今天12点
+    TIME_WINDOW_HOURS = 24
+    now_utc = datetime.now(timezone.utc)
+    window_start = now_utc - timedelta(hours=TIME_WINDOW_HOURS)
+    print(f'[News Collector] 时间窗口: {format_news_time(window_start)} ~ {format_news_time(now_utc)} (北京时间)')
+
+    time_filtered = []
+    skipped_no_time = 0
+    skipped_old = 0
+    skipped_future = 0
+    for item in all_items:
+        pub_dt = parse_pub_date(item.get('pubDate', ''))
+        if pub_dt is None:
+            # 无法解析时间的新闻，保留但标记（避免漏掉重要突发新闻）
+            skipped_no_time += 1
+            item['_pub_dt'] = None
+            item['_time_str'] = ''
+            time_filtered.append(item)
+            continue
+        if pub_dt < window_start:
+            skipped_old += 1
+            continue
+        if pub_dt > now_utc + timedelta(hours=1):
+            # 未来时间（可能是时区错误），跳过
+            skipped_future += 1
+            continue
+        item['_pub_dt'] = pub_dt
+        item['_time_str'] = format_news_time(pub_dt)
+        time_filtered.append(item)
+
+    print(f'[News Collector] 时效性过滤: 保留 {len(time_filtered)} 条 (跳过: {skipped_old}条过期, {skipped_future}条未来时间, {skipped_no_time}条无时间)')
+
     # 去重 (按标题)
     seen_titles = set()
     unique_items = []
-    for item in all_items:
+    for item in time_filtered:
         title_key = item['title'].lower().strip()[:80]
         if title_key not in seen_titles:
             seen_titles.add(title_key)
@@ -278,8 +367,8 @@ def run():
         item['score'] = score
         scored_items.append(item)
 
-    # 按分数排序
-    scored_items.sort(key=lambda x: x['score'], reverse=True)
+    # 按分数排序，分数相同则按时间倒序（新的在前）
+    scored_items.sort(key=lambda x: (x['score'], x.get('_pub_dt') or datetime.min.replace(tzinfo=timezone.utc)), reverse=True)
 
     # 取 Top 8
     top_news = scored_items[:8]
@@ -299,6 +388,7 @@ def run():
             'source': item['source'],
             'link': item['link'],
             'pubDate': item.get('pubDate', ''),
+            'time': item.get('_time_str', ''),
             'score': item['score'],
         })
 
