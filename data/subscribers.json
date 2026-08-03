@@ -11,6 +11,12 @@
       "pushEmail": "ruiqiliang464@gmail.com",
       "enabled": true,
       "name": "用户2"
+    },
+    {
+      "email": "leeangel902@hotmail.com",
+      "pushEmail": "leeangel902@hotmail.com",
+      "enabled": true,
+      "name": "用户3"
     }
   ]
 }
