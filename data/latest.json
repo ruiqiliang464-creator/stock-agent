@@ -1,227 +1,227 @@
 {
   "date": "2026-08-04",
-  "updatedAt": "2026-08-04T07:49:39.886493",
+  "updatedAt": "2026-08-04T22:06:17.268890",
   "markets": {
     "us": [
       {
         "symbol": "AAPL",
         "name": "Apple Inc.",
-        "price": 303.42,
-        "change_pct": -1.78,
-        "volume": 71988041,
-        "high": 311.8,
-        "low": 302.56,
-        "open": 309.67,
-        "prev_close": 308.91
+        "price": 309.38,
+        "change_pct": 1.96,
+        "volume": 67778746,
+        "high": 310.42,
+        "low": 301.32,
+        "open": 302.725,
+        "prev_close": 303.42
       },
       {
         "symbol": "MSFT",
         "name": "Microsoft Corporation",
-        "price": 487.65,
-        "change_pct": 4.93,
-        "volume": 61661383,
-        "high": 491.62,
-        "low": 475.0001,
-        "open": 476.395,
-        "prev_close": 464.72
+        "price": 492.81,
+        "change_pct": 1.06,
+        "volume": 49565875,
+        "high": 499.4399,
+        "low": 479.17,
+        "open": 480.755,
+        "prev_close": 487.65
       },
       {
         "symbol": "GOOGL",
         "name": "Alphabet Inc.",
-        "price": 373.51,
-        "change_pct": 4.88,
-        "volume": 38121117,
-        "high": 376.6932,
-        "low": 363.35,
-        "open": 365.24,
-        "prev_close": 356.13
+        "price": 377.65,
+        "change_pct": 1.11,
+        "volume": 35493839,
+        "high": 380.52,
+        "low": 367.54,
+        "open": 367.6488,
+        "prev_close": 373.51
       },
       {
         "symbol": "AMZN",
         "name": "Amazon.com, Inc.",
-        "price": 284.02,
-        "change_pct": 4.58,
-        "volume": 86036639,
-        "high": 287.13,
-        "low": 278.0,
-        "open": 278.29,
-        "prev_close": 271.58
+        "price": 277.42,
+        "change_pct": -2.32,
+        "volume": 69522809,
+        "high": 281.07,
+        "low": 275.82,
+        "open": 276.06,
+        "prev_close": 284.02
       },
       {
         "symbol": "NVDA",
         "name": "NVIDIA Corporation",
-        "price": 206.64,
-        "change_pct": 2.93,
-        "volume": 127547828,
-        "high": 208.74,
-        "low": 196.85,
-        "open": 197.73,
-        "prev_close": 200.75
+        "price": 211.94,
+        "change_pct": 2.56,
+        "volume": 130429698,
+        "high": 213.06,
+        "low": 209.05,
+        "open": 211.49,
+        "prev_close": 206.64
       },
       {
         "symbol": "META",
         "name": "Meta Platforms, Inc.",
-        "price": 590.24,
-        "change_pct": 6.02,
-        "volume": 24169883,
-        "high": 597.52,
-        "low": 559.36,
-        "open": 562.42,
-        "prev_close": 556.71
+        "price": 587.94,
+        "change_pct": -0.39,
+        "volume": 16729236,
+        "high": 592.787,
+        "low": 578.25,
+        "open": 581.165,
+        "prev_close": 590.24
       },
       {
         "symbol": "TSLA",
         "name": "Tesla, Inc.",
-        "price": 322.08,
-        "change_pct": 3.49,
-        "volume": 37155577,
-        "high": 324.65,
-        "low": 310.425,
-        "open": 311.01,
-        "prev_close": 311.21
+        "price": 327.35,
+        "change_pct": 1.64,
+        "volume": 32958176,
+        "high": 329.57,
+        "low": 320.7901,
+        "open": 324.03,
+        "prev_close": 322.08
       },
       {
         "symbol": "JPM",
         "name": "JP Morgan Chase & Co.",
-        "price": 352.64,
-        "change_pct": 0.24,
-        "volume": 4184777,
-        "high": 355.62,
-        "low": 350.84,
-        "open": 353.75,
-        "prev_close": 351.79
+        "price": 357.52,
+        "change_pct": 1.38,
+        "volume": 8473316,
+        "high": 363.0,
+        "low": 353.873,
+        "open": 355.0,
+        "prev_close": 352.64
       },
       {
         "symbol": "V",
         "name": "Visa Inc.",
-        "price": 365.67,
-        "change_pct": -0.13,
-        "volume": 4160393,
-        "high": 371.97,
-        "low": 364.42,
-        "open": 368.5,
-        "prev_close": 366.13
+        "price": 369.59,
+        "change_pct": 1.07,
+        "volume": 7494782,
+        "high": 371.11,
+        "low": 360.0864,
+        "open": 361.76,
+        "prev_close": 365.67
       },
       {
         "symbol": "WMT",
         "name": "Walmart Inc.",
-        "price": 110.71,
-        "change_pct": -0.44,
-        "volume": 22819265,
-        "high": 113.29,
-        "low": 110.155,
-        "open": 113.1,
-        "prev_close": 111.2
+        "price": 111.55,
+        "change_pct": 0.76,
+        "volume": 29373375,
+        "high": 111.65,
+        "low": 108.56,
+        "open": 108.9,
+        "prev_close": 110.71
       },
       {
         "symbol": "DIS",
         "name": "Walt Disney Company (The)",
-        "price": 98.14,
-        "change_pct": 2.03,
-        "volume": 11142304,
-        "high": 99.05,
-        "low": 97.21,
-        "open": 97.62,
-        "prev_close": 96.19
+        "price": 98.18,
+        "change_pct": 0.04,
+        "volume": 16294560,
+        "high": 98.57,
+        "low": 97.38,
+        "open": 97.87,
+        "prev_close": 98.14
       },
       {
         "symbol": "NFLX",
         "name": "Netflix, Inc.",
-        "price": 73.33,
-        "change_pct": 2.26,
-        "volume": 32213993,
-        "high": 73.95,
-        "low": 72.18,
-        "open": 72.63,
-        "prev_close": 71.71
+        "price": 73.57,
+        "change_pct": 0.33,
+        "volume": 42742380,
+        "high": 73.745,
+        "low": 72.3,
+        "open": 72.45,
+        "prev_close": 73.33
       },
       {
         "symbol": "AMD",
         "name": "Advanced Micro Devices, Inc.",
-        "price": 484.64,
-        "change_pct": 1.78,
-        "volume": 24086408,
-        "high": 490.9464,
-        "low": 455.3,
-        "open": 461.79,
-        "prev_close": 476.15
+        "price": 518.58,
+        "change_pct": 7.0,
+        "volume": 37243667,
+        "high": 530.13,
+        "low": 502.2,
+        "open": 504.24,
+        "prev_close": 484.64
       },
       {
         "symbol": "INTC",
         "name": "Intel Corporation",
-        "price": 91.0,
-        "change_pct": 0.89,
-        "volume": 93454443,
-        "high": 91.6751,
-        "low": 85.62,
-        "open": 88.4,
-        "prev_close": 90.2
+        "price": 100.86,
+        "change_pct": 10.84,
+        "volume": 117064891,
+        "high": 101.3899,
+        "low": 94.32,
+        "open": 95.319,
+        "prev_close": 91.0
       },
       {
         "symbol": "BA",
         "name": "Boeing Company (The)",
-        "price": 233.49,
-        "change_pct": 8.03,
-        "volume": 10015708,
-        "high": 234.0886,
-        "low": 219.5,
-        "open": 221.0,
-        "prev_close": 216.14
+        "price": 237.16,
+        "change_pct": 1.57,
+        "volume": 6466008,
+        "high": 238.17,
+        "low": 232.88,
+        "open": 236.76,
+        "prev_close": 233.49
       },
       {
         "symbol": "GS",
         "name": "Goldman Sachs Group, Inc. (The)",
-        "price": 1027.06,
-        "change_pct": 0.85,
-        "volume": 1344988,
-        "high": 1027.96,
-        "low": 1005.42,
-        "open": 1025.0,
-        "prev_close": 1018.38
+        "price": 1052.98,
+        "change_pct": 2.52,
+        "volume": 1546041,
+        "high": 1066.16,
+        "low": 1043.27,
+        "open": 1050.0,
+        "prev_close": 1027.06
       },
       {
         "symbol": "CVX",
         "name": "Chevron Corporation",
-        "price": 193.18,
-        "change_pct": -1.85,
-        "volume": 7965535,
-        "high": 195.86,
-        "low": 191.83,
-        "open": 195.38,
-        "prev_close": 196.83
+        "price": 190.4,
+        "change_pct": -1.44,
+        "volume": 9447158,
+        "high": 191.47,
+        "low": 186.3401,
+        "open": 190.15,
+        "prev_close": 193.18
       },
       {
         "symbol": "XOM",
         "name": "ExxonMobil Holdings Corporation",
-        "price": 155.06,
-        "change_pct": -0.24,
-        "volume": 14453456,
-        "high": 155.87,
-        "low": 152.66,
-        "open": 153.455,
-        "prev_close": 155.44
+        "price": 153.96,
+        "change_pct": -0.71,
+        "volume": 14030598,
+        "high": 154.84,
+        "low": 149.09,
+        "open": 151.62,
+        "prev_close": 155.06
       },
       {
         "symbol": "PFE",
         "name": "Pfizer, Inc.",
-        "price": 25.03,
-        "change_pct": 0.08,
-        "volume": 40352356,
-        "high": 25.39,
-        "low": 24.865,
-        "open": 25.15,
-        "prev_close": 25.01
+        "price": 25.41,
+        "change_pct": 1.52,
+        "volume": 61323473,
+        "high": 25.64,
+        "low": 24.7,
+        "open": 25.04,
+        "prev_close": 25.03
       },
       {
         "symbol": "UNH",
         "name": "UnitedHealth Group Incorporated",
-        "price": 415.36,
-        "change_pct": 0.23,
-        "volume": 2450932,
-        "high": 419.34,
-        "low": 413.315,
-        "open": 417.43,
-        "prev_close": 414.4
+        "price": 407.55,
+        "change_pct": -1.88,
+        "volume": 5256067,
+        "high": 416.0,
+        "low": 406.8,
+        "open": 415.555,
+        "prev_close": 415.36
       }
     ],
     "cn": [
@@ -472,221 +472,221 @@
       {
         "symbol": "BTC",
         "name": "Bitcoin",
-        "price": 63643.0,
-        "change_pct": 1.3,
-        "volume": 25862022132.0,
-        "high": 64135.0,
-        "low": 62241.0,
-        "open": 62381.72,
-        "prev_close": 62381.72
+        "price": 64123.0,
+        "change_pct": 0.7,
+        "volume": 23005692448.0,
+        "high": 64347.0,
+        "low": 63295.0,
+        "open": 63533.06,
+        "prev_close": 63533.06
       },
       {
         "symbol": "ETH",
         "name": "Ethereum",
-        "price": 1860.34,
-        "change_pct": -0.2,
-        "volume": 7134030717.0,
-        "high": 1873.67,
-        "low": 1828.66,
-        "open": 1834.61,
-        "prev_close": 1834.61
+        "price": 1868.45,
+        "change_pct": 0.3,
+        "volume": 7020117182.0,
+        "high": 1878.93,
+        "low": 1847.64,
+        "open": 1857.65,
+        "prev_close": 1857.65
       },
       {
         "symbol": "BNB",
         "name": "BNB",
-        "price": 589.79,
-        "change_pct": 1.3,
-        "volume": 510789780.0,
-        "high": 593.44,
-        "low": 580.96,
-        "open": 583.0,
-        "prev_close": 583.0
+        "price": 593.06,
+        "change_pct": 0.5,
+        "volume": 477583941.0,
+        "high": 594.45,
+        "low": 587.53,
+        "open": 588.98,
+        "prev_close": 588.98
       },
       {
         "symbol": "XRP",
         "name": "XRP",
         "price": 1.07,
-        "change_pct": 0.1,
-        "volume": 936722512.0,
-        "high": 1.085,
-        "low": 1.062,
-        "open": 1.06,
-        "prev_close": 1.06
+        "change_pct": -0.6,
+        "volume": 927216129.0,
+        "high": 1.081,
+        "low": 1.069,
+        "open": 1.07,
+        "prev_close": 1.07
       },
       {
         "symbol": "SOL",
         "name": "Solana",
-        "price": 73.57,
-        "change_pct": 0.7,
-        "volume": 1454686201.0,
-        "high": 74.15,
-        "low": 71.99,
-        "open": 72.15,
-        "prev_close": 72.15
+        "price": 73.98,
+        "change_pct": 0.4,
+        "volume": 1393101616.0,
+        "high": 74.35,
+        "low": 73.0,
+        "open": 73.42,
+        "prev_close": 73.42
       },
       {
         "symbol": "TRX",
         "name": "TRON",
-        "price": 0.329043,
-        "change_pct": 0.9,
-        "volume": 387575743.0,
-        "high": 0.329282,
-        "low": 0.325364,
-        "open": 0.32596,
-        "prev_close": 0.32596
+        "price": 0.327227,
+        "change_pct": -0.4,
+        "volume": 436144913.0,
+        "high": 0.330854,
+        "low": 0.327237,
+        "open": 0.32858,
+        "prev_close": 0.32858
       },
       {
         "symbol": "DOGE",
         "name": "Dogecoin",
         "price": 0.070179,
-        "change_pct": 0.5,
-        "volume": 396807208.0,
-        "high": 0.070504,
-        "low": 0.068978,
-        "open": 0.069216,
-        "prev_close": 0.069216
+        "change_pct": -0.3,
+        "volume": 376834337.0,
+        "high": 0.070572,
+        "low": 0.069767,
+        "open": 0.070164,
+        "prev_close": 0.070164
       },
       {
         "symbol": "ADA",
         "name": "Cardano",
-        "price": 0.195501,
-        "change_pct": 5.4,
-        "volume": 695651048.0,
+        "price": 0.193234,
+        "change_pct": -0.3,
+        "volume": 513334258.0,
         "high": 0.19854,
-        "low": 0.181664,
-        "open": 0.183912,
-        "prev_close": 0.183912
+        "low": 0.191096,
+        "open": 0.195084,
+        "prev_close": 0.195084
       },
       {
         "symbol": "LINK",
         "name": "Chainlink",
         "price": 8.16,
-        "change_pct": -1.5,
-        "volume": 167116550.0,
-        "high": 8.3,
+        "change_pct": -0.3,
+        "volume": 177084389.0,
+        "high": 8.25,
         "low": 8.11,
-        "open": 8.2,
-        "prev_close": 8.2
+        "open": 8.17,
+        "prev_close": 8.17
       },
       {
         "symbol": "XLM",
         "name": "Stellar",
-        "price": 0.171172,
-        "change_pct": -0.2,
-        "volume": 98901491.0,
-        "high": 0.172637,
-        "low": 0.169907,
-        "open": 0.170431,
-        "prev_close": 0.170431
+        "price": 0.169784,
+        "change_pct": -1.3,
+        "volume": 111984540.0,
+        "high": 0.171838,
+        "low": 0.168525,
+        "open": 0.171013,
+        "prev_close": 0.171013
       },
       {
         "symbol": "LTC",
         "name": "Litecoin",
-        "price": 44.17,
-        "change_pct": -0.5,
-        "volume": 163129703.0,
-        "high": 44.52,
-        "low": 44.0,
-        "open": 44.02,
-        "prev_close": 44.02
-      },
-      {
-        "symbol": "AVAX",
-        "name": "Avalanche",
-        "price": 6.81,
-        "change_pct": 5.9,
-        "volume": 266626980.0,
-        "high": 6.96,
-        "low": 6.38,
-        "open": 6.4,
-        "prev_close": 6.4
+        "price": 44.84,
+        "change_pct": 1.1,
+        "volume": 174465747.0,
+        "high": 44.94,
+        "low": 44.03,
+        "open": 44.17,
+        "prev_close": 44.17
       },
       {
         "symbol": "SHIB",
         "name": "Shiba Inu",
         "price": 5e-06,
-        "change_pct": 1.6,
-        "volume": 91017632.0,
-        "high": 5.05e-06,
-        "low": 4.82e-06,
+        "change_pct": -0.9,
+        "volume": 82177574.0,
+        "high": 5.04e-06,
+        "low": 4.92e-06,
         "open": 5e-06,
         "prev_close": 5e-06
       },
       {
+        "symbol": "AVAX",
+        "name": "Avalanche",
+        "price": 6.67,
+        "change_pct": 2.0,
+        "volume": 275942436.0,
+        "high": 6.96,
+        "low": 6.56,
+        "open": 6.56,
+        "prev_close": 6.56
+      },
+      {
         "symbol": "UNI",
         "name": "Uniswap",
-        "price": 3.88,
-        "change_pct": -5.9,
-        "volume": 238261906.0,
-        "high": 4.11,
-        "low": 3.82,
-        "open": 4.02,
-        "prev_close": 4.02
+        "price": 3.85,
+        "change_pct": -1.6,
+        "volume": 203317823.0,
+        "high": 3.94,
+        "low": 3.79,
+        "open": 3.91,
+        "prev_close": 3.91
       },
       {
         "symbol": "NEAR",
         "name": "NEAR Protocol",
-        "price": 1.75,
-        "change_pct": 2.1,
-        "volume": 111457010.0,
+        "price": 1.73,
+        "change_pct": -0.7,
+        "volume": 91998375.0,
         "high": 1.77,
-        "low": 1.7,
-        "open": 1.72,
-        "prev_close": 1.72
+        "low": 1.72,
+        "open": 1.73,
+        "prev_close": 1.73
       },
       {
         "symbol": "DOT",
         "name": "Polkadot",
-        "price": 0.832965,
-        "change_pct": 4.5,
-        "volume": 104198188.0,
-        "high": 0.845852,
-        "low": 0.789635,
-        "open": 0.795878,
-        "prev_close": 0.795878
+        "price": 0.853683,
+        "change_pct": 4.0,
+        "volume": 99258975.0,
+        "high": 0.856416,
+        "low": 0.819869,
+        "open": 0.82181,
+        "prev_close": 0.82181
       },
       {
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "price": 6.58,
-        "change_pct": -0.2,
-        "volume": 28277831.0,
+        "price": 6.6,
+        "change_pct": -0.4,
+        "volume": 57277260.0,
         "high": 6.64,
-        "low": 6.48,
-        "open": 6.52,
-        "prev_close": 6.52
+        "low": 6.56,
+        "open": 6.59,
+        "prev_close": 6.59
       },
       {
         "symbol": "FIL",
         "name": "Filecoin",
-        "price": 0.717422,
-        "change_pct": 0.7,
-        "volume": 40600909.0,
-        "high": 0.731643,
-        "low": 0.705826,
-        "open": 0.709424,
-        "prev_close": 0.709424
+        "price": 0.718334,
+        "change_pct": -0.7,
+        "volume": 31660362.0,
+        "high": 0.727532,
+        "low": 0.70762,
+        "open": 0.720654,
+        "prev_close": 0.720654
       },
       {
         "symbol": "APT",
         "name": "Aptos",
-        "price": 0.578467,
-        "change_pct": 2.7,
-        "volume": 29930264.0,
-        "high": 0.579876,
-        "low": 0.555351,
-        "open": 0.558444,
-        "prev_close": 0.558444
+        "price": 0.580249,
+        "change_pct": 0.6,
+        "volume": 26574771.0,
+        "high": 0.581905,
+        "low": 0.569145,
+        "open": 0.573989,
+        "prev_close": 0.573989
       }
     ],
     "commodity": [
       {
         "symbol": "GOLD",
         "name": "黄金期货",
-        "price": 4119.4,
-        "change_pct": 0.24,
-        "volume": 24578,
-        "high": 4125.1,
+        "price": 4134.2,
+        "change_pct": 0.6,
+        "volume": 113098,
+        "high": 4163.8,
         "low": 4098.2,
         "open": 4109.6,
         "prev_close": 4109.6
@@ -694,10 +694,10 @@
       {
         "symbol": "SILVER",
         "name": "白银期货",
-        "price": 59.2,
-        "change_pct": 1.4,
-        "volume": 8546,
-        "high": 59.4,
+        "price": 59.75,
+        "change_pct": 2.35,
+        "volume": 40379,
+        "high": 60.28,
         "low": 58.19,
         "open": 58.38,
         "prev_close": 58.38
@@ -705,43 +705,43 @@
       {
         "symbol": "CRUDE_OIL",
         "name": "原油期货(WTI)",
-        "price": 80.86,
-        "change_pct": 0.95,
-        "volume": 26954,
-        "high": 81.45,
-        "low": 79.62,
+        "price": 75.14,
+        "change_pct": -6.19,
+        "volume": 329739,
+        "high": 82.33,
+        "low": 75.11,
         "open": 80.1,
         "prev_close": 80.1
       },
       {
         "symbol": "BRENT",
         "name": "原油期货(布伦特)",
-        "price": 84.96,
-        "change_pct": 1.65,
-        "volume": 4145,
-        "high": 85.26,
-        "low": 83.38,
+        "price": 78.69,
+        "change_pct": -5.85,
+        "volume": 61877,
+        "high": 86.33,
+        "low": 78.69,
         "open": 83.58,
         "prev_close": 83.58
       },
       {
         "symbol": "NATURAL_GAS",
         "name": "天然气期货",
-        "price": 2.77,
-        "change_pct": -0.32,
-        "volume": 4315,
+        "price": 2.69,
+        "change_pct": -3.06,
+        "volume": 130935,
         "high": 2.79,
-        "low": 2.76,
+        "low": 2.66,
         "open": 2.77,
         "prev_close": 2.77
       },
       {
         "symbol": "COPPER",
         "name": "铜期货",
-        "price": 6.61,
-        "change_pct": 1.14,
-        "volume": 11495,
-        "high": 6.63,
+        "price": 6.63,
+        "change_pct": 1.4,
+        "volume": 51163,
+        "high": 6.69,
         "low": 6.53,
         "open": 6.54,
         "prev_close": 6.54
@@ -749,44 +749,44 @@
       {
         "symbol": "ALUMINUM",
         "name": "铝期货",
-        "price": 3443.75,
-        "change_pct": 0.01,
-        "volume": 8,
-        "high": 3444.5,
-        "low": 3434.5,
+        "price": 3416.0,
+        "change_pct": -0.8,
+        "volume": 61,
+        "high": 3453.75,
+        "low": 3416.0,
         "open": 3443.5,
         "prev_close": 3443.5
       },
       {
         "symbol": "CORN",
         "name": "玉米期货",
-        "price": 474.75,
-        "change_pct": 0.16,
-        "volume": 21927,
+        "price": 465.25,
+        "change_pct": -1.85,
+        "volume": 188345,
         "high": 475.25,
-        "low": 471.25,
+        "low": 464.0,
         "open": 474.0,
         "prev_close": 474.0
       },
       {
         "symbol": "SOYBEAN",
         "name": "大豆期货",
-        "price": 1191.75,
-        "change_pct": -0.13,
-        "volume": 11486,
+        "price": 1177.25,
+        "change_pct": -1.34,
+        "volume": 133108,
         "high": 1195.25,
-        "low": 1186.75,
+        "low": 1170.0,
         "open": 1193.25,
         "prev_close": 1193.25
       },
       {
         "symbol": "WHEAT",
         "name": "小麦期货",
-        "price": 658.5,
-        "change_pct": 1.0,
-        "volume": 6639,
-        "high": 659.0,
-        "low": 647.0,
+        "price": 638.0,
+        "change_pct": -2.15,
+        "volume": 64612,
+        "high": 659.5,
+        "low": 635.5,
         "open": 652.0,
         "prev_close": 652.0
       }
@@ -794,75 +794,75 @@
   },
   "news": [
     {
-      "title": "Can Palantir pull off a Microsoft-style comeback? Here's what options say",
-      "summary": "Hopes are running high that high-profile software provider Palantir can shake off its nine-month bear market and rally after earnings.",
-      "source": "CNBC Markets",
-      "link": "https://www.cnbc.com/2026/08/03/can-palantir-pull-off-a-microsoft-style-comeback-heres-what-options-say.html",
-      "pubDate": "Mon, 03 Aug 2026 18:34:52 GMT",
-      "time": "08/04 02:34",
-      "score": 14
-    },
-    {
-      "title": "Amazon tops $3 trillion market cap as stock continues post-earnings surge",
-      "summary": "Shares of Amazon hit a new all-time high Monday, putting its market cap over $3 trillion.",
-      "source": "CNBC Markets",
-      "link": "https://www.cnbc.com/2026/08/03/amazon-amzn-stock-market-cap-earnings.html",
-      "pubDate": "Mon, 03 Aug 2026 20:02:17 GMT",
-      "time": "08/04 04:02",
+      "title": "Stock Indices Rally on Strong Tech Earnings and US-Iran Peace Hopes",
+      "summary": "The S&P 500 Index ($SPX ) (SPY ) today is up +1.13%, the Dow Jones Industrial Average ($DOWI ) (DIA ) is up +1.55%, and the Nasdaq 100 Index ($IUXX ) (QQQ ) is up +2.21%.. September E-mini S&P futures (ESU26 ) are up +1.20%, and September E-mini Nasdaq futures...",
+      "source": "Nasdaq Stocks",
+      "link": "https://www.nasdaq.com/articles/stock-indices-rally-strong-tech-earnings-and-us-iran-peace-hopes",
+      "pubDate": "Tue, 04 Aug 2026 21:33:26 +0000",
+      "time": "08/05 05:33",
       "score": 12
     },
     {
-      "title": "SpaceX's post-IPO plunge sets tense backdrop for first earnings report",
-      "summary": "Two weeks after Tesla's earnings report was panned by Wall Street, Elon Musk faces investors again, but this time to discuss SpaceX's results.",
+      "title": "Paramount Skydance raises full-year profit guidance, remains 'confident' about WBD merger",
+      "summary": "Paramount Skydance reported second-quarter earnings after the bell and said it continues to prepare for its proposed merger with Warner Bros.. Discovery.",
       "source": "CNBC Markets",
-      "link": "https://www.cnbc.com/2026/08/03/spacexs-post-ipo-plunge-sets-tense-backdrop-for-first-earnings-report.html",
-      "pubDate": "Mon, 03 Aug 2026 13:45:02 GMT",
-      "time": "08/03 21:45",
+      "link": "https://www.cnbc.com/2026/08/04/paramount-skydance-psky-earnings-q2-2026.html",
+      "pubDate": "Tue, 04 Aug 2026 21:15:03 GMT",
+      "time": "08/05 05:15",
       "score": 12
     },
     {
-      "title": "Palantir soars 12% on blowout quarter, with U.S. commercial revenue soaring nearly 150%",
-      "summary": "Palantir's second-quarter earnings beat expectations, and the AI software company lifted revenue guidance.",
-      "source": "CNBC Markets",
-      "link": "https://www.cnbc.com/2026/08/03/palantir-pltr-earnings-q2-2026.html",
-      "pubDate": "Mon, 03 Aug 2026 22:47:54 GMT",
-      "time": "08/04 06:47",
-      "score": 10
-    },
-    {
-      "title": "Trump warns Iran talks are ‘last chance’ to end war — oil prices rise as Tehran denies negotiations",
-      "summary": "President Donald Trump has warned that the latest round of negotiations with Iran are the \"last chance\" to bring an end to the five-month conflict.",
-      "source": "CNBC Markets",
-      "link": "https://www.cnbc.com/2026/08/04/us-iran-war-trump-hormuz.html",
-      "pubDate": "Tue, 04 Aug 2026 07:04:07 GMT",
-      "time": "08/04 15:04",
-      "score": 8
-    },
-    {
-      "title": "Analysis: Federal Reserve may be pulled into Bessent’s effort to support Japan’s yen",
-      "summary": "Treasury Secretary Scott Bessent wants to defend the yen without selling Treasurys into a sensitive U.S.. bond market.. The Federal Reserve could help.",
-      "source": "CNBC Markets",
-      "link": "https://www.cnbc.com/2026/08/03/bessent-fed-japan-yen-fima-repo-facility.html",
-      "pubDate": "Mon, 03 Aug 2026 23:20:54 GMT",
-      "time": "08/04 07:20",
-      "score": 8
-    },
-    {
-      "title": "Jim Cramer says the market has warmed up to Big Tech's AI spending. Here's what flipped the switch",
-      "summary": "Cramer said Amazon CEO Andy Jassy finally explained how Amazon's massive AI spending will generate long-term returns.",
-      "source": "CNBC Markets",
-      "link": "https://www.cnbc.com/2026/08/03/jim-cramer-market-warmed-up-big-tech-ai-spending.html",
-      "pubDate": "Mon, 03 Aug 2026 22:20:01 GMT",
-      "time": "08/04 06:20",
-      "score": 8
-    },
-    {
-      "title": "Palantir’s stock climbs after earnings, as AI drives turbocharged growth",
-      "summary": "Companies are turning to Palantir for greater autonomy over their AI models and data, according to CEO Alex Karp.",
+      "title": "So what’s the plan to bring down inflation? The new Fed chair and his White House allies say you shouldn’t ask.",
+      "summary": "Critics say Kevin Warsh’s determination to cool prices gains isn’t sufficient.",
       "source": "MarketWatch Top",
-      "link": "https://www.marketwatch.com/story/palantirs-stock-gains-as-ai-drives-turbocharged-growth-e006b70a?mod=mw_rss_topstories",
-      "pubDate": "Mon, 03 Aug 2026 21:59:00 GMT",
-      "time": "08/04 05:59",
+      "link": "https://www.marketwatch.com/story/bessent-defends-warsh-saying-markets-are-going-through-detox-from-too-much-fed-guidance-39dfc765?mod=mw_rss_topstories",
+      "pubDate": "Tue, 04 Aug 2026 20:26:00 GMT",
+      "time": "08/05 04:26",
+      "score": 12
+    },
+    {
+      "title": "AMD earnings are a key test for chips and momentum stocks. Here's what the options market is saying",
+      "summary": "As AMD prepares to report earnings Tuesday after the bell, market participants face a divergence between positive earnings results and negative price action.",
+      "source": "CNBC Markets",
+      "link": "https://www.cnbc.com/2026/08/04/amd-earnings-are-a-key-test-for-chips-and-momentum-stocks-heres-what-the-options-market-is-saying.html",
+      "pubDate": "Tue, 04 Aug 2026 13:55:51 GMT",
+      "time": "08/04 21:55",
+      "score": 9
+    },
+    {
+      "title": "Pinterest shares fall on lukewarm sales guidance",
+      "summary": "Pinterest reported better-than-expected earnings and revenue for the second quarter, though its forecast was online in line with estimates.",
+      "source": "CNBC Markets",
+      "link": "https://www.cnbc.com/2026/08/04/pinterest-pins-q2-earnings-report-2026.html",
+      "pubDate": "Tue, 04 Aug 2026 21:53:25 GMT",
+      "time": "08/05 05:53",
+      "score": 8
+    },
+    {
+      "title": "S&P 500 Posts a New Record High on Strong Tech Earnings",
+      "summary": "The S&P 500 Index ($SPX ) (SPY ) today is up +0.73%, the Dow Jones Industrial Average ($DOWI ) (DIA ) is up +1.03%, and the Nasdaq 100 Index ($IUXX ) (QQQ ) is up +2.00%.. September E-mini S&P futures (ESU26 ) are up +0.72%, and September E-mini Nasdaq futures...",
+      "source": "Nasdaq Stocks",
+      "link": "https://www.nasdaq.com/articles/sp-500-posts-new-record-high-strong-tech-earnings",
+      "pubDate": "Tue, 04 Aug 2026 21:33:25 +0000",
+      "time": "08/05 05:33",
+      "score": 8
+    },
+    {
+      "title": "Strength in Stocks and Lower Crude Prices Weigh on the Dollar",
+      "summary": "The dollar index (DXY00 ) fell by -0.03% on Tuesday.. The dollar was under pressure Tuesday as hopes for a deal to reopen the Strait of Hormuz have boosted stocks and knocked crude oil prices sharply lower.. The slide in crude oil prices lowers inflation expectations and could prompt the...",
+      "source": "Nasdaq Stocks",
+      "link": "https://www.nasdaq.com/articles/strength-stocks-and-lower-crude-prices-weigh-dollar",
+      "pubDate": "Tue, 04 Aug 2026 21:10:12 +0000",
+      "time": "08/05 05:10",
+      "score": 8
+    },
+    {
+      "title": "Palantir stock skyrockets 29%, narrowly missing its best day ever after 'otherworldly' results",
+      "summary": "\"Our customers have declined to become vassal states of the language labs,\" Palantir's co-founder and CEO Alex Karp said after blowout second-quarter earnings.",
+      "source": "CNBC Markets",
+      "link": "https://www.cnbc.com/2026/08/04/palantir-2q-earnings-ai-sovereign-tools.html",
+      "pubDate": "Tue, 04 Aug 2026 20:04:32 GMT",
+      "time": "08/05 04:04",
       "score": 8
     }
   ],
@@ -877,62 +877,22 @@
       {
         "market": "us",
         "type": "individual_strong",
-        "symbol": "MSFT",
-        "name": "Microsoft Corporation",
-        "description": "Microsoft Corporation(MSFT)涨幅4.93%，表现强势",
-        "confidence": "中",
-        "price": 487.65,
-        "change_pct": 4.93
-      },
-      {
-        "market": "us",
-        "type": "individual_strong",
-        "symbol": "GOOGL",
-        "name": "Alphabet Inc.",
-        "description": "Alphabet Inc.(GOOGL)涨幅4.88%，表现强势",
-        "confidence": "中",
-        "price": 373.51,
-        "change_pct": 4.88
-      },
-      {
-        "market": "us",
-        "type": "individual_strong",
-        "symbol": "AMZN",
-        "name": "Amazon.com, Inc.",
-        "description": "Amazon.com, Inc.(AMZN)涨幅4.58%，表现强势",
-        "confidence": "中",
-        "price": 284.02,
-        "change_pct": 4.58
-      },
-      {
-        "market": "us",
-        "type": "individual_strong",
-        "symbol": "META",
-        "name": "Meta Platforms, Inc.",
-        "description": "Meta Platforms, Inc.(META)涨幅6.02%，表现强势",
+        "symbol": "AMD",
+        "name": "Advanced Micro Devices, Inc.",
+        "description": "Advanced Micro Devices, Inc.(AMD)涨幅7.0%，表现强势",
         "confidence": "高",
-        "price": 590.24,
-        "change_pct": 6.02
+        "price": 518.58,
+        "change_pct": 7.0
       },
       {
         "market": "us",
         "type": "individual_strong",
-        "symbol": "TSLA",
-        "name": "Tesla, Inc.",
-        "description": "Tesla, Inc.(TSLA)涨幅3.49%，表现强势",
-        "confidence": "中",
-        "price": 322.08,
-        "change_pct": 3.49
-      },
-      {
-        "market": "us",
-        "type": "individual_strong",
-        "symbol": "BA",
-        "name": "Boeing Company (The)",
-        "description": "Boeing Company (The)(BA)涨幅8.03%，表现强势",
+        "symbol": "INTC",
+        "name": "Intel Corporation",
+        "description": "Intel Corporation(INTC)涨幅10.84%，表现强势",
         "confidence": "高",
-        "price": 233.49,
-        "change_pct": 8.03
+        "price": 100.86,
+        "change_pct": 10.84
       },
       {
         "market": "cn",
@@ -1003,96 +963,116 @@
       {
         "market": "crypto",
         "type": "market_trend",
-        "description": "数字货币整体偏强，上涨占比68%",
+        "description": "数字货币整体偏弱，上涨占比42%",
         "confidence": "中"
-      },
-      {
-        "market": "crypto",
-        "type": "individual_strong",
-        "symbol": "ADA",
-        "name": "Cardano",
-        "description": "Cardano(ADA)涨幅5.4%，表现强势",
-        "confidence": "高",
-        "price": 0.195501,
-        "change_pct": 5.4
-      },
-      {
-        "market": "crypto",
-        "type": "individual_strong",
-        "symbol": "AVAX",
-        "name": "Avalanche",
-        "description": "Avalanche(AVAX)涨幅5.9%，表现强势",
-        "confidence": "高",
-        "price": 6.81,
-        "change_pct": 5.9
       },
       {
         "market": "crypto",
         "type": "individual_strong",
         "symbol": "DOT",
         "name": "Polkadot",
-        "description": "Polkadot(DOT)涨幅4.5%，表现强势",
+        "description": "Polkadot(DOT)涨幅4.0%，表现强势",
         "confidence": "中",
-        "price": 0.832965,
-        "change_pct": 4.5
-      },
-      {
-        "market": "crypto",
-        "type": "individual_weak",
-        "symbol": "UNI",
-        "name": "Uniswap",
-        "description": "Uniswap(UNI)跌幅-5.9%，表现疲弱",
-        "confidence": "高",
-        "price": 3.88,
-        "change_pct": -5.9
+        "price": 0.853683,
+        "change_pct": 4.0
       },
       {
         "market": "commodity",
         "type": "market_trend",
-        "description": "大宗商品整体强势上涨，上涨占比80%",
+        "description": "大宗商品整体偏弱，上涨占比30%",
         "confidence": "中"
+      },
+      {
+        "market": "commodity",
+        "type": "individual_weak",
+        "symbol": "CRUDE_OIL",
+        "name": "原油期货(WTI)",
+        "description": "原油期货(WTI)(CRUDE_OIL)跌幅-6.19%，表现疲弱",
+        "confidence": "高",
+        "price": 75.14,
+        "change_pct": -6.19
+      },
+      {
+        "market": "commodity",
+        "type": "individual_weak",
+        "symbol": "BRENT",
+        "name": "原油期货(布伦特)",
+        "description": "原油期货(布伦特)(BRENT)跌幅-5.85%，表现疲弱",
+        "confidence": "高",
+        "price": 78.69,
+        "change_pct": -5.85
+      },
+      {
+        "market": "commodity",
+        "type": "individual_weak",
+        "symbol": "NATURAL_GAS",
+        "name": "天然气期货",
+        "description": "天然气期货(NATURAL_GAS)跌幅-3.06%，表现疲弱",
+        "confidence": "中",
+        "price": 2.69,
+        "change_pct": -3.06
       }
     ],
     "opportunities": [
       {
         "market": "us",
         "type": "breakout_watch",
+        "symbol": "AAPL",
+        "name": "Apple Inc.",
+        "description": "Apple Inc.温和上涨1.96%，留意突破信号",
+        "confidence": "低",
+        "price": 309.38,
+        "change_pct": 1.96
+      },
+      {
+        "market": "us",
+        "type": "breakout_watch",
         "symbol": "NVDA",
         "name": "NVIDIA Corporation",
-        "description": "NVIDIA Corporation温和上涨2.93%，留意突破信号",
+        "description": "NVIDIA Corporation温和上涨2.56%，留意突破信号",
         "confidence": "低",
-        "price": 206.64,
-        "change_pct": 2.93
+        "price": 211.94,
+        "change_pct": 2.56
       },
       {
         "market": "us",
         "type": "breakout_watch",
-        "symbol": "DIS",
-        "name": "Walt Disney Company (The)",
-        "description": "Walt Disney Company (The)温和上涨2.03%，留意突破信号",
+        "symbol": "TSLA",
+        "name": "Tesla, Inc.",
+        "description": "Tesla, Inc.温和上涨1.64%，留意突破信号",
         "confidence": "低",
-        "price": 98.14,
-        "change_pct": 2.03
+        "price": 327.35,
+        "change_pct": 1.64
       },
       {
         "market": "us",
         "type": "breakout_watch",
-        "symbol": "NFLX",
-        "name": "Netflix, Inc.",
-        "description": "Netflix, Inc.温和上涨2.26%，留意突破信号",
+        "symbol": "BA",
+        "name": "Boeing Company (The)",
+        "description": "Boeing Company (The)温和上涨1.57%，留意突破信号",
         "confidence": "低",
-        "price": 73.33,
-        "change_pct": 2.26
+        "price": 237.16,
+        "change_pct": 1.57
       },
       {
         "market": "us",
         "type": "breakout_watch",
-        "symbol": "AMD",
-        "name": "Advanced Micro Devices, Inc.",
-        "description": "Advanced Micro Devices, Inc.温和上涨1.78%，留意突破信号",
+        "symbol": "GS",
+        "name": "Goldman Sachs Group, Inc. (The)",
+        "description": "Goldman Sachs Group, Inc. (The)温和上涨2.52%，留意突破信号",
         "confidence": "低",
-        "price": 484.64,
-        "change_pct": 1.78
+        "price": 1052.98,
+        "change_pct": 2.52
+      },
+      {
+        "market": "us",
+        "type": "breakout_watch",
+        "symbol": "PFE",
+        "name": "Pfizer, Inc.",
+        "description": "Pfizer, Inc.温和上涨1.52%，留意突破信号",
+        "confidence": "低",
+        "price": 25.41,
+        "change_pct": 1.52
       },
       {
         "market": "cn",
@@ -1127,64 +1107,74 @@
       {
         "market": "crypto",
         "type": "breakout_watch",
-        "symbol": "SHIB",
-        "name": "Shiba Inu",
-        "description": "Shiba Inu温和上涨1.6%，留意突破信号",
+        "symbol": "AVAX",
+        "name": "Avalanche",
+        "description": "Avalanche温和上涨2.0%，留意突破信号",
         "confidence": "低",
-        "price": 5e-06,
-        "change_pct": 1.6
-      },
-      {
-        "market": "crypto",
-        "type": "dip_buying",
-        "symbol": "UNI",
-        "name": "Uniswap",
-        "description": "Uniswap回调5.9%，关注低吸机会",
-        "confidence": "低",
-        "price": 3.88,
-        "change_pct": -5.9
-      },
-      {
-        "market": "crypto",
-        "type": "breakout_watch",
-        "symbol": "NEAR",
-        "name": "NEAR Protocol",
-        "description": "NEAR Protocol温和上涨2.1%，留意突破信号",
-        "confidence": "低",
-        "price": 1.75,
-        "change_pct": 2.1
-      },
-      {
-        "market": "crypto",
-        "type": "breakout_watch",
-        "symbol": "APT",
-        "name": "Aptos",
-        "description": "Aptos温和上涨2.7%，留意突破信号",
-        "confidence": "低",
-        "price": 0.578467,
-        "change_pct": 2.7
+        "price": 6.67,
+        "change_pct": 2.0
       },
       {
         "market": "commodity",
         "type": "breakout_watch",
+        "symbol": "SILVER",
+        "name": "白银期货",
+        "description": "白银期货温和上涨2.35%，留意突破信号",
+        "confidence": "低",
+        "price": 59.75,
+        "change_pct": 2.35
+      },
+      {
+        "market": "commodity",
+        "type": "dip_buying",
+        "symbol": "CRUDE_OIL",
+        "name": "原油期货(WTI)",
+        "description": "原油期货(WTI)回调6.19%，关注低吸机会",
+        "confidence": "低",
+        "price": 75.14,
+        "change_pct": -6.19
+      },
+      {
+        "market": "commodity",
+        "type": "dip_buying",
         "symbol": "BRENT",
         "name": "原油期货(布伦特)",
-        "description": "原油期货(布伦特)温和上涨1.65%，留意突破信号",
+        "description": "原油期货(布伦特)回调5.85%，关注低吸机会",
         "confidence": "低",
-        "price": 84.96,
-        "change_pct": 1.65
+        "price": 78.69,
+        "change_pct": -5.85
+      },
+      {
+        "market": "commodity",
+        "type": "dip_buying",
+        "symbol": "NATURAL_GAS",
+        "name": "天然气期货",
+        "description": "天然气期货回调3.06%，关注低吸机会",
+        "confidence": "中",
+        "price": 2.69,
+        "change_pct": -3.06
       }
     ],
     "risks": [
       {
-        "market": "crypto",
+        "market": "commodity",
         "type": "crash_warning",
-        "symbol": "UNI",
-        "name": "Uniswap",
-        "description": "Uniswap暴跌5.9%，风险极高",
+        "symbol": "CRUDE_OIL",
+        "name": "原油期货(WTI)",
+        "description": "原油期货(WTI)暴跌6.19%，风险极高",
         "confidence": "高",
-        "price": 3.88,
-        "change_pct": -5.9
+        "price": 75.14,
+        "change_pct": -6.19
+      },
+      {
+        "market": "commodity",
+        "type": "crash_warning",
+        "symbol": "BRENT",
+        "name": "原油期货(布伦特)",
+        "description": "原油期货(布伦特)暴跌5.85%，风险极高",
+        "confidence": "高",
+        "price": 78.69,
+        "change_pct": -5.85
       }
     ],
     "summary": {
@@ -1193,16 +1183,16 @@
         "upCount": 15,
         "downCount": 5,
         "flatCount": 0,
-        "avgChange": 1.94,
+        "avgChange": 1.43,
         "maxUp": {
-          "symbol": "BA",
-          "name": "Boeing Company (The)",
-          "change_pct": 8.03
+          "symbol": "INTC",
+          "name": "Intel Corporation",
+          "change_pct": 10.84
         },
         "maxDown": {
-          "symbol": "CVX",
-          "name": "Chevron Corporation",
-          "change_pct": -1.85
+          "symbol": "AMZN",
+          "name": "Amazon.com, Inc.",
+          "change_pct": -2.32
         }
       },
       "cn": {
@@ -1224,42 +1214,42 @@
       },
       "crypto": {
         "total": 19,
-        "upCount": 13,
-        "downCount": 6,
+        "upCount": 8,
+        "downCount": 11,
         "flatCount": 0,
-        "avgChange": 1.01,
+        "avgChange": 0.11,
         "maxUp": {
-          "symbol": "AVAX",
-          "name": "Avalanche",
-          "change_pct": 5.9
+          "symbol": "DOT",
+          "name": "Polkadot",
+          "change_pct": 4.0
         },
         "maxDown": {
           "symbol": "UNI",
           "name": "Uniswap",
-          "change_pct": -5.9
+          "change_pct": -1.6
         }
       },
       "commodity": {
         "total": 10,
-        "upCount": 8,
-        "downCount": 2,
+        "upCount": 3,
+        "downCount": 7,
         "flatCount": 0,
-        "avgChange": 0.61,
+        "avgChange": -1.69,
         "maxUp": {
-          "symbol": "BRENT",
-          "name": "原油期货(布伦特)",
-          "change_pct": 1.65
+          "symbol": "SILVER",
+          "name": "白银期货",
+          "change_pct": 2.35
         },
         "maxDown": {
-          "symbol": "NATURAL_GAS",
-          "name": "天然气期货",
-          "change_pct": -0.32
+          "symbol": "CRUDE_OIL",
+          "name": "原油期货(WTI)",
+          "change_pct": -6.19
         }
       }
     }
   },
   "report": {
-    "summary": "美股: 平均+1.94%, 涨跌比15:5 | A股: 平均-0.06%, 涨跌比9:13 | 数字货币: 平均+1.01%, 涨跌比13:6 | 大宗商品: 平均+0.61%, 涨跌比8:2 | 风险预警: 1条 | 机会提示: 12条"
+    "summary": "美股: 平均+1.43%, 涨跌比15:5 | A股: 平均-0.06%, 涨跌比9:13 | 数字货币: 平均+0.11%, 涨跌比8:11 | 大宗商品: 平均-1.69%, 涨跌比3:7 | 风险预警: 2条 | 机会提示: 14条"
   },
   "emailResults": [
     {
