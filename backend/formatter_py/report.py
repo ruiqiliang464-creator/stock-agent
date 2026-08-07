@@ -67,8 +67,49 @@ def generate_analysis_items(items, type_name):
     return result
 
 
+def generate_market_summary_section(analysis):
+    """生成市场大盘总结区块 HTML — 总结前一天市场数据"""
+    summary = analysis.get('summary', {})
+    if not summary:
+        return ''
+
+    cards = ''
+    for market in ['us', 'cn', 'crypto', 'commodity']:
+        s = summary.get(market)
+        if not s:
+            continue
+
+        avg = s.get('avgChange', 0)
+        avg_color = '#dc2626' if avg > 0 else '#16a34a'
+        avg_sign = '+' if avg > 0 else ''
+        icon = MARKET_ICONS.get(market, '')
+        name = MARKET_NAMES.get(market, market)
+
+        max_up = s.get('maxUp', {})
+        max_down = s.get('maxDown', {})
+        up_count = s.get('upCount', 0)
+        down_count = s.get('downCount', 0)
+
+        cards += f'''
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f1f5f9">
+            <span style="font-size:16px">{icon}</span>
+            <div style="flex:1">
+                <div style="font-size:13px;font-weight:500;color:#1e293b">{name}</div>
+                <div style="font-size:11px;color:#94a3b8">涨{up_count} 跌{down_count} | 领涨: {max_up.get('name','-')} +{max_up.get('change_pct',0):.1f}% | 领跌: {max_down.get('name','-')} {max_down.get('change_pct',0):.1f}%</div>
+            </div>
+            <div style="font-size:16px;font-weight:600;color:{avg_color}">{avg_sign}{avg:.2f}%</div>
+        </div>'''
+
+    return f'''
+    <div style="background:#f0f9ff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #bae6fd">
+        <h3 style="font-size:15px;font-weight:600;margin:0 0 8px 0;color:#0369a1">📋 市场大盘总结</h3>
+        <p style="font-size:12px;color:#0284c7;margin:0 0 12px 0">前一交易日全球主要市场数据概览</p>
+        {cards}
+    </div>'''
+
+
 def generate_news_section(news_items):
-    """生成今日要闻区块 HTML"""
+    """生成今日要闻区块 HTML — 带分类标签和影响分析"""
     if not news_items:
         return ''
 
@@ -77,27 +118,41 @@ def generate_news_section(news_items):
         title = item.get('title', '')
         summary = item.get('summary', '')
         source = item.get('source', '')
-        link = item.get('link', '')
         news_time = item.get('time', '')
+        analysis = item.get('analysis', '')
+        cat_label = item.get('category_label', '')
+        cat_icon = item.get('category_icon', '')
+        cat_color = item.get('category_color', '#6b7280')
+        cat_bg = item.get('category_bg', '#f3f4f6')
 
-        # 时间标签 (如果有)
-        time_badge = f'<span style="font-size:11px;color:#94a3b8;margin-top:4px">来源: {source}' + (f' · {news_time}' if news_time else '') + '</span>'
+        # 分类标签
+        cat_badge = f'<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;color:{cat_color};background:{cat_bg};margin-bottom:6px">{cat_icon} {cat_label}</span>' if cat_label else ''
 
-        # 序号圆圈
+        # 来源+时间
+        meta_badge = f'<span style="font-size:11px;color:#94a3b8">来源: {source}' + (f' &middot; {news_time}' if news_time else '') + '</span>'
+
+        # 影响分析 (如果有)
+        analysis_html = f'''<div style="margin-top:6px;padding:6px 10px;background:#f8fafc;border-radius:6px;border-left:3px solid {cat_color}">
+            <div style="font-size:11px;color:#64748b;margin-bottom:2px">📊 影响分析</div>
+            <div style="font-size:12px;color:#475569;line-height:1.5">{analysis}</div>
+        </div>''' if analysis else ''
+
         cards += f'''
         <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #e5e7eb">
             <div style="flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#1e40af;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center">{i+1}</div>
             <div style="flex:1">
+                {cat_badge}
                 <div style="font-size:14px;font-weight:500;color:#1e293b;margin-bottom:4px">{title}</div>
                 <div style="font-size:13px;color:#64748b;line-height:1.5">{summary}</div>
-                <div style="margin-top:4px">{time_badge}</div>
+                {analysis_html}
+                <div style="margin-top:4px">{meta_badge}</div>
             </div>
         </div>'''
 
     return f'''
     <div style="background:#fffbeb;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #fde68a">
         <h3 style="font-size:15px;font-weight:600;margin:0 0 8px 0;color:#92400e">📰 今日要闻</h3>
-        <p style="font-size:12px;color:#b45309;margin:0 0 12px 0">以下为过去24小时内可能影响市场走势的重大新闻</p>
+        <p style="font-size:12px;color:#b45309;margin:0 0 12px 0">以下为过去24小时内可能影响市场走势的重大新闻，含分类标签与影响分析</p>
         {cards}
     </div>'''
 
@@ -184,7 +239,7 @@ def generate_report(analysis, news_items=None):
     # 数据来源说明
     source_note = '''
         <div style="background:#f8fafc;border-radius:12px;padding:12px;margin-bottom:16px;border:1px solid #e5e7eb;font-size:12px;color:#888">
-            <p style="margin:0"><strong>数据来源</strong>：美股(yfinance/CNBC) | A股(akshare/同花顺) | 数字货币(Binance) | 大宗商品(akshare/yfinance) | 要闻(CNBC/Reuters/MarketWatch等RSS)</p>
+            <p style="margin:0"><strong>数据来源</strong>：美股(yfinance/CNBC) | A股(akshare/同花顺) | 数字货币(Binance) | 大宗商品(akshare/yfinance) | 要闻(CNBC/MarketWatch/Yahoo Finance/Google News/BBC/Seeking Alpha等RSS)</p>
         </div>'''
 
     html = f'''
@@ -195,6 +250,7 @@ def generate_report(analysis, news_items=None):
         </div>
 
         <div style="padding:20px">
+            {generate_market_summary_section(analysis)}
             {generate_news_section(news_items)}
             {market_sections}
             {trend_section}
