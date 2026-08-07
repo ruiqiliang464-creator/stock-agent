@@ -354,6 +354,78 @@ def clean_html(text):
     return text
 
 
+def translate_to_chinese(text, max_retries=2):
+    """将英文文本翻译为中文 (使用 Google Translate 免费API，MyMemory 备用)
+
+    如果文本已包含大量中文字符，则跳过翻译。
+    翻译失败时返回原文，不影响管道运行。
+    """
+    if not text or not text.strip():
+        return ''
+
+    # 检测是否已包含大量中文，如果是则跳过翻译
+    cjk_count = sum(1 for c in text if '\u4e00' <= c <= '\u9fff')
+    if cjk_count / max(len(text), 1) > 0.3:
+        return text
+
+    # 方案1: Google Translate 免费API
+    for attempt in range(max_retries):
+        try:
+            resp = requests.get(
+                'https://translate.googleapis.com/translate_a/single',
+                params={
+                    'client': 'gtx',
+                    'sl': 'en',
+                    'tl': 'zh-CN',
+                    'dt': 't',
+                    'q': text,
+                },
+                headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                },
+                timeout=(5, 15),
+            )
+
+            if resp.status_code == 200:
+                data = resp.json()
+                if data and data[0]:
+                    translated = ''.join(seg[0] for seg in data[0] if seg and seg[0])
+                    if translated:
+                        return translated
+            else:
+                print(f'[News] Google translate HTTP {resp.status_code} (attempt {attempt+1})')
+        except Exception as e:
+            print(f'[News] Google translate attempt {attempt+1} failed: {e}')
+
+        if attempt < max_retries - 1:
+            time.sleep(1)
+
+    # 方案2: MyMemory 备用翻译API
+    try:
+        resp = requests.get(
+            'https://api.mymemory.translated.net/get',
+            params={
+                'q': text[:500],  # MyMemory 限制500字符
+                'langpair': 'en|zh-CN',
+            },
+            headers={
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            },
+            timeout=(5, 15),
+        )
+
+        if resp.status_code == 200:
+            data = resp.json()
+            translated = data.get('responseData', {}).get('translatedText', '')
+            if translated and translated.upper() != text.upper():
+                return translated
+    except Exception as e:
+        print(f'[News] MyMemory translate failed: {e}')
+
+    # 所有翻译方案均失败，返回原文
+    return text
+
+
 def keyword_match(keyword, text):
     """检查关键词是否出现在文本中
 
@@ -701,17 +773,26 @@ def run():
 
     top_news = selected[:TARGET_COUNT]
 
-    # 格式化输出
+    # 格式化输出 (含中文翻译)
     results = []
-    for item in top_news:
+    print(f'[News Collector] translating {len(top_news)} news items to Chinese...')
+    for idx, item in enumerate(top_news):
         summary = truncate_sentences(item['description'], max_sentences=3)
         if not summary or len(summary) < 20:
             summary = item['title']
 
+        # 翻译标题和摘要为中文
+        title_zh = translate_to_chinese(item['title'])
+        time.sleep(0.3)  # 避免API限流
+        summary_zh = translate_to_chinese(summary)
+        time.sleep(0.3)
+
         cat_info = CATEGORY_KEYWORDS.get(item['category'], {})
         results.append({
             'title': item['title'],
+            'title_zh': title_zh,
             'summary': summary,
+            'summary_zh': summary_zh,
             'analysis': item.get('analysis', ''),
             'category': item['category'],
             'category_label': cat_info.get('label', ''),
@@ -724,6 +805,7 @@ def run():
             'time': item.get('_time_str', ''),
             'score': item['score'],
         })
+        print(f'  [{idx+1}/{len(top_news)}] {item["title"][:60]} -> {title_zh[:40]}')
 
-    print(f'[News Collector] done: {len(results)} news items (filtered from {len(unique_items)})')
+    print(f'[News Collector] done: {len(results)} news items with Chinese translation (filtered from {len(unique_items)})')
     return results

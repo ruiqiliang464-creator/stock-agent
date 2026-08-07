@@ -116,7 +116,9 @@ def generate_news_section(news_items):
     cards = ''
     for i, item in enumerate(news_items):
         title = item.get('title', '')
+        title_zh = item.get('title_zh', '')
         summary = item.get('summary', '')
+        summary_zh = item.get('summary_zh', '')
         source = item.get('source', '')
         news_time = item.get('time', '')
         analysis = item.get('analysis', '')
@@ -131,6 +133,12 @@ def generate_news_section(news_items):
         # 来源+时间
         meta_badge = f'<span style="font-size:11px;color:#94a3b8">来源: {source}' + (f' &middot; {news_time}' if news_time else '') + '</span>'
 
+        # 中文标题 (如有翻译)
+        title_zh_html = f'<div style="font-size:13px;font-weight:500;color:#475569;margin-bottom:4px">{title_zh}</div>' if title_zh and title_zh != title else ''
+
+        # 中文摘要 (如有翻译)
+        summary_zh_html = f'<div style="font-size:12px;color:#94a3b8;line-height:1.5;margin-top:4px">{summary_zh}</div>' if summary_zh and summary_zh != summary else ''
+
         # 影响分析 (如果有)
         analysis_html = f'''<div style="margin-top:6px;padding:6px 10px;background:#f8fafc;border-radius:6px;border-left:3px solid {cat_color}">
             <div style="font-size:11px;color:#64748b;margin-bottom:2px">📊 影响分析</div>
@@ -143,7 +151,9 @@ def generate_news_section(news_items):
             <div style="flex:1">
                 {cat_badge}
                 <div style="font-size:14px;font-weight:500;color:#1e293b;margin-bottom:4px">{title}</div>
+                {title_zh_html}
                 <div style="font-size:13px;color:#64748b;line-height:1.5">{summary}</div>
+                {summary_zh_html}
                 {analysis_html}
                 <div style="margin-top:4px">{meta_badge}</div>
             </div>
