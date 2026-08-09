@@ -26,6 +26,18 @@ import json
 import time
 import yfinance as yf
 from datetime import datetime, timedelta
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
+
+
+def call_with_timeout(func, timeout=10, *args, **kwargs):
+    """带超时保护地调用函数 (防止akshare等阻塞调用卡住管道)"""
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(func, *args, **kwargs)
+        try:
+            return future.result(timeout=timeout)
+        except FuturesTimeoutError:
+            print(f'  [MarketReview] 调用超时 ({timeout}s), 跳过')
+            return None
 
 # ── 核心指数列表 ──
 CORE_INDICES = [
@@ -84,7 +96,7 @@ def _fetch_index_akshare():
     results = []
     for idx in CORE_INDICES:
         try:
-            df = ak.stock_zh_index_daily_em(symbol=idx['ak_symbol'])
+            df = call_with_timeout(ak.stock_zh_index_daily_em, timeout=10, symbol=idx['ak_symbol'])
             if df is not None and len(df) > 0:
                 latest = df.iloc[-1]
                 prev = df.iloc[-2] if len(df) > 1 else latest
@@ -124,7 +136,7 @@ def _fetch_index_eastmoney():
                 'beg': beg_str,
                 'end': today_str,
             }
-            resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(5, 15))
+            resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
             if resp.status_code == 200:
                 data = resp.json()
                 klines = data.get('data', {}).get('klines', [])
@@ -186,15 +198,15 @@ def fetch_market_breadth():
     """获取涨跌停家数、涨跌家数比"""
     print('[MarketReview] 采集市场广度数据...')
 
-    # 方法1: akshare stock_market_activity_legu
+    # 方法1: akshare stock_market_activity_legu (带超时保护)
     try:
-        df = ak.stock_market_activity_legu()
+        df = call_with_timeout(ak.stock_market_activity_legu, timeout=15)
         if df is not None and len(df) > 0:
             return _parse_market_breadth_akshare(df)
     except Exception as e:
         print(f'  [MarketReview] akshare市场广度失败: {e}')
 
-    # 方法2: 东方财富 datacenter API
+    # 方法2: 东方财富 API (直连, 带超时)
     try:
         result = _fetch_breadth_eastmoney()
         if result:
@@ -202,14 +214,7 @@ def fetch_market_breadth():
     except Exception as e:
         print(f'  [MarketReview] eastmoney市场广度失败: {e}')
 
-    # 方法3: 从全市场实时行情统计 (可能较慢)
-    try:
-        result = _fetch_breadth_from_spot()
-        if result:
-            return result
-    except Exception as e:
-        print(f'  [MarketReview] spot统计失败: {e}')
-
+    # 注意: 不再调用 stock_zh_a_spot_em() (下载全市场行情, 过慢)
     print('[MarketReview] 市场广度数据不可用')
     return {}
 
@@ -271,7 +276,7 @@ def _fetch_breadth_eastmoney():
             'fs': 'm:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23',
             'fields': 'f2,f3,f12,f14',
         }
-        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(5, 30))
+        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 10))
         if resp.status_code == 200:
             data = resp.json()
             diff = data.get('data', {}).get('diff', [])
@@ -358,7 +363,7 @@ def fetch_northbound_flow():
 
     # 方法1: akshare
     try:
-        df = ak.stock_hsgt_north_net_flow_in_em(symbol='北向资金')
+        df = call_with_timeout(ak.stock_hsgt_north_net_flow_in_em, timeout=10, symbol='北向资金')
         if df is not None and len(df) > 0:
             latest = df.iloc[-1]
             # 尝试各种可能的列名
@@ -415,7 +420,7 @@ def _fetch_northbound_eastmoney():
             'beg': beg_str,
             'end': today_str,
         }
-        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(5, 15))
+        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
         if resp.status_code == 200:
             data = resp.json()
             klines = data.get('data', {}).get('klines', [])
@@ -466,7 +471,7 @@ def fetch_margin_stats():
 
     # 方法1: akshare SSE
     try:
-        df = ak.stock_margin_detail_sse(start_date=beg_str, end_date=today_str)
+        df = call_with_timeout(ak.stock_margin_detail_sse, timeout=10, start_date=beg_str, end_date=today_str)
         if df is not None and len(df) > 0:
             latest = df.iloc[-1]
             result = {}
@@ -536,7 +541,7 @@ def _fetch_margin_eastmoney():
             'pageNumber': '1',
             'columns': 'ALL',
         }
-        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(5, 15))
+        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
         if resp.status_code == 200:
             data = resp.json()
             rows = data.get('result', {}).get('data', [])
@@ -582,7 +587,7 @@ def fetch_sector_flow():
 
     # 方法1: akshare
     try:
-        df = ak.stock_sector_fund_flow_rank(indicator='今日', sector_type='行业资金流')
+        df = call_with_timeout(ak.stock_sector_fund_flow_rank, timeout=10, indicator='今日', sector_type='行业资金流')
         if df is not None and len(df) > 0:
             results = []
             for _, row in df.iterrows():
@@ -636,7 +641,7 @@ def _fetch_sector_flow_eastmoney():
             'fs': 'm:90+t:2',  # 行业板块
             'fields': 'f12,f14,f62,f184,f3,f2',
         }
-        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(5, 15))
+        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
         if resp.status_code == 200:
             data = resp.json()
             diff = data.get('data', {}).get('diff', [])
