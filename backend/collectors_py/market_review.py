@@ -139,7 +139,8 @@ def _fetch_index_eastmoney():
             resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
             if resp.status_code == 200:
                 data = resp.json()
-                klines = data.get('data', {}).get('klines', [])
+                em_data = data.get('data') or {}
+                klines = em_data.get('klines', [])
                 if klines and len(klines) >= 2:
                     # 格式: date,open,close,high,low,volume,amount
                     parts_latest = klines[-1].split(',')
@@ -279,7 +280,7 @@ def _fetch_breadth_eastmoney():
         resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 10))
         if resp.status_code == 200:
             data = resp.json()
-            diff = data.get('data', {}).get('diff', [])
+            diff = (data.get('data') or {}).get('diff', [])
             if diff:
                 advance = 0
                 decline = 0
@@ -304,7 +305,7 @@ def _fetch_breadth_eastmoney():
                         flat += 1
 
                 total = advance + decline + flat
-                return {
+                result = {
                     'advance_count': advance,
                     'decline_count': decline,
                     'flat_count': flat,
@@ -313,43 +314,14 @@ def _fetch_breadth_eastmoney():
                     'advance_ratio': round(advance / total, 4) if total > 0 else 0,
                     'source': 'eastmoney',
                 }
+                print(f'[MarketReview] 市场广度(eastmoney): 涨{advance} 跌{decline} 涨停{limit_up} 跌停{limit_down}')
+                return result
+            else:
+                print(f'  [MarketReview] eastmoney breadth: 响应无数据 (keys={list(data.keys()) if isinstance(data, dict) else type(data).__name__})')
+        else:
+            print(f'  [MarketReview] eastmoney breadth: HTTP {resp.status_code}')
     except Exception as e:
         print(f'  [MarketReview] eastmoney breadth: {e}')
-    return None
-
-
-def _fetch_breadth_from_spot():
-    """从全市场实时行情统计涨跌家数"""
-    try:
-        df = ak.stock_zh_a_spot_em()
-        if df is not None and len(df) > 0:
-            # 涨跌幅列
-            pct_col = None
-            for col in df.columns:
-                if '涨跌幅' in str(col):
-                    pct_col = col
-                    break
-
-            if pct_col is not None:
-                pcts = df[pct_col].dropna()
-                advance = int((pcts > 0).sum())
-                decline = int((pcts < 0).sum())
-                flat = int((pcts == 0).sum())
-                limit_up = int((pcts >= 9.8).sum())
-                limit_down = int((pcts <= -9.8).sum())
-                total = advance + decline + flat
-
-                return {
-                    'advance_count': advance,
-                    'decline_count': decline,
-                    'flat_count': flat,
-                    'limit_up_count': limit_up,
-                    'limit_down_count': limit_down,
-                    'advance_ratio': round(advance / total, 4) if total > 0 else 0,
-                    'source': 'akshare_spot',
-                }
-    except Exception as e:
-        print(f'  [MarketReview] spot统计: {e}')
     return None
 
 
@@ -361,38 +333,49 @@ def fetch_northbound_flow():
     """获取北向资金流向数据"""
     print('[MarketReview] 采集北向资金数据...')
 
-    # 方法1: akshare
-    try:
-        df = call_with_timeout(ak.stock_hsgt_north_net_flow_in_em, timeout=10, symbol='北向资金')
-        if df is not None and len(df) > 0:
-            latest = df.iloc[-1]
-            # 尝试各种可能的列名
-            net_buy = 0
-            date_str = ''
-            for col in df.columns:
-                col_str = str(col)
-                if '净流入' in col_str or '净买入' in col_str or 'value' in col_str.lower():
-                    net_buy = float(latest[col] or 0)
-                elif 'date' in col_str.lower() or '日期' in col_str:
-                    date_str = str(latest[col])
+    # 方法1: akshare (尝试多个可能的函数名, 兼容不同版本)
+    ak_funcs = [
+        ('stock_hsgt_north_net_flow_in_em', {'symbol': '北向资金'}),
+        ('stock_hsgt_hist_em', {'symbol': '北向资金'}),
+        ('stock_hsgt_north_acc_flow_in_em', {'symbol': '北向资金'}),
+    ]
+    for func_name, kwargs in ak_funcs:
+        func = getattr(ak, func_name, None)
+        if func is None:
+            continue
+        try:
+            df = call_with_timeout(func, timeout=10, **kwargs)
+            if df is not None and len(df) > 0:
+                latest = df.iloc[-1]
+                net_buy = 0
+                date_str = ''
+                for col in df.columns:
+                    col_str = str(col)
+                    if '净流入' in col_str or '净买入' in col_str or 'value' in col_str.lower():
+                        try:
+                            net_buy = float(latest[col] or 0)
+                        except (ValueError, TypeError):
+                            net_buy = 0
+                    elif 'date' in col_str.lower() or '日期' in col_str:
+                        date_str = str(latest[col])
 
-            if net_buy != 0 or date_str:
-                result = {
-                    'net_buy': round(net_buy, 2),
-                    'net_buy_yi': round(net_buy / 1e8, 2),  # 转换为亿元
-                    'date': date_str,
-                    'is_extreme': abs(net_buy) > 10e8,  # 超100亿
-                    'extreme_note': '',
-                    'source': 'akshare',
-                }
-                if net_buy > 10e8:
-                    result['extreme_note'] = '北向单日净买入超100亿，极端流入信号'
-                elif net_buy < -10e8:
-                    result['extreme_note'] = '北向单日净卖出超100亿，极端流出信号'
-                print(f'[MarketReview] 北向资金: 净{("买入" if net_buy > 0 else "卖出")}{result["net_buy_yi"]:.2f}亿')
-                return result
-    except Exception as e:
-        print(f'  [MarketReview] akshare北向资金失败: {e}')
+                if net_buy != 0 or date_str:
+                    result = {
+                        'net_buy': round(net_buy, 2),
+                        'net_buy_yi': round(net_buy / 1e8, 2),
+                        'date': date_str,
+                        'is_extreme': abs(net_buy) > 10e8,
+                        'extreme_note': '',
+                        'source': f'akshare({func_name})',
+                    }
+                    if net_buy > 10e8:
+                        result['extreme_note'] = '北向单日净买入超100亿，极端流入信号'
+                    elif net_buy < -10e8:
+                        result['extreme_note'] = '北向单日净卖出超100亿，极端流出信号'
+                    print(f'[MarketReview] 北向资金({func_name}): 净{("买入" if net_buy > 0 else "卖出")}{result["net_buy_yi"]:.2f}亿')
+                    return result
+        except Exception as e:
+            print(f'  [MarketReview] akshare北向资金({func_name})失败: {e}')
 
     # 方法2: 东方财富 push2his API
     try:
@@ -423,7 +406,9 @@ def _fetch_northbound_eastmoney():
         resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
         if resp.status_code == 200:
             data = resp.json()
-            klines = data.get('data', {}).get('klines', [])
+            # 使用 or {} 防止 data['data'] 为 None 时崩溃
+            em_data = data.get('data') or {}
+            klines = em_data.get('klines', [])
             if klines and len(klines) >= 1:
                 # 格式: date,sh_connect_net,sz_connect_net,total_net,...
                 parts = klines[-1].split(',')
@@ -453,6 +438,10 @@ def _fetch_northbound_eastmoney():
                     result['extreme_note'] = '北向单日净卖出超100亿，极端流出信号'
                 print(f'[MarketReview] 北向资金(eastmoney): 净{("买入" if total_net > 0 else "卖出")}{result["net_buy_yi"]:.2f}亿')
                 return result
+            else:
+                print(f'  [MarketReview] eastmoney northbound: 响应无klines数据 (data={data.get("data")})')
+        else:
+            print(f'  [MarketReview] eastmoney northbound: HTTP {resp.status_code}')
     except Exception as e:
         print(f'  [MarketReview] eastmoney northbound: {e}')
     return None
@@ -467,34 +456,47 @@ def fetch_margin_stats():
     print('[MarketReview] 采集两融数据...')
 
     today_str = datetime.now().strftime('%Y%m%d')
-    beg_str = (datetime.now() - timedelta(days=10)).strftime('%Y%m%d')
+    prev_str = (datetime.now() - timedelta(days=1)).strftime('%Y%m%d')
 
-    # 方法1: akshare SSE
+    # 方法1: akshare SSE (stock_margin_detail_sse 接受 date 参数)
     try:
-        df = call_with_timeout(ak.stock_margin_detail_sse, timeout=10, start_date=beg_str, end_date=today_str)
+        df = call_with_timeout(ak.stock_margin_detail_sse, timeout=10, date=today_str)
         if df is not None and len(df) > 0:
             latest = df.iloc[-1]
             result = {}
             for col in df.columns:
                 col_str = str(col)
                 if '融资余额' in col_str:
-                    result['finance_balance'] = float(latest[col] or 0)
+                    try:
+                        result['finance_balance'] = float(latest[col] or 0)
+                    except (ValueError, TypeError):
+                        result['finance_balance'] = 0
                 elif '融券余额' in col_str:
-                    result['securities_balance'] = float(latest[col] or 0)
+                    try:
+                        result['securities_balance'] = float(latest[col] or 0)
+                    except (ValueError, TypeError):
+                        result['securities_balance'] = 0
                 elif '融资融券余额' in col_str or '两融余额' in col_str:
-                    result['total_balance'] = float(latest[col] or 0)
+                    try:
+                        result['total_balance'] = float(latest[col] or 0)
+                    except (ValueError, TypeError):
+                        result['total_balance'] = 0
                 elif '日期' in col_str or 'date' in col_str.lower():
                     result['date'] = str(latest[col])
 
             if result.get('total_balance') is None and result.get('finance_balance') and result.get('securities_balance'):
                 result['total_balance'] = result['finance_balance'] + result['securities_balance']
 
-            # 计算余额变化
-            if len(df) >= 2:
-                prev = df.iloc[-2]
-                for col in df.columns:
+            # 获取前一交易日数据计算变化
+            df_prev = call_with_timeout(ak.stock_margin_detail_sse, timeout=10, date=prev_str)
+            if df_prev is not None and len(df_prev) > 0:
+                prev = df_prev.iloc[-1]
+                for col in df_prev.columns:
                     if '融资融券余额' in str(col) or '两融余额' in str(col):
-                        prev_balance = float(prev[col] or 0)
+                        try:
+                            prev_balance = float(prev[col] or 0)
+                        except (ValueError, TypeError):
+                            prev_balance = 0
                         if result.get('total_balance') and prev_balance:
                             result['balance_change'] = round(result['total_balance'] - prev_balance, 2)
                             result['balance_change_yi'] = round(result['balance_change'] / 1e8, 2)
@@ -544,7 +546,7 @@ def _fetch_margin_eastmoney():
         resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
         if resp.status_code == 200:
             data = resp.json()
-            rows = data.get('result', {}).get('data', [])
+            rows = (data.get('result') or {}).get('data', [])
             if not rows:
                 # 尝试不同的数据路径
                 rows = data.get('data', [])
@@ -572,6 +574,10 @@ def _fetch_margin_eastmoney():
 
                 print(f'[MarketReview] 两融余额(eastmoney): {result["total_balance_yi"]:.2f}亿')
                 return result
+            else:
+                print(f'  [MarketReview] eastmoney margin: 响应无数据 (success={data.get("success")}, message={data.get("message", "N/A")})')
+        else:
+            print(f'  [MarketReview] eastmoney margin: HTTP {resp.status_code}')
     except Exception as e:
         print(f'  [MarketReview] eastmoney margin: {e}')
     return None
@@ -644,7 +650,7 @@ def _fetch_sector_flow_eastmoney():
         resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
         if resp.status_code == 200:
             data = resp.json()
-            diff = data.get('data', {}).get('diff', [])
+            diff = (data.get('data') or {}).get('diff', [])
             if diff:
                 results = []
                 for item in diff:
@@ -661,6 +667,10 @@ def _fetch_sector_flow_eastmoney():
                 results.sort(key=lambda x: x['net_inflow'], reverse=True)
                 print(f'[MarketReview] 板块资金流(eastmoney): {len(results)}个板块')
                 return results
+            else:
+                print(f'  [MarketReview] eastmoney sector: 响应无数据 (keys={list(data.keys()) if isinstance(data, dict) else type(data).__name__})')
+        else:
+            print(f'  [MarketReview] eastmoney sector: HTTP {resp.status_code}')
     except Exception as e:
         print(f'  [MarketReview] eastmoney sector flow: {e}')
     return None
