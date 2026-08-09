@@ -458,66 +458,109 @@ def fetch_margin_stats():
     today_str = datetime.now().strftime('%Y%m%d')
     prev_str = (datetime.now() - timedelta(days=1)).strftime('%Y%m%d')
 
-    # 方法1: akshare SSE (stock_margin_detail_sse 接受 date 参数)
+    # 方法1: akshare stock_margin_account_info (两融汇总数据, 单位: 亿元)
+    func_account = getattr(ak, 'stock_margin_account_info', None)
+    if func_account:
+        try:
+            df = call_with_timeout(func_account, timeout=10)
+            if df is not None and len(df) > 0:
+                latest = df.iloc[-1]
+                result = {}
+                for col in df.columns:
+                    col_str = str(col)
+                    if '日期' in col_str or 'date' in col_str.lower():
+                        result['date'] = str(latest[col])
+                    elif '融资余额' in col_str and '融资买入' not in col_str:
+                        try:
+                            val = float(latest[col] or 0)
+                            result['finance_balance'] = val * 1e8  # 亿元→元
+                            result['finance_balance_yi'] = round(val, 2)
+                        except (ValueError, TypeError):
+                            pass
+                    elif '融券余额' in col_str and '融券卖出' not in col_str:
+                        try:
+                            val = float(latest[col] or 0)
+                            result['securities_balance'] = val * 1e8
+                            result['securities_balance_yi'] = round(val, 2)
+                        except (ValueError, TypeError):
+                            pass
+
+                if result.get('finance_balance_yi') and result.get('securities_balance_yi'):
+                    result['total_balance_yi'] = round(result['finance_balance_yi'] + result['securities_balance_yi'], 2)
+                    result['total_balance'] = result['finance_balance'] + result['securities_balance']
+
+                # 计算变化
+                if len(df) >= 2:
+                    prev = df.iloc[-2]
+                    for col in df.columns:
+                        if '融资余额' in str(col) and '融资买入' not in str(col):
+                            try:
+                                prev_finance = float(prev[col] or 0)
+                            except (ValueError, TypeError):
+                                prev_finance = 0
+                            break
+                    for col in df.columns:
+                        if '融券余额' in str(col) and '融券卖出' not in str(col):
+                            try:
+                                prev_securities = float(prev[col] or 0)
+                            except (ValueError, TypeError):
+                                prev_securities = 0
+                            break
+                    prev_total_yi = prev_finance + prev_securities
+                    if result.get('total_balance_yi'):
+                        result['balance_change_yi'] = round(result['total_balance_yi'] - prev_total_yi, 2)
+                        result['balance_change'] = round(result['balance_change_yi'] * 1e8, 2)
+
+                result['source'] = 'akshare_account'
+                result.setdefault('balance_change', 0)
+                result.setdefault('balance_change_yi', 0)
+                print(f'[MarketReview] 两融余额(account): {result.get("total_balance_yi", 0):.2f}亿 变化{result.get("balance_change_yi", 0):+.2f}亿')
+                return result
+        except Exception as e:
+            print(f'  [MarketReview] akshare两融(account)失败: {e}')
+
+    # 方法2: akshare SSE (stock_margin_detail_sse 接受 date 参数, 返回个股明细需聚合)
     try:
         df = call_with_timeout(ak.stock_margin_detail_sse, timeout=10, date=today_str)
         if df is not None and len(df) > 0:
-            latest = df.iloc[-1]
+            # stock_margin_detail_sse 返回个股明细, 需要聚合求和
             result = {}
             for col in df.columns:
                 col_str = str(col)
-                if '融资余额' in col_str:
+                if '融资余额' in col_str and '买入' not in col_str:
                     try:
-                        result['finance_balance'] = float(latest[col] or 0)
+                        result['finance_balance'] = float(df[col].sum())
                     except (ValueError, TypeError):
-                        result['finance_balance'] = 0
-                elif '融券余额' in col_str:
+                        pass
+                elif '融券余额' in col_str and '卖出' not in col_str:
                     try:
-                        result['securities_balance'] = float(latest[col] or 0)
+                        result['securities_balance'] = float(df[col].sum())
                     except (ValueError, TypeError):
-                        result['securities_balance'] = 0
+                        pass
                 elif '融资融券余额' in col_str or '两融余额' in col_str:
                     try:
-                        result['total_balance'] = float(latest[col] or 0)
+                        result['total_balance'] = float(df[col].sum())
                     except (ValueError, TypeError):
-                        result['total_balance'] = 0
+                        pass
                 elif '日期' in col_str or 'date' in col_str.lower():
-                    result['date'] = str(latest[col])
+                    result['date'] = str(df.iloc[0][col])
 
             if result.get('total_balance') is None and result.get('finance_balance') and result.get('securities_balance'):
                 result['total_balance'] = result['finance_balance'] + result['securities_balance']
 
-            # 获取前一交易日数据计算变化
-            df_prev = call_with_timeout(ak.stock_margin_detail_sse, timeout=10, date=prev_str)
-            if df_prev is not None and len(df_prev) > 0:
-                prev = df_prev.iloc[-1]
-                for col in df_prev.columns:
-                    if '融资融券余额' in str(col) or '两融余额' in str(col):
-                        try:
-                            prev_balance = float(prev[col] or 0)
-                        except (ValueError, TypeError):
-                            prev_balance = 0
-                        if result.get('total_balance') and prev_balance:
-                            result['balance_change'] = round(result['total_balance'] - prev_balance, 2)
-                            result['balance_change_yi'] = round(result['balance_change'] / 1e8, 2)
-                        break
-
             result['source'] = 'akshare_sse'
             result.setdefault('balance_change', 0)
             result.setdefault('balance_change_yi', 0)
-
-            # 转换为亿元
             if result.get('total_balance'):
                 result['total_balance_yi'] = round(result['total_balance'] / 1e8, 2)
             if result.get('finance_balance'):
                 result['finance_balance_yi'] = round(result['finance_balance'] / 1e8, 2)
             if result.get('securities_balance'):
                 result['securities_balance_yi'] = round(result['securities_balance'] / 1e8, 2)
-
-            print(f'[MarketReview] 两融余额: {result.get("total_balance_yi", 0):.2f}亿 变化{result.get("balance_change_yi", 0):+.2f}亿')
+            print(f'[MarketReview] 两融余额(sse): {result.get("total_balance_yi", 0):.2f}亿')
             return result
     except Exception as e:
-        print(f'  [MarketReview] akshare两融失败: {e}')
+        print(f'  [MarketReview] akshare两融(sse)失败: {e}')
 
     # 方法2: 东方财富 datacenter API
     try:
@@ -532,31 +575,38 @@ def fetch_margin_stats():
 
 
 def _fetch_margin_eastmoney():
-    """东方财富 datacenter API 获取两融数据"""
+    """东方财富 datacenter API 获取两融数据 (使用正确的报表名 RPTA_RZRQ_LSHJ)"""
     try:
         url = 'https://datacenter-web.eastmoney.com/api/data/v1/get'
         params = {
-            'reportName': 'RPTZRZMRZB',
-            'sortColumns': 'RQ',
-            'sortTypes': '-1',
+            'reportName': 'RPTA_RZRQ_LSHJ',  # 融资融券历史汇总
+            'columns': 'ALL',
+            'source': 'WEB',
+            'sortColumns': 'dim_date',  # 按交易日期排序
+            'sortTypes': '-1',  # 倒序
             'pageSize': '5',
             'pageNumber': '1',
-            'columns': 'ALL',
         }
         resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
         if resp.status_code == 200:
             data = resp.json()
             rows = (data.get('result') or {}).get('data', [])
             if not rows:
-                # 尝试不同的数据路径
                 rows = data.get('data', [])
             if rows and len(rows) >= 1:
                 latest = rows[0]
+                # RPTA_RZRQ_LSHJ 字段: dim_date, rzye, rqye, rzrqye
+                finance = float(latest.get('rzye', 0) or latest.get('RZYE', 0) or 0)
+                securities = float(latest.get('rqye', 0) or latest.get('RQYE', 0) or 0)
+                total = float(latest.get('rzrqye', 0) or latest.get('RZRQYE', 0) or 0)
+                if total == 0:
+                    total = finance + securities
+                date_str = str(latest.get('dim_date', '') or latest.get('DATE', '') or latest.get('RQ', ''))
                 result = {
-                    'total_balance': float(latest.get('RZYE', 0) or 0) + float(latest.get('RQYE', 0) or 0),
-                    'finance_balance': float(latest.get('RZYE', 0) or 0),
-                    'securities_balance': float(latest.get('RQYE', 0) or 0),
-                    'date': str(latest.get('RQ', '')),
+                    'total_balance': total,
+                    'finance_balance': finance,
+                    'securities_balance': securities,
+                    'date': date_str[:10] if date_str else '',
                     'source': 'eastmoney',
                 }
                 result['total_balance_yi'] = round(result['total_balance'] / 1e8, 2)
@@ -565,7 +615,11 @@ def _fetch_margin_eastmoney():
 
                 if len(rows) >= 2:
                     prev = rows[1]
-                    prev_total = float(prev.get('RZYE', 0) or 0) + float(prev.get('RQYE', 0) or 0)
+                    prev_total = float(prev.get('rzrqye', 0) or prev.get('RZRQYE', 0) or 0)
+                    if prev_total == 0:
+                        prev_finance = float(prev.get('rzye', 0) or prev.get('RZYE', 0) or 0)
+                        prev_securities = float(prev.get('rqye', 0) or prev.get('RQYE', 0) or 0)
+                        prev_total = prev_finance + prev_securities
                     result['balance_change'] = round(result['total_balance'] - prev_total, 2)
                     result['balance_change_yi'] = round(result['balance_change'] / 1e8, 2)
                 else:
