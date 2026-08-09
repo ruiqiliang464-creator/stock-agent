@@ -1,62 +1,37 @@
 {
   "date": "2026-08-09",
-  "summary": "放量上涨，市场情绪中性偏热",
+  "summary": "放量上涨，市场情绪偏热",
   "indices": [
     {
       "name": "上证指数",
       "code": "000001",
       "close": 3940.04,
       "change_pct": 1.02,
-      "volume": 565000,
-      "amount": 0,
-      "source": "yfinance"
+      "volume": 564988582,
+      "amount": 1209543573294.4,
+      "source": "eastmoney"
     },
     {
       "name": "深证成指",
       "code": "399001",
       "close": 14311.01,
       "change_pct": 1.42,
-      "volume": 2699700,
-      "amount": 0,
-      "source": "yfinance"
+      "volume": 719703760,
+      "amount": 1454876177586.06,
+      "source": "eastmoney"
     },
     {
       "name": "创业板指",
       "code": "399006",
       "close": 3563.12,
-      "change_pct": 0.0,
-      "volume": 564798776,
-      "amount": 0,
-      "source": "yfinance"
-    },
-    {
-      "name": "沪深300",
-      "code": "000300",
-      "close": 4694.44,
-      "change_pct": 0.0,
-      "volume": 2432365520,
-      "amount": 0,
-      "source": "yfinance"
-    },
-    {
-      "name": "科创50",
-      "code": "000688",
-      "close": 1744.02,
-      "change_pct": 0.0,
-      "volume": 1214141800,
-      "amount": 0,
-      "source": "yfinance"
+      "change_pct": 1.35,
+      "volume": 238370556,
+      "amount": 734824333658.66,
+      "source": "eastmoney"
     }
   ],
   "market_breadth": {},
-  "northbound": {
-    "net_buy": 0,
-    "net_buy_yi": 0.0,
-    "date": "2026-08-07",
-    "is_extreme": false,
-    "extreme_note": "",
-    "source": "akshare(stock_hsgt_hist_em)"
-  },
+  "northbound": {},
   "margin": {
     "total_balance": 2639859413180.0,
     "finance_balance": 2615566375058.0,
@@ -73,7 +48,7 @@
   "signals": {
     "market_breadth": "数据不足",
     "advance_ratio": null,
-    "sentiment": "中性偏热",
+    "sentiment": "偏热",
     "fund_flow_signals": [
       "两融余额增加113.9亿，杠杆资金积极入场"
     ],
