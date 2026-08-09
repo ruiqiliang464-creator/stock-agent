@@ -57,14 +57,25 @@
     "extreme_note": "",
     "source": "akshare(stock_hsgt_hist_em)"
   },
-  "margin": {},
+  "margin": {
+    "total_balance": 2639859413180.0,
+    "finance_balance": 2615566375058.0,
+    "securities_balance": 24293038122.0,
+    "date": "",
+    "source": "eastmoney",
+    "total_balance_yi": 26398.59,
+    "finance_balance_yi": 26155.66,
+    "securities_balance_yi": 242.93,
+    "balance_change": 11393087205.0,
+    "balance_change_yi": 113.93
+  },
   "sector_flow": [],
   "signals": {
     "market_breadth": "数据不足",
     "advance_ratio": null,
     "sentiment": "中性偏热",
     "fund_flow_signals": [
-      "无明显极端资金流向信号"
+      "两融余额增加113.9亿，杠杆资金积极入场"
     ],
     "volatility_percentile": 65,
     "volatility_desc": "中等偏高",
