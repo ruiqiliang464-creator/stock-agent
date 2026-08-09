@@ -1,0 +1,81 @@
+{
+  "date": "2026-08-09",
+  "summary": "放量上涨，市场情绪偏热",
+  "indices": [
+    {
+      "name": "上证指数",
+      "code": "000001",
+      "close": 3940.04,
+      "change_pct": 1.02,
+      "volume": 564988582,
+      "amount": 1209543573294.4,
+      "source": "eastmoney"
+    },
+    {
+      "name": "深证成指",
+      "code": "399001",
+      "close": 14311.01,
+      "change_pct": 1.42,
+      "volume": 719703760,
+      "amount": 1454876177586.06,
+      "source": "eastmoney"
+    },
+    {
+      "name": "创业板指",
+      "code": "399006",
+      "close": 3563.12,
+      "change_pct": 1.35,
+      "volume": 238370556,
+      "amount": 734824333658.66,
+      "source": "eastmoney"
+    },
+    {
+      "name": "沪深300",
+      "code": "000300",
+      "close": 4694.44,
+      "change_pct": 0.93,
+      "volume": 239072020,
+      "amount": 788405762429.7,
+      "source": "eastmoney"
+    },
+    {
+      "name": "科创50",
+      "code": "000688",
+      "close": 1744.02,
+      "change_pct": 2.51,
+      "volume": 12141418,
+      "amount": 136268941852.0,
+      "source": "eastmoney"
+    }
+  ],
+  "market_breadth": {},
+  "northbound": {},
+  "margin": {},
+  "sector_flow": [],
+  "signals": {
+    "market_breadth": "数据不足",
+    "advance_ratio": null,
+    "sentiment": "偏热",
+    "fund_flow_signals": [
+      "无明显极端资金流向信号"
+    ],
+    "volatility_percentile": 85,
+    "volatility_desc": "偏高",
+    "max_index_change": 2.51
+  },
+  "anomalies": [
+    {
+      "type": "volume_price",
+      "description": "科创50放量上涨2.51%，多头力量强劲",
+      "severity": "高"
+    },
+    {
+      "type": "volatility_extreme",
+      "description": "波动率分位85%，市场波动剧烈",
+      "severity": "高"
+    }
+  ],
+  "tomorrow_focus": [
+    "高波动环境下注意控制仓位"
+  ]
+}
