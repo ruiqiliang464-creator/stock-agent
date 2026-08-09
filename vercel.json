@@ -18,7 +18,7 @@
       "schedule": "0 22 * * *"
     },
     {
-      "path": "/api/trigger",
+      "path": "/api/trigger?mode=review",
       "schedule": "0 4 * * *"
     }
   ]

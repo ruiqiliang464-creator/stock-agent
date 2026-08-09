@@ -1,8 +1,15 @@
 /**
  * Vercel Serverless Function — 每天定时触发 GitHub Actions pipeline
  *
- * 由 Vercel Cron Jobs 每天 6:00 AM CST 自动调用此接口，
- * 本接口再 POST 到 GitHub Actions dispatch API 触发数据管道运行。
+ * 由 Vercel Cron Jobs 调用此接口，再 POST 到 GitHub Actions dispatch API。
+ *
+ * 两个 cron:
+ *   6:00 AM CST → /api/trigger         (常规模式: 市场数据 + 新闻)
+ *   12:00 PM CST → /api/trigger?mode=review  (复盘模式: A股市场复盘)
+ *
+ * 手动测试:
+ *   常规: GET /api/trigger
+ *   复盘: GET /api/trigger?mode=review
  */
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
@@ -21,6 +28,10 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'GITHUB_TOKEN not configured' });
   }
 
+  // 读取 mode 参数 (默认 morning)
+  const mode = (req.query.mode || 'morning').toLowerCase();
+  console.log(`[Trigger] 触发模式: ${mode}`);
+
   const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/workflows/${WORKFLOW_ID}/dispatches`;
 
   try {
@@ -32,14 +43,20 @@ module.exports = async function handler(req, res) {
         'Content-Type': 'application/json',
         'User-Agent': 'StockAgent-VercelCron'
       },
-      body: JSON.stringify({ ref: 'main' })
+      body: JSON.stringify({
+        ref: 'main',
+        inputs: {
+          mode: mode
+        }
+      })
     });
 
     if (response.status === 204) {
-      console.log('[Trigger] ✅ GitHub Actions pipeline 触发成功');
+      console.log(`[Trigger] ✅ GitHub Actions pipeline 触发成功 (mode=${mode})`);
       return res.status(200).json({
         success: true,
-        message: 'Pipeline triggered successfully',
+        message: `Pipeline triggered successfully (mode=${mode})`,
+        mode: mode,
         timestamp: new Date().toISOString()
       });
     } else {

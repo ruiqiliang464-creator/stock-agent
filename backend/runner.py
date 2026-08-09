@@ -409,12 +409,77 @@ def report_and_push(analysis, news_items=None):
     return {'sent': sent, 'total': len(results)}
 
 
+# ── 复盘模式: 采集 → 分析 → 报告 ──
+def run_review():
+    """市场复盘模式: 采集A股复盘数据 → 生成复盘报告 → 推送"""
+    print('\n[Pipeline] ═══ 复盘模式启动 ═══')
+
+    from collectors_py.market_review import run as review_run
+    from formatter_py.report import generate_review_report, generate_review_summary_text, send_email
+
+    # 1. 采集复盘数据
+    review_data = review_run()
+
+    # 2. 生成报告
+    html_content = generate_review_report(review_data)
+    summary_text = generate_review_summary_text(review_data)
+
+    # 3. 保存复盘数据
+    review_path = os.path.join(DATA_DIR, f'review_{today}.json')
+    with open(review_path, 'w', encoding='utf-8') as f:
+        json.dump(review_data, f, ensure_ascii=False, indent=2)
+    print(f'[Pipeline] 复盘数据已保存: review_{today}.json')
+
+    # 保存到 latest_review.json 供看板使用
+    latest_review_path = os.path.join(DATA_DIR, 'latest_review.json')
+    with open(latest_review_path, 'w', encoding='utf-8') as f:
+        json.dump({
+            'date': today,
+            'updatedAt': datetime.now().isoformat(),
+            **review_data,
+        }, f, ensure_ascii=False, indent=2)
+    print('[Pipeline] latest_review.json 已保存')
+
+    # 4. 读取订阅者
+    sub_path = os.path.join(DATA_DIR, 'subscribers.json')
+    subscribers = []
+    if os.path.exists(sub_path):
+        try:
+            with open(sub_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                subscribers = [s for s in data.get('subscribers', []) if s.get('enabled', True)]
+        except Exception:
+            pass
+
+    print(f'[Pipeline] {len(subscribers)} 位订阅者')
+
+    # 5. 发送邮件
+    subject = f'市场复盘与异动简报 {today}'
+    results = send_email(
+        SMTP_USER, SMTP_PASS, SMTP_HOST, SMTP_PORT,
+        subscribers, html_content, summary_text, today, subject=subject
+    )
+
+    sent = sum(1 for r in results if r.get('success'))
+    print(f'[Pipeline] 邮件: {sent}/{len(results)} 成功')
+    return {'sent': sent, 'total': len(results)}
+
+
 # ── 主入口 ──
 def main():
+    # 检查运行模式: morning(常规) / review(复盘)
+    pipeline_mode = os.environ.get('PIPELINE_MODE', 'morning').lower()
+
+    if pipeline_mode == 'review':
+        print(f'[Pipeline] ═══ 复盘模式 (PIPELINE_MODE=review) 日期: {today} ═══')
+        run_review()
+        print('\n[Pipeline] ✅ 复盘完成')
+        return
+
     task = sys.argv[1] if len(sys.argv) > 1 else 'all'
     tasks = ['collect', 'process', 'analyze', 'report'] if task == 'all' else [task]
 
-    print(f'[Pipeline] 开始: {" → ".join(tasks)}  日期: {today}')
+    print(f'[Pipeline] 开始: {" → ".join(tasks)}  日期: {today}  模式: {pipeline_mode}')
 
     raw_data = None
     news_data = []

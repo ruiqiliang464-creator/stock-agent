@@ -4,9 +4,18 @@ on:
   # GitHub 内部 cron 不靠谱，仅保留 1 个作为备用
   # 主要靠 Vercel Cron Jobs 触发 workflow_dispatch
   schedule:
-    - cron: '0 22 * * *'     # 6:00 AM CST (备用)
+    - cron: '0 22 * * *'     # 6:00 AM CST (备用, 常规模式)
   # 外部触发 (Vercel Cron) + 手动测试
   workflow_dispatch:
+    inputs:
+      mode:
+        description: '运行模式: morning=常规推送, review=市场复盘'
+        required: false
+        default: 'morning'
+        type: choice
+        options:
+          - morning
+          - review
 
 jobs:
   pipeline:
@@ -26,18 +35,28 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Run full pipeline (collect → process → analyze → report)
+      - name: Determine pipeline mode
+        id: mode
+        run: |
+          # GitHub schedule 触发时 inputs 为空，默认 morning
+          # Vercel Cron 触发时通过 inputs.mode 传入
+          MODE="${{ github.event.inputs.mode || 'morning' }}"
+          echo "PIPELINE_MODE=${MODE}" >> $GITHUB_ENV
+          echo "Mode: ${MODE}"
+
+      - name: Run pipeline
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           SMTP_HOST: smtp.qq.com
           SMTP_PORT: 465
+          PIPELINE_MODE: ${{ env.PIPELINE_MODE }}
         run: python backend/runner.py all
 
       - name: Commit updated data files
         run: |
           git config user.name "Stock Agent Bot"
           git config user.email "bot@stock-agent.dev"
-          git add data/latest.json data/raw_*.json data/processed_*.json data/analysis_*.json || true
-          git diff --staged --quiet || git commit -m "📊 Update market data $(date -u +%Y-%m-%d)"
+          git add data/latest.json data/latest_review.json data/raw_*.json data/processed_*.json data/analysis_*.json data/review_*.json || true
+          git diff --staged --quiet || git commit -m "📊 Update market data $(date -u +%Y-%m-%d) [${{ env.PIPELINE_MODE }}]"
           git push
