@@ -1,6 +1,6 @@
 {
   "date": "2026-08-10",
-  "summary": "震荡上行，赚钱效应明显，北向资金大幅净卖出nan亿；市场情绪偏热",
+  "summary": "震荡上行，赚钱效应明显，市场情绪偏热",
   "indices": [
     {
       "name": "上证指数",
@@ -49,23 +49,16 @@
     }
   ],
   "market_breadth": {
-    "advance_count": 4044,
-    "decline_count": 1376,
-    "flat_count": 80,
-    "limit_up_count": 129,
+    "advance_count": 3676,
+    "decline_count": 1249,
+    "flat_count": 75,
+    "limit_up_count": 121,
     "limit_down_count": 9,
-    "advance_ratio": 0.7353,
-    "total_count": 5500,
+    "advance_ratio": 0.7352,
+    "total_count": 5000,
     "source": "sina"
   },
-  "northbound": {
-    "net_buy": NaN,
-    "net_buy_yi": NaN,
-    "date": "2026-08-10",
-    "is_extreme": false,
-    "extreme_note": "",
-    "source": "akshare(stock_hsgt_hist_em, 沪+深)"
-  },
+  "northbound": {},
   "margin": {
     "total_balance": 2647541469745.0,
     "finance_balance": 2622544107786.0,
@@ -99,17 +92,6 @@
       "turnover_yi": 2057.82,
       "up_count": 38,
       "down_count": 62,
-      "source": "sina"
-    },
-    {
-      "name": "有色金属",
-      "stock_count": 100,
-      "net_inflow": 196586134340.0,
-      "net_inflow_yi": 1965.86,
-      "change_pct": 2.48,
-      "turnover_yi": 1965.86,
-      "up_count": 77,
-      "down_count": 22,
       "source": "sina"
     },
     {
@@ -188,6 +170,17 @@
       "up_count": 74,
       "down_count": 25,
       "source": "sina"
+    },
+    {
+      "name": "公用事业",
+      "stock_count": 100,
+      "net_inflow": 46638564303.0,
+      "net_inflow_yi": 466.39,
+      "change_pct": 1.53,
+      "turnover_yi": 466.39,
+      "up_count": 76,
+      "down_count": 20,
+      "source": "sina"
     }
   ],
   "signals": {
@@ -206,7 +199,7 @@
   "anomalies": [
     {
       "type": "sentiment_extreme",
-      "description": "涨停家数达129家，市场情绪过热",
+      "description": "涨停家数达121家，市场情绪过热",
       "severity": "高"
     },
     {
@@ -216,8 +209,7 @@
     }
   ],
   "tomorrow_focus": [
-    "关注北向资金流出对大盘的持续影响",
     "关注电子板块资金持续流入情况",
-    "涨停家数达129家，市场情绪过热"
+    "涨停家数达121家，市场情绪过热"
   ]
 }
