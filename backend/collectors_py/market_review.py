@@ -17,7 +17,7 @@ market_review.py — A股市场复盘数据采集与异动分析
   1. 量价配合异常、资金大幅调仓的板块
   2. 情绪过热或过冷的极端信号
 
-数据源优先级: akshare → 东方财富API(直连) → yfinance(仅指数)
+数据源优先级: akshare → 新浪财经(并发) → 东方财富API(直连) → yfinance(仅指数)
 """
 
 import akshare as ak
@@ -26,7 +26,7 @@ import json
 import time
 import yfinance as yf
 from datetime import datetime, timedelta
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError, as_completed
 
 
 def call_with_timeout(func, timeout=10, *args, **kwargs):
@@ -53,31 +53,26 @@ EM_HEADERS = {
     'Referer': 'https://www.eastmoney.com/',
 }
 
-# 同花顺 (10jqka) 请求头
-THS_HEADERS = {
-    'Accept': 'application/json, text/plain, */*',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Connection': 'keep-alive',
-    'Host': 'dq.10jqka.com.cn',
-    'Sec-Fetch-Dest': 'document',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'none',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+# 新浪财经请求头
+SINA_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+    'Referer': 'https://vip.stock.finance.sina.com.cn/',
 }
 
-THS_API_HEADERS = {
-    'Accept': 'application/json, text/plain, */*',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Accept-Language': 'zh-CN,zh;q=0.9',
-    'Connection': 'keep-alive',
-    'Content-Type': 'application/json',
-    'Host': 'dq.10jqka.com.cn',
-    'Origin': 'https://dq.10jqka.com.cn',
-    'Referer': 'https://dq.10jqka.com.cn/',
-    'Sec-Fetch-Mode': 'cors',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-}
+# 申万一级行业分类 (31个板块)
+SW1_SECTORS = [
+    ('煤炭', 'sw1_740000'), ('石油石化', 'sw1_750000'), ('美容护理', 'sw1_770000'),
+    ('环保', 'sw1_760000'), ('电力设备', 'sw1_630000'), ('社会服务', 'sw1_460000'),
+    ('商贸零售', 'sw1_450000'), ('纺织服饰', 'sw1_350000'), ('基础化工', 'sw1_220000'),
+    ('通信', 'sw1_730000'), ('传媒', 'sw1_720000'), ('计算机', 'sw1_710000'),
+    ('国防军工', 'sw1_650000'), ('机械设备', 'sw1_640000'), ('建筑装饰', 'sw1_620000'),
+    ('建筑材料', 'sw1_610000'), ('非银金融', 'sw1_490000'), ('银行', 'sw1_480000'),
+    ('房地产', 'sw1_430000'), ('交通运输', 'sw1_420000'), ('公用事业', 'sw1_410000'),
+    ('医药生物', 'sw1_370000'), ('轻工制造', 'sw1_360000'), ('食品饮料', 'sw1_340000'),
+    ('家用电器', 'sw1_330000'), ('汽车', 'sw1_280000'), ('电子', 'sw1_270000'),
+    ('有色金属', 'sw1_240000'), ('钢铁', 'sw1_230000'), ('农林牧渔', 'sw1_110000'),
+    ('综合', 'sw1_510000'),
+]
 
 
 # ═══════════════════════════════════════════════════
@@ -235,13 +230,13 @@ def fetch_market_breadth():
     except Exception as e:
         print(f'  [MarketReview] akshare市场广度失败: {e}')
 
-    # 方法2: 同花顺 API (直连, 可能从US IP访问)
+    # 方法2: 新浪财经 (并发获取全A股, 统计涨跌家数)
     try:
-        result = _fetch_breadth_ths()
+        result = _fetch_breadth_sina()
         if result:
             return result
     except Exception as e:
-        print(f'  [MarketReview] 同花顺市场广度失败: {e}')
+        print(f'  [MarketReview] 新浪市场广度失败: {e}')
 
     # 方法3: 东方财富 API (直连, 带超时)
     try:
@@ -251,7 +246,6 @@ def fetch_market_breadth():
     except Exception as e:
         print(f'  [MarketReview] eastmoney市场广度失败: {e}')
 
-    # 注意: 不再调用 stock_zh_a_spot_em() (下载全市场行情, 过慢)
     print('[MarketReview] 市场广度数据不可用')
     return {}
 
@@ -300,42 +294,71 @@ def _parse_market_breadth_akshare(df):
     return result
 
 
-def _fetch_breadth_ths():
-    """同花顺 API 获取市场广度 (涨跌家数、涨跌停)"""
+def _fetch_breadth_sina():
+    """新浪财经并发获取全A股行情, 统计涨跌家数和涨跌停"""
     try:
-        url = 'https://dq.10jqka.com.cn/fuyao/up_distribution/distribution/v2/realtime'
-        resp = requests.get(url, headers=THS_HEADERS, timeout=(3, 10))
-        if resp.status_code == 200:
-            data = resp.json()
-            d = data.get('data') or {}
-            up = int(d.get('up', 0) or 0)
-            down = int(d.get('down', 0) or 0)
-            flat = int(d.get('flat', 0) or 0)
-            limit_up = int(d.get('limit_up', 0) or 0)
-            limit_down = int(d.get('limit_down', 0) or 0)
-            suspend = int(d.get('suspend', 0) or 0)
+        sina_url = 'http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData'
 
-            if up > 0 or down > 0 or limit_up > 0 or limit_down > 0:
-                total = up + down + flat
-                result = {
-                    'advance_count': up,
-                    'decline_count': down,
-                    'flat_count': flat,
-                    'limit_up_count': limit_up,
-                    'limit_down_count': limit_down,
-                    'suspend_count': suspend,
-                    'update_time': d.get('last_update_time', ''),
-                    'advance_ratio': round(up / total, 4) if total > 0 else 0,
-                    'source': 'ths',
-                }
-                print(f'[MarketReview] 市场广度(同花顺): 涨{up} 跌{down} 平{flat} 涨停{limit_up} 跌停{limit_down} 停牌{suspend}')
-                return result
+        def _fetch_page(page):
+            params = {
+                'page': page, 'num': 100, 'sort': 'symbol',
+                'asc': 1, 'node': 'hs_a', '_s_r_a': 'auto',
+            }
+            try:
+                r = requests.get(sina_url, params=params, headers=SINA_HEADERS, timeout=8)
+                if r.status_code == 200:
+                    return r.json()
+            except Exception:
+                pass
+            return []
+
+        all_stocks = []
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            futures = {executor.submit(_fetch_page, p): p for p in range(1, 56)}
+            for future in as_completed(futures):
+                result = future.result()
+                if result:
+                    all_stocks.extend(result)
+
+        if not all_stocks:
+            print('  [MarketReview] 新浪 breadth: 无数据返回')
+            return None
+
+        up = down = flat = limit_up = limit_down = 0
+        for s in all_stocks:
+            try:
+                pct = float(s.get('changepercent', 0) or 0)
+            except (ValueError, TypeError):
+                continue
+            if pct > 0:
+                up += 1
+                if pct >= 9.8:
+                    limit_up += 1
+            elif pct < 0:
+                down += 1
+                if pct <= -9.8:
+                    limit_down += 1
             else:
-                print(f'  [MarketReview] 同花顺 breadth: 响应数据为0 (data={d})')
-        else:
-            print(f'  [MarketReview] 同花顺 breadth: HTTP {resp.status_code}')
+                flat += 1
+
+        total = up + down + flat
+        if total == 0:
+            return None
+
+        result = {
+            'advance_count': up,
+            'decline_count': down,
+            'flat_count': flat,
+            'limit_up_count': limit_up,
+            'limit_down_count': limit_down,
+            'advance_ratio': round(up / total, 4),
+            'total_count': total,
+            'source': 'sina',
+        }
+        print(f'[MarketReview] 市场广度(新浪): 涨{up} 跌{down} 平{flat} 涨停{limit_up} 跌停{limit_down} (共{total}只)')
+        return result
     except Exception as e:
-        print(f'  [MarketReview] 同花顺 breadth: {e}')
+        print(f'  [MarketReview] 新浪 breadth: {e}')
     return None
 
 
@@ -752,13 +775,13 @@ def fetch_sector_flow():
     except Exception as e:
         print(f'  [MarketReview] akshare板块资金流失败: {e}')
 
-    # 方法2: 同花顺 API (直连, 可能从US IP访问)
+    # 方法2: 新浪财经 (并发获取申万一级行业板块数据)
     try:
-        result = _fetch_sector_flow_ths()
+        result = _fetch_sector_flow_sina()
         if result:
             return result
     except Exception as e:
-        print(f'  [MarketReview] 同花顺板块资金流失败: {e}')
+        print(f'  [MarketReview] 新浪板块资金流失败: {e}')
 
     # 方法3: 东方财富 API
     try:
@@ -772,78 +795,60 @@ def fetch_sector_flow():
     return []
 
 
-def _fetch_sector_flow_ths():
-    """同花顺 API 获取行业板块资金流 (含主力净流入)"""
+def _fetch_sector_flow_sina():
+    """新浪财经并发获取申万一级行业板块数据 (成交额+涨跌幅作为资金流代理)"""
     try:
-        today_str = datetime.now().strftime('%Y%m%d')
-        url = 'https://dq.10jqka.com.cn/intervale_calculation/block_info/v1/get_block_list'
-        payload = {
-            'sort_info': {
-                'sort_field': '0',
-                'sort_type': 'desc',
-            },
-            'history_info': {
-                'history_type': '0',
-                'end_date': f'{today_str}150000',
-                'start_date': f'{today_str}093000',
-            },
-            'type': 0,
-            'page_info': {
-                'page_size': 100,
-                'page': 1,
-            },
-        }
-        resp = requests.post(url, json=payload, headers=THS_API_HEADERS, timeout=(3, 10))
-        if resp.status_code == 200:
-            data = resp.json()
-            block_data = data.get('data') or {}
-            sectors = block_data.get('list', [])
-            total = block_data.get('total', 0)
+        sina_url = 'http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData'
 
-            # 如果有更多页, 获取所有板块
-            if total > 100:
-                all_sectors = list(sectors)
-                import math
-                total_pages = math.ceil(total / 100)
-                for page in range(2, total_pages + 1):
-                    try:
-                        payload['page_info']['page'] = page
-                        resp2 = requests.post(url, json=payload, headers=THS_API_HEADERS, timeout=(3, 8))
-                        if resp2.status_code == 200:
-                            extra = (resp2.json().get('data') or {}).get('list', [])
-                            all_sectors.extend(extra)
-                    except Exception:
-                        pass
-                sectors = all_sectors
+        def _fetch_sector(name, node):
+            params = {
+                'page': 1, 'num': 100, 'sort': 'amount',
+                'asc': 0, 'node': node, '_s_r_a': 'auto',
+            }
+            try:
+                r = requests.get(sina_url, params=params, headers=SINA_HEADERS, timeout=8)
+                if r.status_code == 200:
+                    return name, r.json()
+            except Exception:
+                pass
+            return name, []
 
-            if sectors:
-                results = []
-                for item in sectors:
-                    name = item.get('block_name', '')
-                    if not name:
-                        continue
-                    net_inflow = float(item.get('net_flow_of_main_force', 0) or 0)
-                    change_pct = float(item.get('margin_of_increase', 0) or 0)
-                    turnover = float(item.get('turnover', 0) or 0)
-                    results.append({
-                        'name': name,
-                        'net_inflow': net_inflow,
-                        'net_inflow_yi': round(net_inflow / 1e8, 2),
-                        'change_pct': round(change_pct, 2),
-                        'turnover': turnover,
-                        'turnover_yi': round(turnover / 1e8, 2),
-                        'source': 'ths',
-                    })
+        sector_results = []
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            futures = {executor.submit(_fetch_sector, name, node): name for name, node in SW1_SECTORS}
+            for future in as_completed(futures):
+                sector_name, stocks = future.result()
+                if not stocks:
+                    continue
+                total_amount = sum(float(s.get('amount', 0) or 0) for s in stocks)
+                avg_change = sum(float(s.get('changepercent', 0) or 0) for s in stocks) / len(stocks)
+                up = sum(1 for s in stocks if float(s.get('changepercent', 0) or 0) > 0)
+                down = sum(1 for s in stocks if float(s.get('changepercent', 0) or 0) < 0)
+                total_amount_yi = total_amount / 1e8
+                # 用成交额作为资金活跃度代理, 涨跌幅作为方向
+                sector_results.append({
+                    'name': sector_name,
+                    'stock_count': len(stocks),
+                    'net_inflow': total_amount,  # 用成交额代理
+                    'net_inflow_yi': round(total_amount_yi, 2),
+                    'change_pct': round(avg_change, 2),
+                    'turnover_yi': round(total_amount_yi, 2),
+                    'up_count': up,
+                    'down_count': down,
+                    'source': 'sina',
+                })
 
-                results.sort(key=lambda x: x['net_inflow'], reverse=True)
-                print(f'[MarketReview] 板块资金流(同花顺): {len(results)}个板块')
-                return results
-            else:
-                print(f'  [MarketReview] 同花顺 sector: 响应无list数据 (keys={list(block_data.keys()) if isinstance(block_data, dict) else type(block_data).__name__})')
+        if sector_results:
+            # 按成交额降序排列 (成交额最大 = 资金最活跃)
+            sector_results.sort(key=lambda x: x['net_inflow'], reverse=True)
+            print(f'[MarketReview] 板块资金流(新浪): {len(sector_results)}个板块')
+            for s in sector_results[:3]:
+                print(f'  {s["name"]}: 成交{s["turnover_yi"]:.2f}亿, 均涨跌{s["change_pct"]:+.2f}%')
+            return sector_results
         else:
-            print(f'  [MarketReview] 同花顺 sector: HTTP {resp.status_code}')
+            print('  [MarketReview] 新浪 sector: 无数据返回')
     except Exception as e:
-        print(f'  [MarketReview] 同花顺 sector flow: {e}')
+        print(f'  [MarketReview] 新浪 sector flow: {e}')
     return None
 
 
