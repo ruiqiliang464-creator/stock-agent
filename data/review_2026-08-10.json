@@ -7,18 +7,18 @@
       "code": "000001",
       "close": 3966.59,
       "change_pct": 0.67,
-      "volume": 542118110,
-      "amount": 1166893282353.8,
-      "source": "eastmoney"
+      "volume": 2672203448,
+      "amount": 0,
+      "source": "yfinance"
     },
     {
       "name": "深证成指",
       "code": "399001",
       "close": 14316.96,
       "change_pct": 0.04,
-      "volume": 687533827,
-      "amount": 1356209535367.73,
-      "source": "eastmoney"
+      "volume": 2912581419,
+      "amount": 0,
+      "source": "yfinance"
     },
     {
       "name": "创业板指",
@@ -196,7 +196,8 @@
     "sentiment": "偏热",
     "fund_flow_signals": [
       "两融余额增加76.8亿，杠杆资金积极入场",
-      "电子板块资金大幅净流入5416.4亿"
+      "电子板块成交活跃，成交额5416.4亿",
+      "食品饮料板块均涨3.2%，领涨市场"
     ],
     "volatility_percentile": 45,
     "volatility_desc": "中等",
@@ -210,7 +211,7 @@
     },
     {
       "type": "sector_rotation",
-      "description": "电子板块资金大幅净流入5416.4亿，领涨资金方向",
+      "description": "食品饮料板块均涨3.2%，成交421亿，领涨资金方向",
       "severity": "中"
     }
   ],
