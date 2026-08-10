@@ -1,50 +1,50 @@
 {
   "date": "2026-08-10",
-  "updatedAt": "2026-08-10T04:28:18.301072",
-  "summary": "缩量震荡，市场情绪中性偏冷",
+  "updatedAt": "2026-08-10T07:39:58.437919",
+  "summary": "震荡上行，市场情绪中性偏热",
   "indices": [
     {
       "name": "上证指数",
       "code": "000001",
-      "close": 3947.91,
-      "change_pct": 0.2,
-      "volume": 1982165532,
+      "close": 3966.59,
+      "change_pct": 0.67,
+      "volume": 2672203448,
       "amount": 0,
       "source": "yfinance"
     },
     {
       "name": "深证成指",
       "code": "399001",
-      "close": 14148.86,
-      "change_pct": -1.13,
-      "volume": 3618679064,
+      "close": 14316.96,
+      "change_pct": 0.04,
+      "volume": 2912581419,
       "amount": 0,
       "source": "yfinance"
     },
     {
       "name": "创业板指",
       "code": "399006",
-      "close": 3485.44,
+      "close": 3537.21,
       "change_pct": 0.0,
-      "volume": 3015790737,
+      "volume": 4273450443,
       "amount": 0,
       "source": "yfinance"
     },
     {
       "name": "沪深300",
       "code": "000300",
-      "close": 4670.05,
+      "close": 4702.02,
       "change_pct": 0.0,
-      "volume": 1296567612,
+      "volume": 4127730416,
       "amount": 0,
       "source": "yfinance"
     },
     {
       "name": "科创50",
       "code": "000688",
-      "close": 1716.69,
+      "close": 1737.77,
       "change_pct": 0.0,
-      "volume": 736323700,
+      "volume": 1081717400,
       "amount": 0,
       "source": "yfinance"
     }
@@ -74,13 +74,13 @@
   "signals": {
     "market_breadth": "数据不足",
     "advance_ratio": null,
-    "sentiment": "中性偏冷",
+    "sentiment": "中性偏热",
     "fund_flow_signals": [
       "两融余额增加76.8亿，杠杆资金积极入场"
     ],
-    "volatility_percentile": 65,
-    "volatility_desc": "中等偏高",
-    "max_index_change": 1.13
+    "volatility_percentile": 45,
+    "volatility_desc": "中等",
+    "max_index_change": 0.67
   },
   "anomalies": [],
   "tomorrow_focus": [
