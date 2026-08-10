@@ -23,6 +23,7 @@ market_review.py — A股市场复盘数据采集与异动分析
 import akshare as ak
 import requests
 import json
+import re
 import time
 import yfinance as yf
 from datetime import datetime, timedelta
@@ -41,11 +42,11 @@ def call_with_timeout(func, timeout=10, *args, **kwargs):
 
 # ── 核心指数列表 ──
 CORE_INDICES = [
-    {'code': '000001', 'name': '上证指数', 'em_secid': '1.000001', 'ak_symbol': 'sh000001', 'yf_symbol': '000001.SS'},
-    {'code': '399001', 'name': '深证成指', 'em_secid': '0.399001', 'ak_symbol': 'sz399001', 'yf_symbol': '399001.SZ'},
-    {'code': '399006', 'name': '创业板指', 'em_secid': '0.399006', 'ak_symbol': 'sz399006', 'yf_symbol': '399006.SZ'},
-    {'code': '000300', 'name': '沪深300', 'em_secid': '1.000300', 'ak_symbol': 'sh000300', 'yf_symbol': '000300.SS'},
-    {'code': '000688', 'name': '科创50', 'em_secid': '1.000688', 'ak_symbol': 'sh000688', 'yf_symbol': '000688.SS'},
+    {'code': '000001', 'name': '上证指数', 'em_secid': '1.000001', 'ak_symbol': 'sh000001', 'yf_symbol': '000001.SS', 'sina_code': 'sh000001'},
+    {'code': '399001', 'name': '深证成指', 'em_secid': '0.399001', 'ak_symbol': 'sz399001', 'yf_symbol': '399001.SZ', 'sina_code': 'sz399001'},
+    {'code': '399006', 'name': '创业板指', 'em_secid': '0.399006', 'ak_symbol': 'sz399006', 'yf_symbol': '399006.SZ', 'sina_code': 'sz399006'},
+    {'code': '000300', 'name': '沪深300', 'em_secid': '1.000300', 'ak_symbol': 'sh000300', 'yf_symbol': '000300.SS', 'sina_code': 'sh000300'},
+    {'code': '000688', 'name': '科创50', 'em_secid': '1.000688', 'ak_symbol': 'sh000688', 'yf_symbol': '000688.SS', 'sina_code': 'sh000688'},
 ]
 
 EM_HEADERS = {
@@ -83,13 +84,22 @@ def fetch_index_data():
     """获取核心指数收盘数据、涨跌幅度及成交额"""
     print('[MarketReview] 采集核心指数数据...')
 
-    # 方法1: akshare
-    results = _fetch_index_akshare()
+    # 方法1: 新浪财经实时行情 (US IP 可用, 一次请求获取全部指数)
+    sina_results = _fetch_index_sina()
+    if sina_results and len(sina_results) >= 3:
+        print(f'[MarketReview] sina指数: {len(sina_results)}条')
+        return sina_results
+
+    # 方法2: akshare
+    results = []
+    ak_results = _fetch_index_akshare()
+    if ak_results:
+        results.extend(ak_results)
     if len(results) >= 3:
         print(f'[MarketReview] akshare指数: {len(results)}条')
         return results
 
-    # 方法2: 东方财富 push2his API (直连, 不同hostname可能可用)
+    # 方法3: 东方财富 push2his API (直连, 不稳定)
     em_results = _fetch_index_eastmoney()
     if em_results:
         existing = {r['code'] for r in results}
@@ -100,7 +110,7 @@ def fetch_index_data():
             print(f'[MarketReview] eastmoney指数: {len(results)}条')
             return results
 
-    # 方法3: yfinance (仅指数, 可从海外IP访问)
+    # 方法4: yfinance (海外IP可用, 数据可能不全)
     yf_results = _fetch_index_yfinance()
     if yf_results:
         existing = {r['code'] for r in results}
@@ -108,8 +118,75 @@ def fetch_index_data():
             if r['code'] not in existing:
                 results.append(r)
 
+    # 补充: 如果新浪有部分数据, 也加入
+    if sina_results:
+        existing = {r['code'] for r in results}
+        for r in sina_results:
+            if r['code'] not in existing:
+                results.append(r)
+
     print(f'[MarketReview] 指数采集完成: {len(results)}条')
     return results
+
+
+def _fetch_index_sina():
+    """新浪财经实时行情获取指数数据 (US IP 可用, 一次请求获取全部指数)"""
+    try:
+        codes = ','.join(idx['sina_code'] for idx in CORE_INDICES)
+        url = f'https://hq.sinajs.cn/list={codes}'
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Referer': 'https://finance.sina.com.cn/',
+        }
+        resp = requests.get(url, headers=headers, timeout=(3, 8))
+        resp.encoding = 'gbk'
+        if resp.status_code != 200:
+            print(f'  [MarketReview] sina指数 HTTP {resp.status_code}')
+            return []
+
+        results = []
+        for line in resp.text.strip().split('\n'):
+            m = re.search(r'var hq_str_\w+="(.+)"', line)
+            if not m:
+                continue
+            parts = m.group(1).split(',')
+            if len(parts) < 10:
+                continue
+            name = parts[0]
+            prev_close = float(parts[1]) if parts[1] else 0
+            open_price = float(parts[2]) if parts[2] else 0
+            close = float(parts[3]) if parts[3] else 0
+            high = float(parts[4]) if parts[4] else 0
+            low = float(parts[5]) if parts[5] else 0
+            volume = float(parts[8]) if parts[8] else 0
+            amount = float(parts[9]) if parts[9] else 0
+            date_str = parts[30] if len(parts) > 30 else ''
+
+            if close <= 0:
+                continue
+
+            change_pct = round((close - prev_close) / prev_close * 100, 2) if prev_close > 0 else 0
+
+            idx_info = next((idx for idx in CORE_INDICES if idx['sina_code'] in line), None)
+            code = idx_info['code'] if idx_info else ''
+            display_name = idx_info['name'] if idx_info else name
+
+            results.append({
+                'name': display_name,
+                'code': code,
+                'close': round(close, 2),
+                'change_pct': change_pct,
+                'volume': int(volume),
+                'amount': amount,
+                'source': 'sina',
+            })
+
+        if results:
+            print(f'[MarketReview] sina指数: {len(results)}条')
+        return results
+    except Exception as e:
+        print(f'  [MarketReview] sina指数失败: {e}')
+        return []
 
 
 def _fetch_index_akshare():
@@ -191,7 +268,7 @@ def _fetch_index_yfinance():
     for idx in CORE_INDICES:
         try:
             ticker = yf.Ticker(idx['yf_symbol'])
-            hist = ticker.history(period='5d')
+            hist = ticker.history(period='1mo')
             if hist is not None and len(hist) > 0:
                 latest = hist.iloc[-1]
                 prev_close = float(hist.iloc[-2]['Close']) if len(hist) > 1 else float(latest['Close'])
@@ -431,60 +508,69 @@ def fetch_northbound_flow():
     """获取北向资金流向数据"""
     print('[MarketReview] 采集北向资金数据...')
 
-    # 方法1: akshare (尝试多个可能的函数名, 兼容不同版本)
-    ak_funcs = [
-        ('stock_hsgt_north_net_flow_in_em', {'symbol': '北向资金'}),
-        ('stock_hsgt_hist_em', {'symbol': '北向资金'}),
-        ('stock_hsgt_north_acc_flow_in_em', {'symbol': '北向资金'}),
-    ]
-    for func_name, kwargs in ak_funcs:
-        func = getattr(ak, func_name, None)
-        if func is None:
-            continue
-        try:
-            df = call_with_timeout(func, timeout=10, **kwargs)
-            if df is not None and len(df) > 0:
-                latest = df.iloc[-1]
-                net_buy = 0
-                date_str = ''
-                for col in df.columns:
-                    col_str = str(col)
-                    if '净流入' in col_str or '净买入' in col_str or 'value' in col_str.lower():
-                        try:
-                            net_buy = float(latest[col] or 0)
-                        except (ValueError, TypeError):
-                            net_buy = 0
-                    elif 'date' in col_str.lower() or '日期' in col_str:
-                        date_str = str(latest[col])
-
-                if net_buy != 0 or date_str:
-                    result = {
-                        'net_buy': round(net_buy, 2),
-                        'net_buy_yi': round(net_buy / 1e8, 2),
-                        'date': date_str,
-                        'is_extreme': abs(net_buy) > 10e8,
-                        'extreme_note': '',
-                        'source': f'akshare({func_name})',
-                    }
-                    if net_buy > 10e8:
-                        result['extreme_note'] = '北向单日净买入超100亿，极端流入信号'
-                    elif net_buy < -10e8:
-                        result['extreme_note'] = '北向单日净卖出超100亿，极端流出信号'
-                    print(f'[MarketReview] 北向资金({func_name}): 净{("买入" if net_buy > 0 else "卖出")}{result["net_buy_yi"]:.2f}亿')
-                    return result
-        except Exception as e:
-            print(f'  [MarketReview] akshare北向资金({func_name})失败: {e}')
-
-    # 方法2: 东方财富 push2his API
+    # 方法1: 东方财富 kamt.kline API (直连HTTP, 直接返回北向合计)
     try:
         result = _fetch_northbound_eastmoney()
-        if result:
+        if result and result.get('net_buy', 0) != 0:
             return result
     except Exception as e:
         print(f'  [MarketReview] eastmoney北向资金失败: {e}')
 
+    # 方法2: akshare (分别查沪股通+深股通求和)
+    try:
+        result = _fetch_northbound_akshare()
+        if result and result.get('net_buy', 0) != 0:
+            return result
+    except Exception as e:
+        print(f'  [MarketReview] akshare北向资金失败: {e}')
+
     print('[MarketReview] 北向资金数据不可用')
     return {}
+
+
+def _fetch_northbound_akshare():
+    """akshare 获取北向资金 (分别查沪股通+深股通, 求和)"""
+    func = getattr(ak, 'stock_hsgt_hist_em', None)
+    if func is None:
+        return None
+
+    total_net = 0
+    date_str = ''
+    for symbol in ['沪股通', '深股通']:
+        df = call_with_timeout(func, timeout=10, symbol=symbol)
+        if df is None or len(df) == 0:
+            continue
+        latest = df.iloc[-1]
+        for col in df.columns:
+            col_str = str(col)
+            # 跳过累计列, 只取当日净买额
+            if '累计' in col_str:
+                continue
+            if '净买' in col_str or '净流入' in col_str or 'value' in col_str.lower():
+                try:
+                    total_net += float(latest[col] or 0)
+                except (ValueError, TypeError):
+                    pass
+            elif 'date' in col_str.lower() or '日期' in col_str:
+                date_str = str(latest[col])
+
+    if total_net == 0 and not date_str:
+        return None
+
+    result = {
+        'net_buy': round(total_net, 2),
+        'net_buy_yi': round(total_net / 1e8, 2),
+        'date': date_str,
+        'is_extreme': abs(total_net) > 10e8,
+        'extreme_note': '',
+        'source': 'akshare(stock_hsgt_hist_em, 沪+深)',
+    }
+    if total_net > 10e8:
+        result['extreme_note'] = '北向单日净买入超100亿，极端流入信号'
+    elif total_net < -10e8:
+        result['extreme_note'] = '北向单日净卖出超100亿，极端流出信号'
+    print(f'[MarketReview] 北向资金(akshare): 净{("买入" if total_net > 0 else "卖出")}{result["net_buy_yi"]:.2f}亿')
+    return result
 
 
 def _fetch_northbound_eastmoney():
