@@ -1,52 +1,52 @@
 {
   "date": "2026-08-10",
-  "updatedAt": "2026-08-10T08:03:37.469390",
-  "summary": "震荡上行，赚钱效应明显，市场情绪偏热",
+  "updatedAt": "2026-08-10T09:47:12.320377",
+  "summary": "震荡上行，赚钱效应明显，北向资金大幅净卖出nan亿；市场情绪偏热",
   "indices": [
     {
       "name": "上证指数",
       "code": "000001",
       "close": 3966.59,
-      "change_pct": 0.67,
-      "volume": 2672203448,
-      "amount": 0,
-      "source": "yfinance"
+      "change_pct": 0.58,
+      "volume": 542118110,
+      "amount": 1166893282354.0,
+      "source": "sina"
     },
     {
       "name": "深证成指",
       "code": "399001",
       "close": 14316.96,
-      "change_pct": 0.04,
-      "volume": 2912581419,
-      "amount": 0,
-      "source": "yfinance"
+      "change_pct": -0.22,
+      "volume": 68753382679,
+      "amount": 1356209535367.726,
+      "source": "sina"
     },
     {
       "name": "创业板指",
       "code": "399006",
       "close": 3537.21,
-      "change_pct": 0.0,
-      "volume": 4273450443,
-      "amount": 0,
-      "source": "yfinance"
+      "change_pct": -0.84,
+      "volume": 20898630208,
+      "amount": 657874162782.25,
+      "source": "sina"
     },
     {
       "name": "沪深300",
       "code": "000300",
       "close": 4702.02,
-      "change_pct": 0.0,
-      "volume": 4127730416,
-      "amount": 0,
-      "source": "yfinance"
+      "change_pct": 0.07,
+      "volume": 213075996,
+      "amount": 733103396912.0,
+      "source": "sina"
     },
     {
       "name": "科创50",
       "code": "000688",
       "close": 1737.77,
-      "change_pct": 0.0,
-      "volume": 1081717400,
-      "amount": 0,
-      "source": "yfinance"
+      "change_pct": -0.14,
+      "volume": 10817174,
+      "amount": 128470941791.0,
+      "source": "sina"
     }
   ],
   "market_breadth": {
@@ -60,12 +60,12 @@
     "source": "sina"
   },
   "northbound": {
-    "net_buy": 0,
-    "net_buy_yi": 0.0,
-    "date": "2026-08-07",
+    "net_buy": NaN,
+    "net_buy_yi": NaN,
+    "date": "2026-08-10",
     "is_extreme": false,
     "extreme_note": "",
-    "source": "akshare(stock_hsgt_hist_em)"
+    "source": "akshare(stock_hsgt_hist_em, 沪+深)"
   },
   "margin": {
     "total_balance": 2647541469745.0,
@@ -202,7 +202,7 @@
     ],
     "volatility_percentile": 45,
     "volatility_desc": "中等",
-    "max_index_change": 0.67
+    "max_index_change": 0.84
   },
   "anomalies": [
     {
@@ -217,6 +217,7 @@
     }
   ],
   "tomorrow_focus": [
+    "关注北向资金流出对大盘的持续影响",
     "关注电子板块资金持续流入情况",
     "涨停家数达129家，市场情绪过热"
   ]
