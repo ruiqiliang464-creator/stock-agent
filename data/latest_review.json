@@ -1,6 +1,6 @@
 {
   "date": "2026-08-10",
-  "updatedAt": "2026-08-10T09:53:21.321827",
+  "updatedAt": "2026-08-10T10:28:34.546553",
   "summary": "震荡上行，赚钱效应明显，市场情绪偏热",
   "indices": [
     {
@@ -50,13 +50,13 @@
     }
   ],
   "market_breadth": {
-    "advance_count": 3676,
-    "decline_count": 1249,
-    "flat_count": 75,
-    "limit_up_count": 121,
+    "advance_count": 4044,
+    "decline_count": 1376,
+    "flat_count": 80,
+    "limit_up_count": 129,
     "limit_down_count": 9,
-    "advance_ratio": 0.7352,
-    "total_count": 5000,
+    "advance_ratio": 0.7353,
+    "total_count": 5500,
     "source": "sina"
   },
   "northbound": {},
@@ -93,6 +93,17 @@
       "turnover_yi": 2057.82,
       "up_count": 38,
       "down_count": 62,
+      "source": "sina"
+    },
+    {
+      "name": "有色金属",
+      "stock_count": 100,
+      "net_inflow": 196586134340.0,
+      "net_inflow_yi": 1965.86,
+      "change_pct": 2.48,
+      "turnover_yi": 1965.86,
+      "up_count": 77,
+      "down_count": 22,
       "source": "sina"
     },
     {
@@ -171,17 +182,6 @@
       "up_count": 74,
       "down_count": 25,
       "source": "sina"
-    },
-    {
-      "name": "公用事业",
-      "stock_count": 100,
-      "net_inflow": 46638564303.0,
-      "net_inflow_yi": 466.39,
-      "change_pct": 1.53,
-      "turnover_yi": 466.39,
-      "up_count": 76,
-      "down_count": 20,
-      "source": "sina"
     }
   ],
   "signals": {
@@ -200,7 +200,7 @@
   "anomalies": [
     {
       "type": "sentiment_extreme",
-      "description": "涨停家数达121家，市场情绪过热",
+      "description": "涨停家数达129家，市场情绪过热",
       "severity": "高"
     },
     {
@@ -211,6 +211,6 @@
   ],
   "tomorrow_focus": [
     "关注电子板块资金持续流入情况",
-    "涨停家数达121家，市场情绪过热"
+    "涨停家数达129家，市场情绪过热"
   ]
 }
