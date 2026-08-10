@@ -24,6 +24,7 @@ import akshare as ak
 import requests
 import json
 import re
+import math
 import time
 import yfinance as yf
 from datetime import datetime, timedelta
@@ -511,7 +512,7 @@ def fetch_northbound_flow():
     # 方法1: 东方财富 kamt.kline API (直连HTTP, 直接返回北向合计)
     try:
         result = _fetch_northbound_eastmoney()
-        if result and result.get('net_buy', 0) != 0:
+        if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
             return result
     except Exception as e:
         print(f'  [MarketReview] eastmoney北向资金失败: {e}')
@@ -519,7 +520,7 @@ def fetch_northbound_flow():
     # 方法2: akshare (分别查沪股通+深股通求和)
     try:
         result = _fetch_northbound_akshare()
-        if result and result.get('net_buy', 0) != 0:
+        if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
             return result
     except Exception as e:
         print(f'  [MarketReview] akshare北向资金失败: {e}')
@@ -540,22 +541,33 @@ def _fetch_northbound_akshare():
         df = call_with_timeout(func, timeout=10, symbol=symbol)
         if df is None or len(df) == 0:
             continue
-        latest = df.iloc[-1]
-        for col in df.columns:
-            col_str = str(col)
-            # 跳过累计列, 只取当日净买额
-            if '累计' in col_str:
-                continue
-            if '净买' in col_str or '净流入' in col_str or 'value' in col_str.lower():
-                try:
-                    total_net += float(latest[col] or 0)
-                except (ValueError, TypeError):
-                    pass
-            elif 'date' in col_str.lower() or '日期' in col_str:
-                date_str = str(latest[col])
+        # 尝试最后一行, 如果是NaN则用倒数第二行
+        for row_idx in [-1, -2]:
+            if abs(row_idx) > len(df):
+                break
+            latest = df.iloc[row_idx]
+            found_val = False
+            for col in df.columns:
+                col_str = str(col)
+                if '累计' in col_str:
+                    continue
+                if '净买' in col_str or '净流入' in col_str or 'value' in col_str.lower():
+                    try:
+                        val = float(latest[col])
+                        if math.isnan(val):
+                            continue
+                        total_net += val
+                        found_val = True
+                    except (ValueError, TypeError):
+                        pass
+                elif 'date' in col_str.lower() or '日期' in col_str:
+                    date_str = str(latest[col])
+            if found_val:
+                break
 
-    if total_net == 0 and not date_str:
-        return None
+    if math.isnan(total_net) or total_net == 0:
+        if not date_str:
+            return None
 
     result = {
         'net_buy': round(total_net, 2),
