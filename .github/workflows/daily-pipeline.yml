@@ -50,6 +50,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           SMTP_HOST: smtp.qq.com
           SMTP_PORT: 465
+          TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
           PIPELINE_MODE: ${{ env.PIPELINE_MODE }}
         run: python backend/runner.py all
 

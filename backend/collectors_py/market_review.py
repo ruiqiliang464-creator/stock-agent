@@ -25,6 +25,7 @@ import requests
 import json
 import re
 import math
+import os
 import time
 import yfinance as yf
 from datetime import datetime, timedelta
@@ -509,7 +510,15 @@ def fetch_northbound_flow():
     """获取北向资金流向数据"""
     print('[MarketReview] 采集北向资金数据...')
 
-    # 方法1: 东方财富 kamt.kline API (直连HTTP, 直接返回北向合计)
+    # 方法1: Tushare moneyflow_hsgt (需要token + 2000积分)
+    try:
+        result = _fetch_northbound_tushare()
+        if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
+            return result
+    except Exception as e:
+        print(f'  [MarketReview] tushare北向资金失败: {e}')
+
+    # 方法2: 东方财富 kamt.kline API (直连HTTP, 直接返回北向合计)
     try:
         result = _fetch_northbound_eastmoney()
         if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
@@ -517,7 +526,7 @@ def fetch_northbound_flow():
     except Exception as e:
         print(f'  [MarketReview] eastmoney北向资金失败: {e}')
 
-    # 方法2: akshare (分别查沪股通+深股通求和)
+    # 方法3: akshare (分别查沪股通+深股通求和)
     try:
         result = _fetch_northbound_akshare()
         if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
@@ -527,6 +536,107 @@ def fetch_northbound_flow():
 
     print('[MarketReview] 北向资金数据不可用')
     return {}
+
+
+def _fetch_northbound_tushare():
+    """Tushare moneyflow_hsgt 获取北向资金 (需要token + 2000积分)"""
+    token = os.environ.get('TUSHARE_TOKEN', '')
+    if not token:
+        print('  [MarketReview] tushare: 未配置 TUSHARE_TOKEN 环境变量')
+        return None
+
+    try:
+        import tushare as ts
+        ts.set_token(token)
+        pro = ts.pro_api()
+
+        # 查最近3天数据, 取最新一行
+        today_str = datetime.now().strftime('%Y%m%d')
+        beg_str = (datetime.now() - timedelta(days=5)).strftime('%Y%m%d')
+
+        df = pro.moneyflow_hsgt(start_date=beg_str, end_date=today_str)
+        if df is None or len(df) == 0:
+            print('  [MarketReview] tushare: moneyflow_hsgt 返回空数据')
+            return None
+
+        # 按交易日期降序排序, 取最新一行
+        if 'trade_date' in df.columns:
+            df = df.sort_values('trade_date', ascending=False)
+
+        latest = df.iloc[0]
+
+        # north_money: 北向资金(百万元), hgt: 沪股通(百万元), sgt: 深股通(百万元)
+        north_million = 0
+        hgt_million = 0
+        sgt_million = 0
+        date_str = ''
+
+        for col in df.columns:
+            col_str = str(col)
+            if 'north_money' in col_str:
+                try:
+                    val = float(latest[col])
+                    if not math.isnan(val):
+                        north_million = val
+                except (ValueError, TypeError):
+                    pass
+            elif col_str == 'hgt':
+                try:
+                    val = float(latest[col])
+                    if not math.isnan(val):
+                        hgt_million = val
+                except (ValueError, TypeError):
+                    pass
+            elif col_str == 'sgt':
+                try:
+                    val = float(latest[col])
+                    if not math.isnan(val):
+                        sgt_million = val
+                except (ValueError, TypeError):
+                    pass
+            elif 'trade_date' in col_str or '日期' in col_str:
+                date_str = str(latest[col])
+
+        # 如果north_money为0, 尝试用hgt+sgt
+        if north_million == 0 and (hgt_million != 0 or sgt_million != 0):
+            north_million = hgt_million + sgt_million
+
+        # 百万元 → 元
+        total_net = north_million * 1e6
+
+        if total_net == 0:
+            print(f'  [MarketReview] tushare: 北向资金净额为0 (date={date_str})')
+            return None
+
+        result = {
+            'net_buy': round(total_net, 2),
+            'net_buy_yi': round(total_net / 1e8, 2),
+            'hgt_yi': round(hgt_million / 100, 2),  # 百万→亿
+            'sgt_yi': round(sgt_million / 100, 2),
+            'date': date_str,
+            'is_extreme': abs(total_net) > 10e8,
+            'extreme_note': '',
+            'source': 'tushare(moneyflow_hsgt)',
+        }
+        if total_net > 10e8:
+            result['extreme_note'] = '北向单日净买入超100亿，极端流入信号'
+        elif total_net < -10e8:
+            result['extreme_note'] = '北向单日净卖出超100亿，极端流出信号'
+        print(f'[MarketReview] 北向资金(tushare): 净{("买入" if total_net > 0 else "卖出")}{result["net_buy_yi"]:.2f}亿')
+        return result
+
+    except ImportError:
+        print('  [MarketReview] tushare: tushare包未安装')
+        return None
+    except Exception as e:
+        err_str = str(e)
+        if '积分' in err_str or '权限' in err_str:
+            print(f'  [MarketReview] tushare: 积分不足或无权限 - {err_str}')
+        elif 'token' in err_str.lower() or '认证' in err_str:
+            print(f'  [MarketReview] tushare: token认证失败 - {err_str}')
+        else:
+            print(f'  [MarketReview] tushare: {err_str}')
+        return None
 
 
 def _fetch_northbound_akshare():
