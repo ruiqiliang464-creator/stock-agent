@@ -942,14 +942,27 @@ def calculate_signals(index_data, breadth, northbound, margin, sector_flow):
 
     # 板块资金极端值
     if sector_flow:
-        top_inflow = sector_flow[0] if sector_flow else {}
-        if top_inflow.get('net_inflow_yi', 0) > 20:
-            flow_signals.append(f'{top_inflow["name"]}板块资金大幅净流入{top_inflow["net_inflow_yi"]:.1f}亿')
-
-        # 找最大流出
-        bottom_outflow = min(sector_flow, key=lambda x: x.get('net_inflow', 0))
-        if bottom_outflow.get('net_inflow_yi', 0) < -20:
-            flow_signals.append(f'{bottom_outflow["name"]}板块资金大幅净流出{abs(bottom_outflow["net_inflow_yi"]):.1f}亿')
+        top_sector = sector_flow[0] if sector_flow else {}
+        # 判断数据源: sina 用成交额, eastmoney/akshare 用净流入
+        is_sina = top_sector.get('source') == 'sina'
+        if is_sina:
+            # 新浪数据: 用成交额和涨跌幅
+            if top_sector.get('turnover_yi', 0) > 1000:
+                flow_signals.append(f'{top_sector["name"]}板块成交活跃，成交额{top_sector["turnover_yi"]:.1f}亿')
+            # 找最大涨幅/跌幅板块
+            top_gain = max(sector_flow, key=lambda x: x.get('change_pct', 0))
+            top_loss = min(sector_flow, key=lambda x: x.get('change_pct', 0))
+            if top_gain.get('change_pct', 0) > 2.0:
+                flow_signals.append(f'{top_gain["name"]}板块均涨{top_gain["change_pct"]:.1f}%，领涨市场')
+            if top_loss.get('change_pct', 0) < -2.0:
+                flow_signals.append(f'{top_loss["name"]}板块均跌{abs(top_loss["change_pct"]):.1f}%，领跌市场')
+        else:
+            # eastmoney/akshare 数据: 用主力净流入
+            if top_sector.get('net_inflow_yi', 0) > 20:
+                flow_signals.append(f'{top_sector["name"]}板块资金大幅净流入{top_sector["net_inflow_yi"]:.1f}亿')
+            bottom_outflow = min(sector_flow, key=lambda x: x.get('net_inflow', 0))
+            if bottom_outflow.get('net_inflow_yi', 0) < -20:
+                flow_signals.append(f'{bottom_outflow["name"]}板块资金大幅净流出{abs(bottom_outflow["net_inflow_yi"]):.1f}亿')
 
     signals['fund_flow_signals'] = flow_signals if flow_signals else ['无明显极端资金流向信号']
 
@@ -1081,25 +1094,44 @@ def identify_anomalies(index_data, breadth, northbound, sector_flow, signals):
             'severity': '高',
         })
 
-    # 4. 板块资金大幅调仓
+    # 4. 板块资金大幅调仓 / 板块轮动
     if sector_flow and len(sector_flow) >= 2:
         top = sector_flow[0]
         bottom = sector_flow[-1]
-        top_inflow = top.get('net_inflow_yi', 0)
-        bottom_outflow = bottom.get('net_inflow_yi', 0)
+        is_sina = top.get('source') == 'sina'
 
-        if top_inflow > 10:
-            anomalies.append({
-                'type': 'sector_rotation',
-                'description': f'{top["name"]}板块资金大幅净流入{top_inflow:.1f}亿，领涨资金方向',
-                'severity': '中',
-            })
-        if bottom_outflow < -10:
-            anomalies.append({
-                'type': 'sector_rotation',
-                'description': f'{bottom["name"]}板块资金大幅净流出{abs(bottom_outflow):.1f}亿，注意调仓风险',
-                'severity': '中',
-            })
+        if is_sina:
+            # 新浪数据: 用涨跌幅检测极端板块
+            top_gain = max(sector_flow, key=lambda x: x.get('change_pct', 0))
+            top_loss = min(sector_flow, key=lambda x: x.get('change_pct', 0))
+            if top_gain.get('change_pct', 0) > 2.0:
+                anomalies.append({
+                    'type': 'sector_rotation',
+                    'description': f'{top_gain["name"]}板块均涨{top_gain["change_pct"]:.1f}%，成交{top_gain.get("turnover_yi", 0):.0f}亿，领涨资金方向',
+                    'severity': '中',
+                })
+            if top_loss.get('change_pct', 0) < -2.0:
+                anomalies.append({
+                    'type': 'sector_rotation',
+                    'description': f'{top_loss["name"]}板块均跌{abs(top_loss["change_pct"]):.1f}%，注意调仓风险',
+                    'severity': '中',
+                })
+        else:
+            # eastmoney/akshare 数据: 用主力净流入
+            top_inflow = top.get('net_inflow_yi', 0)
+            bottom_outflow = bottom.get('net_inflow_yi', 0)
+            if top_inflow > 10:
+                anomalies.append({
+                    'type': 'sector_rotation',
+                    'description': f'{top["name"]}板块资金大幅净流入{top_inflow:.1f}亿，领涨资金方向',
+                    'severity': '中',
+                })
+            if bottom_outflow < -10:
+                anomalies.append({
+                    'type': 'sector_rotation',
+                    'description': f'{bottom["name"]}板块资金大幅净流出{abs(bottom_outflow):.1f}亿，注意调仓风险',
+                    'severity': '中',
+                })
 
     # 5. 波动率极端
     if signals.get('volatility_percentile'):
