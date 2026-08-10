@@ -53,6 +53,32 @@ EM_HEADERS = {
     'Referer': 'https://www.eastmoney.com/',
 }
 
+# 同花顺 (10jqka) 请求头
+THS_HEADERS = {
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Connection': 'keep-alive',
+    'Host': 'dq.10jqka.com.cn',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+}
+
+THS_API_HEADERS = {
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'zh-CN,zh;q=0.9',
+    'Connection': 'keep-alive',
+    'Content-Type': 'application/json',
+    'Host': 'dq.10jqka.com.cn',
+    'Origin': 'https://dq.10jqka.com.cn',
+    'Referer': 'https://dq.10jqka.com.cn/',
+    'Sec-Fetch-Mode': 'cors',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+}
+
 
 # ═══════════════════════════════════════════════════
 # 1. 核心指数收盘数据
@@ -203,11 +229,21 @@ def fetch_market_breadth():
     try:
         df = call_with_timeout(ak.stock_market_activity_legu, timeout=15)
         if df is not None and len(df) > 0:
-            return _parse_market_breadth_akshare(df)
+            result = _parse_market_breadth_akshare(df)
+            if result:
+                return result
     except Exception as e:
         print(f'  [MarketReview] akshare市场广度失败: {e}')
 
-    # 方法2: 东方财富 API (直连, 带超时)
+    # 方法2: 同花顺 API (直连, 可能从US IP访问)
+    try:
+        result = _fetch_breadth_ths()
+        if result:
+            return result
+    except Exception as e:
+        print(f'  [MarketReview] 同花顺市场广度失败: {e}')
+
+    # 方法3: 东方财富 API (直连, 带超时)
     try:
         result = _fetch_breadth_eastmoney()
         if result:
@@ -262,6 +298,45 @@ def _parse_market_breadth_akshare(df):
         print(f'[MarketReview] 市场广度: 涨{advance} 跌{decline} 涨停{result.get("limit_up_count", 0)} 跌停{result.get("limit_down_count", 0)}')
 
     return result
+
+
+def _fetch_breadth_ths():
+    """同花顺 API 获取市场广度 (涨跌家数、涨跌停)"""
+    try:
+        url = 'https://dq.10jqka.com.cn/fuyao/up_distribution/distribution/v2/realtime'
+        resp = requests.get(url, headers=THS_HEADERS, timeout=(3, 10))
+        if resp.status_code == 200:
+            data = resp.json()
+            d = data.get('data') or {}
+            up = int(d.get('up', 0) or 0)
+            down = int(d.get('down', 0) or 0)
+            flat = int(d.get('flat', 0) or 0)
+            limit_up = int(d.get('limit_up', 0) or 0)
+            limit_down = int(d.get('limit_down', 0) or 0)
+            suspend = int(d.get('suspend', 0) or 0)
+
+            if up > 0 or down > 0 or limit_up > 0 or limit_down > 0:
+                total = up + down + flat
+                result = {
+                    'advance_count': up,
+                    'decline_count': down,
+                    'flat_count': flat,
+                    'limit_up_count': limit_up,
+                    'limit_down_count': limit_down,
+                    'suspend_count': suspend,
+                    'update_time': d.get('last_update_time', ''),
+                    'advance_ratio': round(up / total, 4) if total > 0 else 0,
+                    'source': 'ths',
+                }
+                print(f'[MarketReview] 市场广度(同花顺): 涨{up} 跌{down} 平{flat} 涨停{limit_up} 跌停{limit_down} 停牌{suspend}')
+                return result
+            else:
+                print(f'  [MarketReview] 同花顺 breadth: 响应数据为0 (data={d})')
+        else:
+            print(f'  [MarketReview] 同花顺 breadth: HTTP {resp.status_code}')
+    except Exception as e:
+        print(f'  [MarketReview] 同花顺 breadth: {e}')
+    return None
 
 
 def _fetch_breadth_eastmoney():
@@ -672,12 +747,20 @@ def fetch_sector_flow():
             if results:
                 # 排序: 净流入降序
                 results.sort(key=lambda x: x.get('net_inflow', 0), reverse=True)
-                print(f'[MarketReview] 行业资金流: {len(results)}个板块')
+                print(f'[MarketReview] 行业资金流(akshare): {len(results)}个板块')
                 return results
     except Exception as e:
         print(f'  [MarketReview] akshare板块资金流失败: {e}')
 
-    # 方法2: 东方财富 API
+    # 方法2: 同花顺 API (直连, 可能从US IP访问)
+    try:
+        result = _fetch_sector_flow_ths()
+        if result:
+            return result
+    except Exception as e:
+        print(f'  [MarketReview] 同花顺板块资金流失败: {e}')
+
+    # 方法3: 东方财富 API
     try:
         result = _fetch_sector_flow_eastmoney()
         if result:
@@ -687,6 +770,81 @@ def fetch_sector_flow():
 
     print('[MarketReview] 行业板块资金流数据不可用')
     return []
+
+
+def _fetch_sector_flow_ths():
+    """同花顺 API 获取行业板块资金流 (含主力净流入)"""
+    try:
+        today_str = datetime.now().strftime('%Y%m%d')
+        url = 'https://dq.10jqka.com.cn/intervale_calculation/block_info/v1/get_block_list'
+        payload = {
+            'sort_info': {
+                'sort_field': '0',
+                'sort_type': 'desc',
+            },
+            'history_info': {
+                'history_type': '0',
+                'end_date': f'{today_str}150000',
+                'start_date': f'{today_str}093000',
+            },
+            'type': 0,
+            'page_info': {
+                'page_size': 100,
+                'page': 1,
+            },
+        }
+        resp = requests.post(url, json=payload, headers=THS_API_HEADERS, timeout=(3, 10))
+        if resp.status_code == 200:
+            data = resp.json()
+            block_data = data.get('data') or {}
+            sectors = block_data.get('list', [])
+            total = block_data.get('total', 0)
+
+            # 如果有更多页, 获取所有板块
+            if total > 100:
+                all_sectors = list(sectors)
+                import math
+                total_pages = math.ceil(total / 100)
+                for page in range(2, total_pages + 1):
+                    try:
+                        payload['page_info']['page'] = page
+                        resp2 = requests.post(url, json=payload, headers=THS_API_HEADERS, timeout=(3, 8))
+                        if resp2.status_code == 200:
+                            extra = (resp2.json().get('data') or {}).get('list', [])
+                            all_sectors.extend(extra)
+                    except Exception:
+                        pass
+                sectors = all_sectors
+
+            if sectors:
+                results = []
+                for item in sectors:
+                    name = item.get('block_name', '')
+                    if not name:
+                        continue
+                    net_inflow = float(item.get('net_flow_of_main_force', 0) or 0)
+                    change_pct = float(item.get('margin_of_increase', 0) or 0)
+                    turnover = float(item.get('turnover', 0) or 0)
+                    results.append({
+                        'name': name,
+                        'net_inflow': net_inflow,
+                        'net_inflow_yi': round(net_inflow / 1e8, 2),
+                        'change_pct': round(change_pct, 2),
+                        'turnover': turnover,
+                        'turnover_yi': round(turnover / 1e8, 2),
+                        'source': 'ths',
+                    })
+
+                results.sort(key=lambda x: x['net_inflow'], reverse=True)
+                print(f'[MarketReview] 板块资金流(同花顺): {len(results)}个板块')
+                return results
+            else:
+                print(f'  [MarketReview] 同花顺 sector: 响应无list数据 (keys={list(block_data.keys()) if isinstance(block_data, dict) else type(block_data).__name__})')
+        else:
+            print(f'  [MarketReview] 同花顺 sector: HTTP {resp.status_code}')
+    except Exception as e:
+        print(f'  [MarketReview] 同花顺 sector flow: {e}')
+    return None
 
 
 def _fetch_sector_flow_eastmoney():
