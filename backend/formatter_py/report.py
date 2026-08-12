@@ -369,21 +369,28 @@ def generate_review_report(review_data):
     capital_parts = []
 
     # 北向资金
-    if northbound and northbound.get('net_buy_yi') is not None:
-        nb = northbound['net_buy_yi']
-        nb_color = '#dc2626' if nb > 0 else '#16a34a'
-        nb_label = '净买入' if nb > 0 else '净卖出'
-        extreme_badge = ''
-        if northbound.get('is_extreme'):
-            extreme_badge = '<span style="padding:2px 6px;border-radius:4px;font-size:10px;color:#fff;background:#f59e0b;margin-left:6px">极端值</span>'
-        sh_part = f'沪股通 {northbound.get("sh_connect_yi", 0):.1f}亿' if northbound.get('sh_connect_yi') is not None else ''
-        sz_part = f'深股通 {northbound.get("sz_connect_yi", 0):.1f}亿' if northbound.get('sz_connect_yi') is not None else ''
-        detail = f' ({sh_part} {sz_part})' if sh_part or sz_part else ''
-        capital_parts.append(f'''
+    if northbound and northbound.get('amount_yi', 0) > 0:
+        nb_metric = northbound.get('metric', 'net_buy')
+        if nb_metric == 'deal_amount':
+            # 净买额因港交所披露调整暂停披露, 展示成交总额
+            amt = northbound.get('amount_yi', 0)
+            capital_parts.append(f'''
+        <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9">
+            <span style="font-size:13px;color:#475569;width:80px">北向成交</span>
+            <span style="font-size:14px;font-weight:600;color:#1e293b">成交额 {amt:.0f}亿</span>
+            <span style="font-size:11px;color:#94a3b8;margin-left:8px">净买额因港交所披露调整暂停披露</span>
+        </div>''')
+        else:
+            nb = northbound.get('net_buy_yi', 0)
+            nb_color = '#dc2626' if nb > 0 else '#16a34a'
+            nb_label = '净买入' if nb > 0 else '净卖出'
+            extreme_badge = ''
+            if northbound.get('is_extreme'):
+                extreme_badge = '<span style="padding:2px 6px;border-radius:4px;font-size:10px;color:#fff;background:#f59e0b;margin-left:6px">极端值</span>'
+            capital_parts.append(f'''
         <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9">
             <span style="font-size:13px;color:#475569;width:80px">北向资金</span>
             <span style="font-size:14px;font-weight:600;color:{nb_color}">{nb_label} {abs(nb):.2f}亿</span>{extreme_badge}
-            <span style="font-size:11px;color:#94a3b8;margin-left:8px">{detail}</span>
         </div>''')
 
     # 两融
