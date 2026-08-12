@@ -1,6 +1,6 @@
 {
-  "date": "2026-08-11",
-  "updatedAt": "2026-08-11T22:28:16.298265",
+  "date": "2026-08-12",
+  "updatedAt": "2026-08-12T00:09:21.461549",
   "markets": {
     "us": [
       {
@@ -472,43 +472,43 @@
       {
         "symbol": "BTC",
         "name": "Bitcoin",
-        "price": 63668.0,
-        "change_pct": -0.7,
-        "volume": 20199829209.0,
+        "price": 63513.0,
+        "change_pct": -0.6,
+        "volume": 20140191937.0,
         "high": 64414.0,
         "low": 63200.0,
-        "open": 63929.98,
-        "prev_close": 63929.98
+        "open": 63946.31,
+        "prev_close": 63946.31
       },
       {
         "symbol": "ETH",
         "name": "Ethereum",
-        "price": 1881.7,
-        "change_pct": 0.3,
-        "volume": 7040611386.0,
+        "price": 1880.11,
+        "change_pct": 0.4,
+        "volume": 7003992829.0,
         "high": 1894.37,
         "low": 1854.88,
-        "open": 1872.39,
-        "prev_close": 1872.39
+        "open": 1873.42,
+        "prev_close": 1873.42
       },
       {
         "symbol": "BNB",
         "name": "BNB",
-        "price": 612.02,
-        "change_pct": 2.0,
-        "volume": 716346232.0,
-        "high": 613.15,
-        "low": 597.88,
-        "open": 598.54,
-        "prev_close": 598.54
+        "price": 616.27,
+        "change_pct": 2.9,
+        "volume": 767413791.0,
+        "high": 617.01,
+        "low": 598.07,
+        "open": 599.5,
+        "prev_close": 599.5
       },
       {
         "symbol": "XRP",
         "name": "XRP",
         "price": 1.02,
-        "change_pct": 0.5,
-        "volume": 1332412747.0,
-        "high": 1.024,
+        "change_pct": 1.2,
+        "volume": 1320210720.0,
+        "high": 1.025,
         "low": 0.992922,
         "open": 1.01,
         "prev_close": 1.01
@@ -516,188 +516,188 @@
       {
         "symbol": "SOL",
         "name": "Solana",
-        "price": 76.34,
-        "change_pct": 0.0,
-        "volume": 1360469032.0,
-        "high": 76.51,
+        "price": 76.2,
+        "change_pct": 0.2,
+        "volume": 1374708145.0,
+        "high": 76.58,
         "low": 74.66,
-        "open": 76.06,
-        "prev_close": 76.06
+        "open": 75.71,
+        "prev_close": 75.71
       },
       {
         "symbol": "TRX",
         "name": "TRON",
-        "price": 0.33484,
+        "price": 0.335074,
         "change_pct": 1.3,
-        "volume": 435417945.0,
+        "volume": 438609038.0,
         "high": 0.337298,
-        "low": 0.33032,
-        "open": 0.330376,
-        "prev_close": 0.330376
+        "low": 0.330664,
+        "open": 0.330707,
+        "prev_close": 0.330707
       },
       {
         "symbol": "DOGE",
         "name": "Dogecoin",
-        "price": 0.0728,
-        "change_pct": 3.7,
-        "volume": 445654035.0,
-        "high": 0.072737,
-        "low": 0.069592,
-        "open": 0.069795,
-        "prev_close": 0.069795
+        "price": 0.071862,
+        "change_pct": 3.0,
+        "volume": 461038098.0,
+        "high": 0.07289,
+        "low": 0.069761,
+        "open": 0.069809,
+        "prev_close": 0.069809
       },
       {
         "symbol": "ADA",
         "name": "Cardano",
-        "price": 0.186708,
-        "change_pct": -3.4,
-        "volume": 271394090.0,
-        "high": 0.192084,
+        "price": 0.18683,
+        "change_pct": -2.5,
+        "volume": 267290856.0,
+        "high": 0.19134,
         "low": 0.183709,
-        "open": 0.19187,
-        "prev_close": 0.19187
+        "open": 0.190286,
+        "prev_close": 0.190286
       },
       {
         "symbol": "LINK",
         "name": "Chainlink",
-        "price": 8.75,
-        "change_pct": 5.8,
-        "volume": 377763051.0,
+        "price": 8.76,
+        "change_pct": 5.7,
+        "volume": 383760250.0,
         "high": 8.78,
-        "low": 8.28,
-        "open": 8.29,
-        "prev_close": 8.29
+        "low": 8.32,
+        "open": 8.33,
+        "prev_close": 8.33
       },
       {
         "symbol": "XLM",
         "name": "Stellar",
-        "price": 0.162029,
-        "change_pct": -0.1,
-        "volume": 84338574.0,
+        "price": 0.161903,
+        "change_pct": 0.5,
+        "volume": 83889364.0,
         "high": 0.162621,
         "low": 0.159196,
-        "open": 0.161378,
-        "prev_close": 0.161378
+        "open": 0.161739,
+        "prev_close": 0.161739
       },
       {
         "symbol": "LTC",
         "name": "Litecoin",
-        "price": 45.45,
-        "change_pct": 1.0,
-        "volume": 130443899.0,
+        "price": 45.44,
+        "change_pct": 0.7,
+        "volume": 128881391.0,
         "high": 45.52,
         "low": 44.93,
-        "open": 45.15,
-        "prev_close": 45.15
+        "open": 45.11,
+        "prev_close": 45.11
       },
       {
         "symbol": "AVAX",
         "name": "Avalanche",
         "price": 6.31,
-        "change_pct": -2.2,
-        "volume": 160398780.0,
+        "change_pct": -1.5,
+        "volume": 163055804.0,
         "high": 6.55,
         "low": 6.17,
-        "open": 6.42,
-        "prev_close": 6.42
+        "open": 6.47,
+        "prev_close": 6.47
       },
       {
         "symbol": "SHIB",
         "name": "Shiba Inu",
-        "price": 5e-06,
-        "change_pct": -2.3,
-        "volume": 60933239.0,
+        "price": 4e-06,
+        "change_pct": -0.8,
+        "volume": 58861728.0,
         "high": 4.53e-06,
         "low": 4.42e-06,
-        "open": 5e-06,
-        "prev_close": 5e-06
+        "open": 4e-06,
+        "prev_close": 4e-06
       },
       {
         "symbol": "UNI",
         "name": "Uniswap",
-        "price": 3.76,
-        "change_pct": -5.0,
-        "volume": 173403367.0,
+        "price": 3.75,
+        "change_pct": -4.9,
+        "volume": 175720001.0,
         "high": 4.02,
         "low": 3.69,
-        "open": 3.93,
-        "prev_close": 3.93
+        "open": 3.95,
+        "prev_close": 3.95
       },
       {
         "symbol": "NEAR",
         "name": "NEAR Protocol",
-        "price": 1.59,
-        "change_pct": -0.8,
-        "volume": 136920144.0,
+        "price": 1.61,
+        "change_pct": 1.3,
+        "volume": 148202336.0,
         "high": 1.62,
         "low": 1.54,
-        "open": 1.59,
-        "prev_close": 1.59
+        "open": 1.6,
+        "prev_close": 1.6
       },
       {
         "symbol": "DOT",
         "name": "Polkadot",
-        "price": 0.787715,
-        "change_pct": -2.1,
-        "volume": 63426185.0,
+        "price": 0.789764,
+        "change_pct": -2.0,
+        "volume": 63803478.0,
         "high": 0.811449,
         "low": 0.778836,
-        "open": 0.804703,
-        "prev_close": 0.804703
+        "open": 0.802698,
+        "prev_close": 0.802698
       },
       {
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "price": 6.38,
-        "change_pct": -0.1,
-        "volume": 30322754.0,
+        "price": 6.39,
+        "change_pct": -0.2,
+        "volume": 30240638.0,
         "high": 6.44,
         "low": 6.28,
-        "open": 6.37,
-        "prev_close": 6.37
+        "open": 6.39,
+        "prev_close": 6.39
       },
       {
         "symbol": "FIL",
         "name": "Filecoin",
-        "price": 0.709708,
-        "change_pct": 1.0,
-        "volume": 33349652.0,
+        "price": 0.71033,
+        "change_pct": 1.2,
+        "volume": 33297841.0,
         "high": 0.716364,
         "low": 0.689902,
-        "open": 0.701581,
-        "prev_close": 0.701581
+        "open": 0.701634,
+        "prev_close": 0.701634
       },
       {
         "symbol": "APT",
         "name": "Aptos",
-        "price": 0.580539,
-        "change_pct": -1.2,
-        "volume": 28441953.0,
+        "price": 0.577457,
+        "change_pct": -1.3,
+        "volume": 28521642.0,
         "high": 0.590001,
         "low": 0.570693,
-        "open": 0.587054,
-        "prev_close": 0.587054
+        "open": 0.587903,
+        "prev_close": 0.587903
       }
     ],
     "commodity": [
       {
         "symbol": "GOLD",
         "name": "黄金期货",
-        "price": 4432.5,
-        "change_pct": 0.06,
-        "volume": 522,
-        "high": 4433.6,
-        "low": 4427.8,
+        "price": 4430.3,
+        "change_pct": 0.01,
+        "volume": 6735,
+        "high": 4437.8,
+        "low": 4421.4,
         "open": 4430.0,
         "prev_close": 4430.0
       },
       {
         "symbol": "SILVER",
         "name": "白银期货",
-        "price": 65.0,
-        "change_pct": 0.19,
-        "volume": 132,
-        "high": 65.01,
+        "price": 64.94,
+        "change_pct": 0.1,
+        "volume": 448,
+        "high": 65.07,
         "low": 64.81,
         "open": 64.88,
         "prev_close": 64.88
@@ -705,10 +705,10 @@
       {
         "symbol": "CRUDE_OIL",
         "name": "原油期货(WTI)",
-        "price": 83.52,
-        "change_pct": 0.04,
-        "volume": 819,
-        "high": 83.57,
+        "price": 83.45,
+        "change_pct": -0.05,
+        "volume": 1968,
+        "high": 83.6,
         "low": 83.35,
         "open": 83.49,
         "prev_close": 83.49
@@ -716,11 +716,11 @@
       {
         "symbol": "BRENT",
         "name": "原油期货(布伦特)",
-        "price": 89.26,
-        "change_pct": -0.01,
-        "volume": 62,
-        "high": 89.27,
-        "low": 89.16,
+        "price": 89.12,
+        "change_pct": -0.17,
+        "volume": 113,
+        "high": 89.3,
+        "low": 89.11,
         "open": 89.27,
         "prev_close": 89.27
       },
@@ -728,8 +728,8 @@
         "symbol": "NATURAL_GAS",
         "name": "天然气期货",
         "price": 2.75,
-        "change_pct": 0.11,
-        "volume": 106,
+        "change_pct": -0.04,
+        "volume": 484,
         "high": 2.75,
         "low": 2.75,
         "open": 2.75,
@@ -738,10 +738,10 @@
       {
         "symbol": "COPPER",
         "name": "铜期货",
-        "price": 6.63,
-        "change_pct": 0.02,
-        "volume": 92,
-        "high": 6.63,
+        "price": 6.64,
+        "change_pct": 0.1,
+        "volume": 444,
+        "high": 6.64,
         "low": 6.63,
         "open": 6.63,
         "prev_close": 6.63
@@ -794,10 +794,10 @@
   },
   "news": [
     {
-      "title": "Stock Market Today: Dow Skids, Oil Pops As Iran Says This On Hormuz; SpaceX Shares Take A Dive (Live Coverage) - Investor's Business Daily",
-      "title_zh": "今日股市：道琼斯指数下跌，石油价格暴涨，因为伊朗在霍尔木兹海峡上发表了这样的言论； SpaceX 股价暴跌（现场报道） - 投资者商业日报",
-      "summary": "Stock Market Today: Dow Skids, Oil Pops As Iran Says This On Hormuz; SpaceX Shares Take A Dive (Live Coverage) Investor's Business DailyS&P 500 posts back-to-back losses, weighed down by tech sell-off and Iran uncertainty CNBCU.S.. stocks edge further from their records as oil prices keep swinging PBSStock market today: Dow, S&P 500, Nasdaq slip amid US-Iran impasse, Alphabet stock sinks Yahoo FinanceOil prices reverse gains in Strait of Hormuz standoff as Wall Street inches up ahead of inflation numbers Fortune",
-      "summary_zh": "今日股市：道琼斯指数下跌，石油价格暴涨，因为伊朗在霍尔木兹海峡上发表了这样的言论； SpaceX 股价暴跌（现场报道）投资者商业日报标准普尔 500 指数连续下跌，受到科技股抛售和伊朗不确定性的拖累 CNBCU.. 由于油价持续波动，美国股市进一步偏离历史记录 PBS 今天股票市场：道琼斯指数、标准普尔 500 指数、纳斯达克指数在美伊僵局中下滑，Alphabet 股票下跌 雅虎财经 石油价格逆转霍尔木兹海峡对峙中的涨幅股市涨幅领先于通胀数据 - 财富",
+      "title": "Stock futures are little changed ahead of Wednesday's big inflation report: Live updates - CNBC",
+      "title_zh": "在周三发布大型通胀报告之前，股票期货几乎没有变化：实时更新 - CNBC",
+      "summary": "Stock futures are little changed ahead of Wednesday's big inflation report: Live updates CNBCFutures: Three AI Plays Lead Earnings Movers; CPI Report Looms Investor's Business DailyThe S&P 500 rally stalls as US-Iran deal gets delayed and the focus shifts to the US CPI report investingLiveInvestors keep their powder dry ahead of key inflation data MarketWatch[Good Morning Market] U.S.. Weakens Ahead of July CPI… Korea Expected to \"Open Weak, Close Strong\" 아시아경제",
+      "summary_zh": "在周三发布大型通胀报告之前，股票期货几乎没有变化：CNBCFutures 实时更新：三大人工智能公司引领盈利推动者； CPI 报告迫在眉睫投资者商业日报标普 500 涨势因美伊协议推迟而焦点转向美国 CPI 报告投资直播投资者在关键通胀数据公布前做好准备 MarketWatch[早安市场]美国在 7 月 CPI 之前走软…韩国预计“开弱收强” 아시아경제",
       "analysis": "伊朗局势影响中东地缘稳定和油价，能源和军工板块关注",
       "category": "geopolitics",
       "category_label": "地缘政治",
@@ -805,16 +805,67 @@
       "category_color": "#b91c1c",
       "category_bg": "#fee2e2",
       "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOT3FnNThkeUNTbExQbFBtcExxUGFGZm10SjBMb0pkS01WNGtSNHJGdnBnMUlnbUpGMUxzOHdSUktkYzF1TnhRVmFPajNhcElramxRWkVLZ2ZDMDA4TlhINkpNWmxMcm05aElxSDRDeV9DS3pzcjc2Zm1FNWNZNkVvcEJ3MF9UZkVtUEZ0R3FSMWJaOWNhN21NTjdXVGpZYmNqR0tRSGw4SXZxenFtWVJzVUJwNVp6YTdEVmc?oc=5",
-      "pubDate": "Tue, 11 Aug 2026 20:32:00 GMT",
-      "time": "08/12 04:32",
+      "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9CSHNyNUIweUU5SmU5MmxjdEg3SXpaNGRpNE9EakxRVmVVRTBfLVBZb2txZ1NKa1pySEtGWUVUemVRaGRKdWdrNUpTWXRFM3ZOb2V6NUNIcXN5U1ppYzU4OUhmUDVydXcyclJLcndQZVJ5aVNCbW5R0gF8QVVfeXFMTmhFcWg1MDU1aEFqcHFBZUlUdnJqT1pHVy1mbWl1MU5TMGlfSFhOMmxDMmJ2QXlTZTF4bGtJSFdzMVR4VURwUDdLUmtBbHJEQ2Y2OFpKNlpKZkx6cTN6LW5PeDR2MjZrWHctVWZaSy1SdE1ndE5KaWdzS2hzXw?oc=5",
+      "pubDate": "Tue, 11 Aug 2026 22:02:11 GMT",
+      "time": "08/12 06:02",
+      "score": 20
+    },
+    {
+      "title": "Lumentum Q4 results feature 109% revenue surge with more growth ahead on AI demand - Seeking Alpha",
+      "title_zh": "Lumentum 第​​四季度业绩显示收入激增 109%，人工智能需求将进一步增长 - 美股指南 - 美股开户 - 港股开户",
+      "summary": "Lumentum Q4 results feature 109% revenue surge with more growth ahead on AI demand Seeking AlphaLumentum beats estimates on AI demand, guides above consensus finance.yahoo.comLumentum Earnings, Revenue Top Estimates As New Products Ramp Investor's Business DailyLumentum Earnings Clear Estimates as Sales More Than Double Barron'sLumentum: Fiscal Q4 Earnings Snapshot 10TV",
+      "summary_zh": "Lumentum 第​​四季度业绩显示，收入激增 109%，人工智能需求将进一步增长寻求 AlphaLumentum 超过人工智能需求预期，指引高于共识 Finance.yahoo.com 随着新产品增加，Lumentum 盈利、收入最高预期 投资者商业日报 Lumentum 盈利明确预期，销售额超过《巴伦周刊》的两倍 Lumentum：第四季度财报盈利快照 10TV",
+      "analysis": "暴涨行情显示资金积极涌入，关注领涨标的和板块轮动",
+      "category": "market_performance",
+      "category_label": "市场表现",
+      "category_icon": "📊",
+      "category_color": "#15803d",
+      "category_bg": "#dcfce7",
+      "source": "Google News Business",
+      "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQRF95NmpjeXhfMTc3NjFieDRUTGZGYjM1ZDdFWDdfMk55YzFoQWE2R2p5WnRwU01OTGJUNWlQekxWcDZZYUYyMXl6Ym5YUS1mU3BuQTJxMGdYeTFuckNTZDk1N0ZjbVBzZU5oZEJKU21RQXB6Nk9Zem1NUXZkbG15MkgtVlYtR2ZNd1VkMzJwRi05ZjZlMWhOUjZ4Q2tveFdJTjhPMWxaMkYtN0hFaGRaZGt0V085Qy1uSHRz?oc=5",
+      "pubDate": "Tue, 11 Aug 2026 20:20:03 GMT",
+      "time": "08/12 04:20",
       "score": 13
+    },
+    {
+      "title": "S&P 500 posts back-to-back losses, weighed down by tech sell-off and Iran uncertainty - CNBC",
+      "title_zh": "受科技股抛售和伊朗不确定性拖累，标普 500 指数连续下跌 - CNBC",
+      "summary": "S&P 500 posts back-to-back losses, weighed down by tech sell-off and Iran uncertainty CNBCStocks edge further from their records as oil prices keep swinging Los Angeles TimesWall Street ends down as US-Iran peace optimism fades reuters.comStock market today: Dow, S&P 500, Nasdaq slip amid US-Iran impasse, Alphabet stock sinks finance.yahoo.comStock Market News, Aug.. 11, 2026: Dow ends over 180 points lower, S&P 500 and Nasdaq slide as hopes for a U.S.-Iran deal fade; gold settles at 2-month high MarketWatch",
+      "summary_zh": "受科技股抛售和伊朗不确定性拖累，标准普尔 500 指数连续下跌2026 年：道琼斯指数收盘下跌 180 点以上，标准普尔 500 指数和纳斯达克指数下跌，因为美国与伊朗达成协议的希望消退；黄金收于两个月高位 MarketWatch",
+      "analysis": "伊朗局势影响中东地缘稳定和油价，能源和军工板块关注",
+      "category": "geopolitics",
+      "category_label": "地缘政治",
+      "category_icon": "⚔️",
+      "category_color": "#b91c1c",
+      "category_bg": "#fee2e2",
+      "source": "Google News Business",
+      "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE51VmlwRjZlNm9iOXNSRXMtN2ZFN3ozMFYyd3RmX0lBa0NvbHVscFNFWURwMzNOejVPMGlRejgtamhCNzF2WF9UTTBxdGhMV2tkZDc2bGtvRWVNSDRjOUtzNnFMS0laRzlLMTI1eGpId1ViU1JNXzRB0gF8QVVfeXFMTlhUUHFmWm9NbFBpS2M5SW14N0FfUzBac3FBYldQWS12NEFra3BpZ1p3dVRYaWZmQ2lndW1Fdzk4dWlJaC1BYmpfN3dnUThEUTJUMVgwVjZicmZGTThZcGVJZWpsemp5bEs5SUlGUHZHSVI0Ylh0ZlkzcFE1bQ?oc=5",
+      "pubDate": "Tue, 11 Aug 2026 22:02:04 GMT",
+      "time": "08/12 06:02",
+      "score": 12
+    },
+    {
+      "title": "SpaceX Stock Falls Back Below IPO Price, Snaps Three-Day Streak - Investor's Business Daily",
+      "title_zh": "SpaceX 股价回落至 IPO 价格以下，结束连续三天上涨 - 投资者商业日报",
+      "summary": "SpaceX Stock Falls Back Below IPO Price, Snaps Three-Day Streak Investor's Business DailySpaceX Stock Keeps Rising After Lockup Rally Ahead of the Next Share Unlock Barron'sAfter Its First Public Earnings Report, Here's the 1 Glaring Reason Why I Wouldn't Touch SpaceX's Stock Right Now finance.yahoo.comSelling the Dream of SpaceX Was the Easy Part.. Now Elon Musk Has to Hang On.. WSJSpaceX investors face potentially irresistible opportunity to cash out reuters.com",
+      "summary_zh": "SpaceX 股价回落至 IPO 价格以下，连续三天连续上涨 投资者商业日报 SpaceX 股价在下一次股票解锁之前的禁售反弹后持续上涨 巴伦周刊在其第一份公开收益报告发布后，这是我现在不接触 SpaceX 股票的第一个明显原因 财经.yahoo.com 出售 SpaceX 的梦想是容易的部分..现在埃隆·马斯克必须坚持下去..WSJSpaceX 投资者面临着潜在的风险不可抗拒的套现机会 reuters.com",
+      "analysis": "市场大涨显示风险偏好回暖，关注领涨板块的持续性和资金流向",
+      "category": "market_performance",
+      "category_label": "市场表现",
+      "category_icon": "📊",
+      "category_color": "#15803d",
+      "category_bg": "#dcfce7",
+      "source": "Google News Business",
+      "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOSW5UQ0xnVjBTalNqMDljUlRHOTU1eWZIN09zS1NnR2Uxdlk0UDZRMWtKSWF1c19kYzBwYXhpdWlCX2RSS1VZQzV3T0FZQjhIczQtUzB3VVBUYWVyMElTdjRaODZRemFuaG9VVWladWp5M3J2a3hWMks1T2tRMWxIM00tWUltRzdVZVRQeldVZWdVNzBjWFZLR0I1WWtVVDZkVVJB?oc=5",
+      "pubDate": "Tue, 11 Aug 2026 20:05:00 GMT",
+      "time": "08/12 04:05",
+      "score": 12
     },
     {
       "title": "Fed’s Hammack says multiple rate hikes may be needed to tame inflation - Fox Business",
       "title_zh": "福克斯商业频道：美联储哈马克表示可能需要多次加息来抑制通胀",
-      "summary": "Fed’s Hammack says multiple rate hikes may be needed to tame inflation Fox BusinessCleveland Fed's Beth Hammack says multiple rate hikes may be needed qz.com‘My primary concern is inflation’: Fed’s Schmid pushes rates higher as mortgages hit 6.69%.. Make high rates work for you Yahoo FinanceInflation Problem Isn’t Only About Energy, Fed’s Schmid Says WSJFed’s Hammack Says ‘Some Number’ of Rate Hikes May Be Needed Bloomberg.com",
-      "summary_zh": "美联储哈马克表示可能需要多次加息来抑制通货膨胀福克斯商业克利夫兰联储贝丝哈马克表示可能需要多次加息qz.com“我主要担心的是通货膨胀”：随着抵押贷款达到6.69％，美联储施密德推高利率。雅虎财经让高利率为您服务雅虎财经通胀问题不仅仅与能源有关，美联储施密德表示，华尔街日报美联储的哈马克表示“一定数量”的利率可能需要加息 Bloomberg.com",
+      "summary": "Fed’s Hammack says multiple rate hikes may be needed to tame inflation Fox BusinessCleveland Fed's Beth Hammack says multiple rate hikes may be needed qz.com‘My primary concern is inflation’: Fed’s Schmid pushes rates higher as mortgages hit 6.69%.. Make high rates work for you finance.yahoo.comFed's Schmid calls for tighter monetary policy to tamp down on 'too high' inflation reuters.comFed’s Hammack Says ‘Some Number’ of Rate Hikes May Be Needed Bloomberg.com",
+      "summary_zh": "美联储哈马克表示可能需要多次加息来抑制通胀 福克斯商业频道克利夫兰联储贝丝·哈马克表示可能需要多次加息 qz.com“我主要担心的是通胀”：随着抵押贷款达到6.69%，美联储施密德推高利率。让高利率为你服务finance.yahoo.com美联储施密德呼吁收紧货币政策，以抑制“过高”的通胀reuters.com 美联储哈马克称可能需要“一定程度”的加息 Bloomberg.com",
       "analysis": "美联储收紧货币政策，加息预期升温，可能压制高估值成长股；银行股或受益于息差扩大",
       "category": "fed_policy",
       "category_label": "美联储政策",
@@ -828,38 +879,38 @@
       "score": 12
     },
     {
-      "title": "Dollar Slightly Higher as Crude Oil Rallies and Stocks Fall",
-      "title_zh": "随着原油上涨和股市下跌，美元小幅走高",
-      "summary": "The dollar index (DXY00 ) rose by +0.06% on Tuesday.. The dollar found support on Tuesday after WTI crude oil prices rose more than +1% to a 1-week high, which raises inflation expectations and may persuade the Fed to tighten monetary policy, a supportive factor for the dollar.. Also, weakness...",
-      "summary_zh": "美元指数(DXY00)周二上涨+0.06%。WTI原油价格上涨超过+1%至一周高位，这提升了通胀预期，并可能说服美联储收紧货币政策，这对美元来说是一个支撑因素。美元周二获得支撑。此外，疲软...",
-      "analysis": "央行政策动向影响市场流动性预期和资产定价方向",
-      "category": "fed_policy",
-      "category_label": "美联储政策",
-      "category_icon": "🏦",
-      "category_color": "#7c3aed",
-      "category_bg": "#f3e8ff",
-      "source": "Nasdaq Stocks",
-      "link": "https://www.nasdaq.com/articles/dollar-slightly-higher-crude-oil-rallies-and-stocks-fall",
-      "pubDate": "Tue, 11 Aug 2026 21:43:38 +0000",
-      "time": "08/12 05:43",
-      "score": 11
+      "title": "CoreWeave’s stock soars as earnings show major AI momentum",
+      "title_zh": "CoreWeave 股价飙升，盈利显示人工智能势头强劲",
+      "summary": "The AI cloud provider topped revenue and earnings expectations, with its CEO cheering “an important inflection point.”",
+      "summary_zh": "这家人工智能云提供商的收入和盈利超出了预期，其首席执行官欢呼“一个重要的拐点”。",
+      "analysis": "AI技术突破推动相关产业链投资机会，关注芯片、算力和应用层受益标的",
+      "category": "tech_breakthrough",
+      "category_label": "科技突破",
+      "category_icon": "🔬",
+      "category_color": "#0369a1",
+      "category_bg": "#e0f2fe",
+      "source": "MarketWatch Top",
+      "link": "https://www.marketwatch.com/story/coreweaves-stock-soars-as-earnings-show-major-ai-momentum-d3a5bede?mod=mw_rss_topstories",
+      "pubDate": "Tue, 11 Aug 2026 23:29:00 GMT",
+      "time": "08/12 07:29",
+      "score": 9
     },
     {
-      "title": "Dollar Posts Modest Gains as Crude Oil Fluctuates",
-      "title_zh": "随着原油波动，美元小幅上涨",
-      "summary": "The dollar index (DXY00 ) is up by +0.05% today.. The dollar found support today after WTI crude oil prices rose more than +2% to a 1-week high, which raises inflation expectations and may persuade the Fed to tighten monetary policy, a supportive factor for the dollar.. However, the dollar...",
-      "summary_zh": "美元指数（DXY00）今日上涨+0.05%。WTI原油价格上涨逾+2%至1周高位，这提升了通胀预期，并可能说服美联储收紧货币政策，这对美元来说是一个支撑因素。美元今天获得支撑。不过，美元...",
-      "analysis": "央行政策动向影响市场流动性预期和资产定价方向",
-      "category": "fed_policy",
-      "category_label": "美联储政策",
-      "category_icon": "🏦",
-      "category_color": "#7c3aed",
-      "category_bg": "#f3e8ff",
-      "source": "Nasdaq Stocks",
-      "link": "https://www.nasdaq.com/articles/dollar-posts-modest-gains-crude-oil-fluctuates",
-      "pubDate": "Tue, 11 Aug 2026 21:43:37 +0000",
-      "time": "08/12 05:43",
-      "score": 11
+      "title": "CoreWeave Shares Jump as Revenue Doubles From Year Earlier - WSJ",
+      "title_zh": "CoreWeave 营收较上年翻倍，股价大幅上涨 - 华尔街日报",
+      "summary": "CoreWeave Shares Jump as Revenue Doubles From Year Earlier WSJCoreWeave stock pops 14% as revenue doubles on accelerating AI infrastructure demand CNBCCoreWeave’s Revenue Doubles But So Does Cash Burn theinformation.comCoreWeave boosts 2026 spending plan, beats quarterly estimates on AI demand surge reuters.comCoreWeave Revenue Surges on Booming Demand for AI Computing Bloomberg.com",
+      "summary_zh": "CoreWeave 营收较上年翻倍，股价上涨 WSJCoreWeave 股价上涨 14%，人工智能基础设施需求加速，营收翻倍 CNBCCoreWeave 收入翻倍，但现金消耗也翻倍 theinformation.comCoreWeave 提高 2026 年支出计划，超出人工智能需求激增的季度预期 reuters.comCoreWeave 营收因人工智能计算需求旺盛而激增 Bloomberg.com",
+      "analysis": "暴涨行情显示资金积极涌入，关注领涨标的和板块轮动",
+      "category": "market_performance",
+      "category_label": "市场表现",
+      "category_icon": "📊",
+      "category_color": "#15803d",
+      "category_bg": "#dcfce7",
+      "source": "Google News Business",
+      "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE04SGRISzdlWlUwMF9UYWc0VURaWkczN085SnlRN2xLczlrZUdqVVktXzlNaWFiY0dmNms4V2dpakZHRy1lQU1DOVpkVFdTaHU2dWRfbEdTYWx3NkFmNTlHLW9mdkZWaGFpUDNCeEVJMGFCM2wzUl9kYlhxaUxJZnM?oc=5",
+      "pubDate": "Tue, 11 Aug 2026 23:23:00 GMT",
+      "time": "08/12 07:23",
+      "score": 9
     },
     {
       "title": "Lumentum sees sales more than double as AI demand swells",
@@ -876,57 +927,6 @@
       "link": "https://www.marketwatch.com/story/lumentum-sees-sales-more-than-double-as-ai-demand-swells-6ebe6ef1?mod=mw_rss_topstories",
       "pubDate": "Tue, 11 Aug 2026 22:22:00 GMT",
       "time": "08/12 06:22",
-      "score": 9
-    },
-    {
-      "title": "CoreWeave’s stock soars as earnings show major AI momentum",
-      "title_zh": "CoreWeave 股价飙升，盈利显示人工智能势头强劲",
-      "summary": "The AI cloud provider topped revenue and earnings expectations, with its CEO cheering “an important inflection point.”",
-      "summary_zh": "这家人工智能云提供商的收入和盈利超出了预期，其首席执行官欢呼“一个重要的拐点”。",
-      "analysis": "AI技术突破推动相关产业链投资机会，关注芯片、算力和应用层受益标的",
-      "category": "tech_breakthrough",
-      "category_label": "科技突破",
-      "category_icon": "🔬",
-      "category_color": "#0369a1",
-      "category_bg": "#e0f2fe",
-      "source": "MarketWatch Top",
-      "link": "https://www.marketwatch.com/story/coreweaves-stock-soars-as-earnings-show-major-ai-momentum-d3a5bede?mod=mw_rss_topstories",
-      "pubDate": "Tue, 11 Aug 2026 21:17:00 GMT",
-      "time": "08/12 05:17",
-      "score": 9
-    },
-    {
-      "title": "CoreWeave narrows Q2 losses, stock climbs 8% - Yahoo Finance",
-      "title_zh": "CoreWeave 第二季度亏损收窄，股价上涨 8% - 雅虎财经",
-      "summary": "CoreWeave narrows Q2 losses, stock climbs 8% Yahoo FinanceCoreWeave stock pops 11% as revenue doubles on accelerating AI infrastructure demand CNBCCoreWeave Reports New Revenue High of $2.6 Billion as Sales Backlog Grows WSJCoreWeave’s stock soars as earnings show major AI momentum marketwatch.comCoreWeave Stock Rallied Ahead Of Its Own Numbers, Not On Them Trefis",
-      "summary_zh": "CoreWeave 第二季度亏损收窄，股价上涨 8% 雅虎财经CoreWeave 股价上涨 11%，人工智能基础设施需求加速，收入翻倍 CNBCCoreWeave 报告，随着销售积压增长，收入新高至 26 亿美元 WSJCoreWeave 因盈利显示人工智能势头强劲，股价飙升 marketwatch.comCoreWeave 股价上涨超过其自身数据，而不是 Trefis",
-      "analysis": "AI技术突破推动相关产业链投资机会，关注芯片、算力和应用层受益标的",
-      "category": "tech_breakthrough",
-      "category_label": "科技突破",
-      "category_icon": "🔬",
-      "category_color": "#0369a1",
-      "category_bg": "#e0f2fe",
-      "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNVUlQSzZ1dGQyU1RtcGxiZXRkaHIyNUdFeHc3bXJYSlFuRlNCMmg4QVFNVTFlZ29nMm5rQldCdnAzNm5UWGVfTXRWSi1SLUF2RkZUYTFEd1p5aXE5cGJhU0M4NUItTjRscXpfcGl5TXBrODdXenRUdW9FMTZRb1p5NU9WX1BSbnZFaGxubXZ5MnBObERyZGZLWkx2RWlxWXdrVnREdw?oc=5",
-      "pubDate": "Tue, 11 Aug 2026 20:35:10 GMT",
-      "time": "08/12 04:35",
-      "score": 9
-    },
-    {
-      "title": "Intel's huge rally is helping pay for its AI comeback: Chart of the Day - Yahoo Finance",
-      "title_zh": "英特尔的大幅上涨为其人工智能卷土重来提供了资金：每日图表 - 雅虎财经",
-      "summary": "Intel's huge rally is helping pay for its AI comeback: Chart of the Day Yahoo FinanceIntel Raises $20 Billion in Upsized Share Sale for AI Plans Bloomberg.comIntel upsizes stock offering to $20 billion at $95 per share as AI demand accelerates CNBCIntel investors are banking on a comeback — and then some Financial TimesIntel Increases Size of Stock Offering to Raise $20 Billion WSJ",
-      "summary_zh": "英特尔的大幅上涨正在帮助其人工智能卷土重来：当日图表雅虎财经英特尔为人工智能计划增加了 200 亿美元的股票发行规模 Bloomberg.com 随着人工智能需求加速，英特尔将股票发行规模扩大至 200 亿美元，每股 95 美元 CNBC 英特尔投资者寄希望于其卷土重来 - 然后一些金融时报英特尔增加了股票发行规模以筹集 200 亿美元 华尔街日报",
-      "analysis": "市场大涨显示风险偏好回暖，关注领涨板块的持续性和资金流向",
-      "category": "market_performance",
-      "category_label": "市场表现",
-      "category_icon": "📊",
-      "category_color": "#15803d",
-      "category_bg": "#dcfce7",
-      "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOTHQ3bUFHS1FGWWNZZGhHX1I2ZHQwZ1ozczl2cHV6M0pMRUItdUF5ZmNZMEpiazhxZDNmODJncHJKYXA5aVNSWUJSazhKdDMyQW5EU1hDd3g4bzBMTlRxSV9INjZNMm9GdXhVVFVwM2pZbWVxc0FzRlVxQkZtYUo0bUJTdmt3QzJPR2J1X3ZYX0FxTkZCeElfUWpuY0RnU05qLXBMYzRSdndCMlFOV2NMVU5uelA3Zjd1RkJjTExOSGZqa2pD?oc=5",
-      "pubDate": "Tue, 11 Aug 2026 12:40:42 GMT",
-      "time": "08/11 20:40",
       "score": 9
     }
   ],
@@ -967,53 +967,33 @@
       {
         "market": "crypto",
         "type": "market_trend",
-        "description": "数字货币整体偏弱，上涨占比42%",
+        "description": "数字货币整体偏强，上涨占比58%",
         "confidence": "中"
-      },
-      {
-        "market": "crypto",
-        "type": "individual_strong",
-        "symbol": "DOGE",
-        "name": "Dogecoin",
-        "description": "Dogecoin(DOGE)涨幅3.7%，表现强势",
-        "confidence": "中",
-        "price": 0.0728,
-        "change_pct": 3.7
       },
       {
         "market": "crypto",
         "type": "individual_strong",
         "symbol": "LINK",
         "name": "Chainlink",
-        "description": "Chainlink(LINK)涨幅5.8%，表现强势",
+        "description": "Chainlink(LINK)涨幅5.7%，表现强势",
         "confidence": "高",
-        "price": 8.75,
-        "change_pct": 5.8
-      },
-      {
-        "market": "crypto",
-        "type": "individual_weak",
-        "symbol": "ADA",
-        "name": "Cardano",
-        "description": "Cardano(ADA)跌幅-3.4%，表现疲弱",
-        "confidence": "中",
-        "price": 0.186708,
-        "change_pct": -3.4
+        "price": 8.76,
+        "change_pct": 5.7
       },
       {
         "market": "crypto",
         "type": "individual_weak",
         "symbol": "UNI",
         "name": "Uniswap",
-        "description": "Uniswap(UNI)跌幅-5.0%，表现疲弱",
+        "description": "Uniswap(UNI)跌幅-4.9%，表现疲弱",
         "confidence": "中",
-        "price": 3.76,
-        "change_pct": -5.0
+        "price": 3.75,
+        "change_pct": -4.9
       },
       {
         "market": "commodity",
         "type": "market_trend",
-        "description": "大宗商品整体偏强，上涨占比60%",
+        "description": "大宗商品整体偏弱，上涨占比40%",
         "confidence": "中"
       }
     ],
@@ -1043,30 +1023,20 @@
         "type": "breakout_watch",
         "symbol": "BNB",
         "name": "BNB",
-        "description": "BNB温和上涨2.0%，留意突破信号",
+        "description": "BNB温和上涨2.9%，留意突破信号",
         "confidence": "低",
-        "price": 612.02,
-        "change_pct": 2.0
-      },
-      {
-        "market": "crypto",
-        "type": "dip_buying",
-        "symbol": "ADA",
-        "name": "Cardano",
-        "description": "Cardano回调3.4%，关注低吸机会",
-        "confidence": "中",
-        "price": 0.186708,
-        "change_pct": -3.4
+        "price": 616.27,
+        "change_pct": 2.9
       },
       {
         "market": "crypto",
         "type": "dip_buying",
         "symbol": "UNI",
         "name": "Uniswap",
-        "description": "Uniswap回调5.0%，关注低吸机会",
+        "description": "Uniswap回调4.9%，关注低吸机会",
         "confidence": "中",
-        "price": 3.76,
-        "change_pct": -5.0
+        "price": 3.75,
+        "change_pct": -4.9
       }
     ],
     "risks": [
@@ -1118,27 +1088,27 @@
       },
       "crypto": {
         "total": 19,
-        "upCount": 8,
-        "downCount": 10,
-        "flatCount": 1,
-        "avgChange": -0.12,
+        "upCount": 11,
+        "downCount": 8,
+        "flatCount": 0,
+        "avgChange": 0.24,
         "maxUp": {
           "symbol": "LINK",
           "name": "Chainlink",
-          "change_pct": 5.8
+          "change_pct": 5.7
         },
         "maxDown": {
           "symbol": "UNI",
           "name": "Uniswap",
-          "change_pct": -5.0
+          "change_pct": -4.9
         }
       },
       "commodity": {
         "total": 10,
-        "upCount": 6,
-        "downCount": 4,
+        "upCount": 4,
+        "downCount": 6,
         "flatCount": 0,
-        "avgChange": -0.11,
+        "avgChange": -0.15,
         "maxUp": {
           "symbol": "ALUMINUM",
           "name": "铝期货",
@@ -1153,7 +1123,7 @@
     }
   },
   "report": {
-    "summary": "美股: 平均-0.35%, 涨跌比11:9 | A股: 平均-0.74%, 涨跌比6:16 | 数字货币: 平均-0.12%, 涨跌比8:10 | 大宗商品: 平均-0.11%, 涨跌比6:4 | 风险预警: 1条 | 机会提示: 5条"
+    "summary": "美股: 平均-0.35%, 涨跌比11:9 | A股: 平均-0.74%, 涨跌比6:16 | 数字货币: 平均+0.24%, 涨跌比11:8 | 大宗商品: 平均-0.15%, 涨跌比4:6 | 风险预警: 1条 | 机会提示: 4条"
   },
   "emailResults": [
     {
