@@ -1,4 +1,3 @@
 yfinance>=0.2.36
 akshare>=1.14
 requests>=2.31
-tushare>=1.4.0
