@@ -507,32 +507,33 @@ def _fetch_breadth_eastmoney():
 # ═══════════════════════════════════════════════════
 
 def fetch_northbound_flow():
-    """获取北向资金流向数据"""
+    """获取北向资金流向数据 (东财datacenter-web主源, 沪股通+深股通成交总额/净买额)"""
     print('[MarketReview] 采集北向资金数据...')
 
-    # 方法1: Tushare moneyflow_hsgt (需要token + 2000积分)
+    # 主源: 东财 datacenter-web (RPT_MUTUAL_DEAL_HISTORY, 从US IP可用)
+    # 注: 新浪 getHKData 接口已失效(Service not valid); 港交所2024披露调整致北向净买额不再公开
     try:
-        result = _fetch_northbound_tushare()
-        if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
+        result = _fetch_northbound_eastmoney_dc()
+        if result and result.get('amount_yi', 0) > 0:
             return result
     except Exception as e:
-        print(f'  [MarketReview] tushare北向资金失败: {e}')
+        print(f'  [MarketReview] eastmoney datacenter 北向资金失败: {e}')
 
-    # 方法2: 东方财富 kamt.kline API (直连HTTP, 直接返回北向合计)
-    try:
-        result = _fetch_northbound_eastmoney()
-        if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
-            return result
-    except Exception as e:
-        print(f'  [MarketReview] eastmoney北向资金失败: {e}')
-
-    # 方法3: akshare (分别查沪股通+深股通求和)
+    # 备用: akshare (stock_hsgt_hist_em, 现也走datacenter-web)
     try:
         result = _fetch_northbound_akshare()
         if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
             return result
     except Exception as e:
         print(f'  [MarketReview] akshare北向资金失败: {e}')
+
+    # 备用: Tushare (需token + 2000积分)
+    try:
+        result = _fetch_northbound_tushare()
+        if result and result.get('net_buy', 0) != 0 and not math.isnan(result.get('net_buy', 0)):
+            return result
+    except Exception as e:
+        print(f'  [MarketReview] tushare北向资金失败: {e}')
 
     print('[MarketReview] 北向资金数据不可用')
     return {}
@@ -695,62 +696,93 @@ def _fetch_northbound_akshare():
     return result
 
 
-def _fetch_northbound_eastmoney():
-    """东方财富 push2his API 获取北向资金"""
-    try:
-        today_str = datetime.now().strftime('%Y%m%d')
-        beg_str = (datetime.now() - timedelta(days=10)).strftime('%Y%m%d')
+def _fetch_northbound_eastmoney_dc():
+    """东方财富 datacenter-web RPT_MUTUAL_DEAL_HISTORY 获取北向资金 (沪股通001 + 深股通003)
+    净买额(NET_DEAL_AMT)因港交所2024年披露机制调整已不公开, 优先展示成交总额(DEAL_AMT, 万元)
+    """
+    url = 'https://datacenter-web.eastmoney.com/api/data/v1/get'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Referer': 'https://data.eastmoney.com/hsgt/',
+    }
+    amount_yi = 0.0
+    net_yi = 0.0
+    has_net = True
+    date_str = ''
+    found = False
 
-        url = 'https://push2his.eastmoney.com/api/qt/kamt.kline/get'
+    for mtype, label in [('001', '沪股通'), ('003', '深股通')]:
         params = {
-            'fields1': 'f1,f2,f3,f4',
-            'fields2': 'f51,f52,f53,f54,f55,f56',
-            'klt': '101',
-            'beg': beg_str,
-            'end': today_str,
+            'sortColumns': 'TRADE_DATE',
+            'sortTypes': '-1',
+            'pageSize': '5',
+            'pageNumber': '1',
+            'reportName': 'RPT_MUTUAL_DEAL_HISTORY',
+            'columns': 'ALL',
+            'source': 'WEB',
+            'client': 'WEB',
+            'filter': f'(MUTUAL_TYPE="{mtype}")',
         }
-        resp = requests.get(url, params=params, headers=EM_HEADERS, timeout=(3, 8))
-        if resp.status_code == 200:
+        try:
+            resp = requests.get(url, params=params, headers=headers, timeout=10)
             data = resp.json()
-            # 使用 or {} 防止 data['data'] 为 None 时崩溃
-            em_data = data.get('data') or {}
-            klines = em_data.get('klines', [])
-            if klines and len(klines) >= 1:
-                # 格式: date,sh_connect_net,sz_connect_net,total_net,...
-                parts = klines[-1].split(',')
-                date_str = parts[0]
-                # 尝试解析北向净流入 (通常是第2或第4个字段)
-                sh_net = float(parts[1]) if len(parts) > 1 and parts[1] else 0
-                sz_net = float(parts[2]) if len(parts) > 2 and parts[2] else 0
-                total_net = float(parts[-1]) if parts[-1] else 0
-
-                # 如果total为0，尝试用sh+sz
-                if total_net == 0:
-                    total_net = sh_net + sz_net
-
-                result = {
-                    'net_buy': round(total_net, 2),
-                    'net_buy_yi': round(total_net / 1e8, 2),
-                    'sh_connect_yi': round(sh_net / 1e8, 2),
-                    'sz_connect_yi': round(sz_net / 1e8, 2),
-                    'date': date_str,
-                    'is_extreme': abs(total_net) > 10e8,
-                    'extreme_note': '',
-                    'source': 'eastmoney',
-                }
-                if total_net > 10e8:
-                    result['extreme_note'] = '北向单日净买入超100亿，极端流入信号'
-                elif total_net < -10e8:
-                    result['extreme_note'] = '北向单日净卖出超100亿，极端流出信号'
-                print(f'[MarketReview] 北向资金(eastmoney): 净{("买入" if total_net > 0 else "卖出")}{result["net_buy_yi"]:.2f}亿')
-                return result
+            rows = (data.get('result') or {}).get('data') or []
+            if not rows:
+                print(f'  [MarketReview] eastmoney dc {label}: 无数据')
+                continue
+            # 取最新有成交总额的行
+            latest = None
+            for r in rows:
+                if r.get('DEAL_AMT') is not None:
+                    latest = r
+                    break
+            if latest is None:
+                print(f'  [MarketReview] eastmoney dc {label}: 无成交总额')
+                continue
+            deal_amt_wan = float(latest.get('DEAL_AMT') or 0)  # 单位: 万元
+            amount_yi += deal_amt_wan / 1e4  # 万元 -> 亿元
+            if not date_str:
+                date_str = str(latest.get('TRADE_DATE', ''))[:10]
+            found = True
+            # 净买额 (港交所披露调整后多为 None)
+            net = latest.get('NET_DEAL_AMT')
+            if net is None or (isinstance(net, float) and math.isnan(net)):
+                has_net = False
             else:
-                print(f'  [MarketReview] eastmoney northbound: 响应无klines数据 (data={data.get("data")})')
-        else:
-            print(f'  [MarketReview] eastmoney northbound: HTTP {resp.status_code}')
-    except Exception as e:
-        print(f'  [MarketReview] eastmoney northbound: {e}')
-    return None
+                net_yi += float(net) / 1e4  # 万元 -> 亿元
+        except Exception as e:
+            print(f'  [MarketReview] eastmoney dc {label}: {e}')
+            continue
+
+    if not found or amount_yi == 0:
+        print('  [MarketReview] eastmoney dc 北向: 无成交总额数据')
+        return None
+
+    if has_net and net_yi != 0:
+        # 净买额披露: 用净买额
+        return {
+            'net_buy': round(net_yi * 1e8, 2),
+            'net_buy_yi': round(net_yi, 2),
+            'amount_yi': round(amount_yi, 2),
+            'date': date_str,
+            'is_extreme': abs(net_yi) > 100,
+            'extreme_note': '',
+            'metric': 'net_buy',
+            'source': 'eastmoney(datacenter-web)',
+        }
+    else:
+        # 净买额未披露: 展示成交总额
+        return {
+            'net_buy': 0,
+            'net_buy_yi': 0.0,
+            'amount_yi': round(amount_yi, 2),
+            'date': date_str,
+            'is_extreme': False,
+            'extreme_note': '',
+            'metric': 'deal_amount',
+            'note': '北向净买额因港交所披露机制调整暂停披露, 展示成交总额',
+            'source': 'eastmoney(datacenter-web)',
+        }
 
 
 # ═══════════════════════════════════════════════════
@@ -1396,16 +1428,21 @@ def generate_summary(index_data, breadth, northbound, signals):
             parts.append('亏钱效应明显')
 
     # 北向资金
-    if northbound and northbound.get('net_buy_yi'):
-        nb = northbound['net_buy_yi']
-        if nb > 50:
-            parts.append(f'北向资金大幅净买入{nb:.0f}亿')
-        elif nb > 0:
-            parts.append(f'北向资金小幅净买入{nb:.0f}亿')
-        elif nb > -50:
-            parts.append(f'北向资金小幅净卖出{abs(nb):.0f}亿')
+    if northbound and northbound.get('amount_yi', 0) > 0:
+        nb_metric = northbound.get('metric', 'net_buy')
+        amt = northbound.get('amount_yi', 0)
+        if nb_metric == 'deal_amount':
+            parts.append(f'北向资金成交总额约{amt:.0f}亿（净买额因港交所披露调整暂停披露）')
         else:
-            parts.append(f'北向资金大幅净卖出{abs(nb):.0f}亿')
+            nb = northbound.get('net_buy_yi', 0)
+            if nb > 50:
+                parts.append(f'北向资金大幅净买入{nb:.0f}亿')
+            elif nb > 0:
+                parts.append(f'北向资金小幅净买入{nb:.0f}亿')
+            elif nb > -50:
+                parts.append(f'北向资金小幅净卖出{abs(nb):.0f}亿')
+            else:
+                parts.append(f'北向资金大幅净卖出{abs(nb):.0f}亿')
 
     # 情绪
     sentiment = signals.get('sentiment', '')
@@ -1429,12 +1466,16 @@ def generate_tomorrow_focus(signals, anomalies, sector_flow, northbound):
     focus = []
 
     # 北向资金方向
-    if northbound and northbound.get('net_buy_yi'):
-        nb = northbound['net_buy_yi']
-        if nb > 0:
-            focus.append(f'关注北向资金持续流入方向的板块')
+    if northbound and northbound.get('amount_yi', 0) > 0:
+        nb_metric = northbound.get('metric', 'net_buy')
+        if nb_metric == 'net_buy':
+            nb = northbound.get('net_buy_yi', 0)
+            if nb > 0:
+                focus.append(f'关注北向资金持续流入方向的板块')
+            else:
+                focus.append(f'关注北向资金流出对大盘的持续影响')
         else:
-            focus.append(f'关注北向资金流出对大盘的持续影响')
+            focus.append(f'关注北向资金成交活跃度变化（净买额暂停披露）')
 
     # 板块轮动
     if sector_flow:
