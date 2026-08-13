@@ -1,6 +1,6 @@
 {
-  "date": "2026-08-12",
-  "updatedAt": "2026-08-12T22:22:36.384273",
+  "date": "2026-08-13",
+  "updatedAt": "2026-08-13T00:10:19.324198",
   "markets": {
     "us": [
       {
@@ -472,130 +472,130 @@
       {
         "symbol": "BTC",
         "name": "Bitcoin",
-        "price": 63447.0,
+        "price": 63473.0,
         "change_pct": -0.3,
-        "volume": 21483915258.0,
+        "volume": 22050535442.0,
         "high": 64329.0,
         "low": 63267.0,
-        "open": 63513.48,
-        "prev_close": 63513.48
+        "open": 63697.92,
+        "prev_close": 63697.92
       },
       {
         "symbol": "ETH",
         "name": "Ethereum",
-        "price": 1877.82,
+        "price": 1879.34,
         "change_pct": -0.1,
-        "volume": 6652960562.0,
+        "volume": 6673202692.0,
         "high": 1918.99,
-        "low": 1875.15,
-        "open": 1877.81,
-        "prev_close": 1877.81
+        "low": 1873.79,
+        "open": 1882.25,
+        "prev_close": 1882.25
       },
       {
         "symbol": "BNB",
         "name": "BNB",
-        "price": 609.98,
-        "change_pct": -0.4,
-        "volume": 696532693.0,
+        "price": 610.31,
+        "change_pct": -0.6,
+        "volume": 667636045.0,
         "high": 619.58,
         "low": 608.56,
-        "open": 613.34,
-        "prev_close": 613.34
+        "open": 619.19,
+        "prev_close": 619.19
       },
       {
         "symbol": "XRP",
         "name": "XRP",
-        "price": 1.01,
-        "change_pct": -1.1,
-        "volume": 904240872.0,
+        "price": 1.0,
+        "change_pct": -1.5,
+        "volume": 907841838.0,
         "high": 1.024,
-        "low": 1.003,
+        "low": 1.0,
         "open": 1.02,
         "prev_close": 1.02
       },
       {
         "symbol": "SOL",
         "name": "Solana",
-        "price": 75.57,
-        "change_pct": -0.6,
-        "volume": 1237420631.0,
+        "price": 75.66,
+        "change_pct": -0.9,
+        "volume": 1220308576.0,
         "high": 77.07,
-        "low": 75.39,
-        "open": 76.16,
-        "prev_close": 76.16
+        "low": 75.35,
+        "open": 76.38,
+        "prev_close": 76.38
       },
       {
         "symbol": "TRX",
         "name": "TRON",
-        "price": 0.335635,
-        "change_pct": 0.1,
-        "volume": 338643552.0,
+        "price": 0.336294,
+        "change_pct": 0.3,
+        "volume": 342193293.0,
         "high": 0.337216,
         "low": 0.333237,
-        "open": 0.334812,
-        "prev_close": 0.334812
+        "open": 0.334736,
+        "prev_close": 0.334736
       },
       {
         "symbol": "DOGE",
         "name": "Dogecoin",
-        "price": 0.069239,
-        "change_pct": -3.0,
-        "volume": 432892110.0,
+        "price": 0.069705,
+        "change_pct": -3.5,
+        "volume": 437551938.0,
         "high": 0.072443,
-        "low": 0.069197,
-        "open": 0.071945,
-        "prev_close": 0.071945
+        "low": 0.06892,
+        "open": 0.072388,
+        "prev_close": 0.072388
       },
       {
         "symbol": "ADA",
         "name": "Cardano",
-        "price": 0.181935,
-        "change_pct": -1.9,
-        "volume": 223009096.0,
+        "price": 0.182804,
+        "change_pct": -2.1,
+        "volume": 217630120.0,
         "high": 0.188068,
         "low": 0.180657,
-        "open": 0.1859,
-        "prev_close": 0.1859
+        "open": 0.18607,
+        "prev_close": 0.18607
       },
       {
         "symbol": "LINK",
         "name": "Chainlink",
-        "price": 8.67,
-        "change_pct": -0.5,
-        "volume": 246999294.0,
+        "price": 8.68,
+        "change_pct": -1.1,
+        "volume": 241989605.0,
         "high": 8.88,
         "low": 8.64,
-        "open": 8.76,
-        "prev_close": 8.76
+        "open": 8.77,
+        "prev_close": 8.77
       },
       {
         "symbol": "XLM",
         "name": "Stellar",
-        "price": 0.158854,
-        "change_pct": -2.0,
-        "volume": 94037705.0,
+        "price": 0.159881,
+        "change_pct": -1.5,
+        "volume": 95073678.0,
         "high": 0.162451,
-        "low": 0.158392,
-        "open": 0.161558,
-        "prev_close": 0.161558
+        "low": 0.158323,
+        "open": 0.161825,
+        "prev_close": 0.161825
       },
       {
         "symbol": "LTC",
         "name": "Litecoin",
-        "price": 44.89,
-        "change_pct": -1.2,
-        "volume": 151545967.0,
+        "price": 44.84,
+        "change_pct": -1.3,
+        "volume": 154044652.0,
         "high": 45.61,
         "low": 44.68,
-        "open": 45.48,
-        "prev_close": 45.48
+        "open": 45.55,
+        "prev_close": 45.55
       },
       {
         "symbol": "AVAX",
         "name": "Avalanche",
         "price": 6.33,
-        "change_pct": 0.8,
-        "volume": 187754625.0,
+        "change_pct": 0.1,
+        "volume": 186136503.0,
         "high": 6.48,
         "low": 6.21,
         "open": 6.3,
@@ -606,7 +606,7 @@
         "name": "Shiba Inu",
         "price": 4e-06,
         "change_pct": -2.2,
-        "volume": 55017035.0,
+        "volume": 56856749.0,
         "high": 4.51e-06,
         "low": 4.38e-06,
         "open": 4e-06,
@@ -615,99 +615,99 @@
       {
         "symbol": "UNI",
         "name": "Uniswap",
-        "price": 3.54,
-        "change_pct": -5.7,
-        "volume": 286870196.0,
+        "price": 3.57,
+        "change_pct": -4.6,
+        "volume": 287046804.0,
         "high": 3.8,
         "low": 3.47,
-        "open": 3.74,
-        "prev_close": 3.74
+        "open": 3.77,
+        "prev_close": 3.77
       },
       {
         "symbol": "NEAR",
         "name": "NEAR Protocol",
-        "price": 1.62,
-        "change_pct": 2.5,
-        "volume": 174008596.0,
+        "price": 1.65,
+        "change_pct": 2.7,
+        "volume": 173405240.0,
         "high": 1.68,
-        "low": 1.6,
-        "open": 1.6,
-        "prev_close": 1.6
+        "low": 1.61,
+        "open": 1.63,
+        "prev_close": 1.63
       },
       {
         "symbol": "DOT",
         "name": "Polkadot",
-        "price": 0.770938,
-        "change_pct": -1.6,
-        "volume": 50338121.0,
+        "price": 0.773456,
+        "change_pct": -1.8,
+        "volume": 51022236.0,
         "high": 0.797137,
-        "low": 0.77199,
-        "open": 0.787826,
-        "prev_close": 0.787826
+        "low": 0.769855,
+        "open": 0.793172,
+        "prev_close": 0.793172
       },
       {
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "price": 6.21,
-        "change_pct": -2.0,
-        "volume": 29861986.0,
+        "price": 6.25,
+        "change_pct": -2.2,
+        "volume": 31306092.0,
         "high": 6.49,
-        "low": 6.16,
-        "open": 6.38,
-        "prev_close": 6.38
+        "low": 6.15,
+        "open": 6.39,
+        "prev_close": 6.39
       },
       {
         "symbol": "FIL",
         "name": "Filecoin",
-        "price": 0.670089,
+        "price": 0.669375,
         "change_pct": -5.9,
-        "volume": 40042050.0,
-        "high": 0.712343,
+        "volume": 42888528.0,
+        "high": 0.710946,
         "low": 0.663555,
-        "open": 0.710083,
-        "prev_close": 0.710083
+        "open": 0.71016,
+        "prev_close": 0.71016
       },
       {
         "symbol": "APT",
         "name": "Aptos",
-        "price": 0.556909,
-        "change_pct": -4.3,
-        "volume": 28140769.0,
-        "high": 0.580334,
-        "low": 0.555377,
-        "open": 0.578754,
-        "prev_close": 0.578754
+        "price": 0.559907,
+        "change_pct": -3.6,
+        "volume": 28314296.0,
+        "high": 0.578015,
+        "low": 0.554747,
+        "open": 0.573887,
+        "prev_close": 0.573887
       }
     ],
     "commodity": [
       {
         "symbol": "GOLD",
         "name": "黄金期货",
-        "price": 4462.6,
-        "change_pct": -0.14,
-        "volume": 481,
-        "high": 4470.3,
-        "low": 4461.5,
+        "price": 4471.6,
+        "change_pct": 0.06,
+        "volume": 2693,
+        "high": 4471.9,
+        "low": 4456.5,
         "open": 4468.8,
         "prev_close": 4468.8
       },
       {
         "symbol": "SILVER",
         "name": "白银期货",
-        "price": 65.36,
-        "change_pct": -0.15,
-        "volume": 134,
+        "price": 65.46,
+        "change_pct": 0.0,
+        "volume": 848,
         "high": 65.57,
-        "low": 65.36,
+        "low": 65.22,
         "open": 65.46,
         "prev_close": 65.46
       },
       {
         "symbol": "CRUDE_OIL",
         "name": "原油期货(WTI)",
-        "price": 82.73,
-        "change_pct": 0.04,
-        "volume": 477,
+        "price": 82.69,
+        "change_pct": -0.01,
+        "volume": 1163,
         "high": 82.84,
         "low": 82.6,
         "open": 82.7,
@@ -716,21 +716,21 @@
       {
         "symbol": "BRENT",
         "name": "原油期货(布伦特)",
-        "price": 88.58,
-        "change_pct": 0.12,
-        "volume": 53,
+        "price": 88.57,
+        "change_pct": 0.11,
+        "volume": 109,
         "high": 88.64,
-        "low": 88.44,
+        "low": 88.37,
         "open": 88.47,
         "prev_close": 88.47
       },
       {
         "symbol": "NATURAL_GAS",
         "name": "天然气期货",
-        "price": 2.79,
-        "change_pct": -0.04,
-        "volume": 117,
-        "high": 2.79,
+        "price": 2.8,
+        "change_pct": 0.14,
+        "volume": 407,
+        "high": 2.8,
         "low": 2.79,
         "open": 2.79,
         "prev_close": 2.79
@@ -738,9 +738,9 @@
       {
         "symbol": "COPPER",
         "name": "铜期货",
-        "price": 6.61,
-        "change_pct": 0.01,
-        "volume": 111,
+        "price": 6.6,
+        "change_pct": -0.02,
+        "volume": 472,
         "high": 6.61,
         "low": 6.6,
         "open": 6.61,
@@ -773,8 +773,8 @@
         "name": "大豆期货",
         "price": 1183.25,
         "change_pct": 1.26,
-        "volume": 178992,
-        "high": 1198.75,
+        "volume": 178987,
+        "high": 1198.0,
         "low": 1167.5,
         "open": 1168.5,
         "prev_close": 1168.5
@@ -794,40 +794,6 @@
   },
   "news": [
     {
-      "title": "Stock Market Today: Nasdaq Charges Higher On Inflation Data; Nvidia Leads Dow (Live Coverage) - Investor's Business Daily",
-      "title_zh": "今日股市：纳斯达克因通胀数据而上涨；英伟达领涨道琼斯指数（现场报道） - 投资者商业日报",
-      "summary": "Stock Market Today: Nasdaq Charges Higher On Inflation Data; Nvidia Leads Dow (Live Coverage) Investor's Business DailyS&P 500 ends higher as CoreWeave results fuel AI optimism Yahoo FinanceDow Jones Futures: Cisco, Coherent Are Earnings Movers Late After Nebius, Lumentum, CoreWeave Lead AI Rally Investor's Business DailyStock Market Today: S&P 500, Nasdaq rise as tech stocks rally, while Dow dips; Treasury yields erase declines after inflation data; oil slips MarketWatchU.S.. Stocks Mixed After Inflation Data, AI Earnings WSJ",
-      "summary_zh": "今日股市：纳斯达克因通胀数据而上涨；英伟达领涨道琼斯指数（实时报道）投资者商业日报标准普尔 500 指数收高，因为 CoreWeave 的结果激发了人工智能的乐观情绪雅虎财经道琼斯期货：继 Nebius、Lumentum、CoreWeave 引领 AI 反弹之后，思科、Coherent 的盈利增长较晚投资者商业日报股票市场：随着科技股上涨，标准普尔 500 指数、纳斯达克指数上涨，而道琼斯指数下跌；通胀数据公布后，国债收益率回落；油价下跌 MarketWatch 美国股市涨跌互现 华尔街日报 通胀数据、人工智能收益",
-      "analysis": "市场大涨显示风险偏好回暖，关注领涨板块的持续性和资金流向",
-      "category": "market_performance",
-      "category_label": "市场表现",
-      "category_icon": "📊",
-      "category_color": "#15803d",
-      "category_bg": "#dcfce7",
-      "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOSHJrS1FvLUE3dGtNRWJUbXhnT0pnTU5INGkzUFZMQ2dfdXJqZTh4eEVSY0VGajRSUW9naENPdmUwZ2Q0Ykhndi1PYVg5dzllSGF0Y0xLRVJWTnBtbDRGRmd4Ql9aWmlJYlcwNHdhRWtlQVRJMGdsSkw1YnhrSDJpMXJHTE9MVzUyaXJhcWt0TmNfU2htODVNU3Fsd3pCVFZUUVJ0NXBKRHlzaHBmajBqYlNkSWlVZEdRb05vY2pTZEM2LUE?oc=5",
-      "pubDate": "Wed, 12 Aug 2026 20:22:00 GMT",
-      "time": "08/13 04:22",
-      "score": 25
-    },
-    {
-      "title": "CoreWeave, Super Micro surge on signs of sustained AI buildout - Reuters",
-      "title_zh": "CoreWeave 和 Super Micro 因人工智能持续扩张的迹象而飙升 - 路透中文网",
-      "summary": "CoreWeave, Super Micro surge on signs of sustained AI buildout ReutersCoreWeave gains 19%, Nebius surges 34% in post-earnings neocloud rally CNBCCoreWeave Stock Surge Gives the AI Trade a Boost WSJCoreWeave Shares Soar After Booming AI Demand Boosts Outlook Bloomberg.comCoreWeave proves Nvidia's aging AI GPUs from 2020 can generate profit nine years after deployment, signs A100 contracts into 2029 — power constraints and legacy infrastructure keep old GPUs profitable Tom's Hardware",
-      "summary_zh": "CoreWeave、Super Micro 因人工智能持续扩张的迹象而飙升 ReutersCoreWeave 上涨 19%，Nebius 在财报后 Neocloud 反弹中飙升 34% CNBCCoreWeave 股价飙升提振人工智能交易 WSJCoreWeave 在人工智能需求蓬勃发展后股价飙升 Bloomberg.comCoreWeave 证明 Nvidia 从 2020 年开始老化的 AI GPU 可以在部署九年后产生利润，签署 A100 合同2029 年 — 功率限制和遗留基础设施使旧 GPU 保持盈利 Tom's Hardware",
-      "analysis": "市场大涨显示风险偏好回暖，关注领涨板块的持续性和资金流向",
-      "category": "market_performance",
-      "category_label": "市场表现",
-      "category_icon": "📊",
-      "category_color": "#15803d",
-      "category_bg": "#dcfce7",
-      "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQN1NWQ1duSk1Sa2xQVHlVZjFyUUVmUDJleTJkOG9vM05LUjk4aWtsaUZoUTY2eWdWY2ZKcGNjaVd5Z0lULTFMNlBEeDhTWl84Q05vb0kzMjB6RjVtRkNTYmIyRkFOLWhDLWdHU2loU2ZTY0o5TURxTUFpb0hWejN6NG9VNE5RTTFTMmJzTVBYa3Q4RjhCRXpjek9LOTdnV01RRHc?oc=5",
-      "pubDate": "Wed, 12 Aug 2026 15:47:43 GMT",
-      "time": "08/12 23:47",
-      "score": 19
-    },
-    {
       "title": "Where gold price is headed next as Fed rate hike and inflation odds change direction",
       "title_zh": "随着美联储加息和通胀可能性改变方向，金价下一步走向",
       "summary": "Gold prices have been volatile in 2026, but a recent rally shows renewed investor interest amid tamer inflation data and changing Fed rate expectations.",
@@ -840,32 +806,66 @@
       "category_bg": "#f3e8ff",
       "source": "CNBC Markets",
       "link": "https://www.cnbc.com/2026/08/12/gold-prices-metals-fed-rate-hike-inflation.html",
-      "pubDate": "Wed, 12 Aug 2026 21:18:35 GMT",
-      "time": "08/13 05:18",
+      "pubDate": "Wed, 12 Aug 2026 23:41:02 GMT",
+      "time": "08/13 07:41",
       "score": 17
     },
     {
-      "title": "Cisco Networking Sales Surge on AI Demand. Why the Stock Is Down. - barrons.com",
-      "title_zh": "思科网络销售额因人工智能需求而激增。为什么股票下跌。 - 巴伦周刊",
-      "summary": "Cisco Networking Sales Surge on AI Demand.. Why the Stock Is Down.. barrons.comCisco's stock drops despite earnings, revenue beat CNBCCisco Reports Sharp Jump in Profit as AI Orders Roll In WSJCisco’s (NASDAQ:CSCO) Q2 CY2026 Sales Beat Estimates, Guides for Strong Full-Year Sales Yahoo FinanceCisco forecasts annual revenue above estimates on sustained AI spending Reuters",
-      "summary_zh": "思科网络销售额因人工智能需求而飙升.. 为什么股价下跌.. barrons.com 思科股价下跌，尽管盈利，收入超过 CNBC 思科报告称，随着人工智能订单的增加，利润大幅跃升 WSJ 思科（纳斯达克股票代码：CSCO） 2026 年第二季度销售超出预期，全年销售强劲的指南 雅虎财经 思科预测年收入将高于持续人工智能支出的预期 路透",
-      "analysis": "暴涨行情显示资金积极涌入，关注领涨标的和板块轮动",
+      "title": "Nebius Stock Soars 28% as Revenue Beat Bolsters AI Rally. Michael Burry May Be Helping. - Barron's",
+      "title_zh": "Nebius 股价飙升 28%，营收强劲推动 AI 反弹。迈克尔·伯里可能会有所帮助。 - 巴伦周刊",
+      "summary": "Nebius Stock Soars 28% as Revenue Beat Bolsters AI Rally.. Michael Burry May Be Helping.. Barron'sNebius Is Rising While Oracle Falls: NVIDIA’s Massive $500 Billion Funding Plan Pushes the Stocks in Opposite Directions Yahoo FinanceThis Nvidia-Backed Cloud Company’s Stock Is Soaring on Stronger-Than-Expected Earnings InvestopediaNebius reports second quarter 2026 financial results Business WireNebius powers past estimates as customers race to secure AI computing power Reuters",
+      "summary_zh": "Nebius 股价飙升 28%，收入超过支撑人工智能反弹.. 迈克尔·伯里 (Michael Burry) 可能会有所帮助.. 《巴伦周刊》Nebius 上涨，而 Oracle 下跌：NVIDIA 的 5000 亿美元巨额融资计划将股票推向相反的方向 雅虎财经 这家 Nvidia 支持的云公司的股价因盈利强于预期而飙升 InvestopediaNebius 报告第二季度2026 年财务业绩 Business WireNebius 超预期，客户竞相争夺人工智能计算能力 路透",
+      "analysis": "市场大涨显示风险偏好回暖，关注领涨板块的持续性和资金流向",
       "category": "market_performance",
       "category_label": "市场表现",
       "category_icon": "📊",
       "category_color": "#15803d",
       "category_bg": "#dcfce7",
       "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOb21yU3loblFUX3BncEZLbE1qYU96X0ZpVC1kbGdXYUd4NTNFNGpZX2ZxM085YTVfX0dsVzdEdjlhaWdLMllZQWc3THhJLTNTVUZJdUVBQV8tZldZLXFKaEVDMlo4dmxMUXF3NWlVOWcyajh0dVlsLTVrN3l5TUFac1FB?oc=5",
-      "pubDate": "Wed, 12 Aug 2026 20:47:00 GMT",
-      "time": "08/13 04:47",
-      "score": 15
+      "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTE05V194cFpreGlobENKWHU4azJhZzR1UlRQQ0pDTmRPdHc4cTVTV2hIeVlrajYxTno4MDBCUkRpclE2ckl6ZkctSEZTWWlKdW1GMlplNlljRk41RzNnbXdNZ0Nwdnh3MW9OSFU5aGl6aGk2ZHZCVDRSZw?oc=5",
+      "pubDate": "Wed, 12 Aug 2026 18:26:00 GMT",
+      "time": "08/13 02:26",
+      "score": 16
     },
     {
-      "title": "Gulf Oil Giants Are Spending Billions to Build Ways Around Strait of Hormuz - The New York Times",
-      "title_zh": "海湾石油巨头斥资数十亿修建霍尔木兹海峡周边道路 - 纽约时报中文网",
-      "summary": "Gulf Oil Giants Are Spending Billions to Build Ways Around Strait of Hormuz The New York TimesGulf states scramble for Strait of Hormuz alternative DW.comInside the U.S.IsraelSaudi Plan to Cut Iran Out of Global Oil Crude Oil Prices Today | OilPrice.comTODAY: Egypt and Libya want a new pipeline + The war still weighs on earnings EnterpriseAMCan Oil Producers Bypass the Strait of Hormuz?. Dryad Global Explains the Risks channel16.dryadglobal.com",
-      "summary_zh": "海湾石油巨头正斥资数十亿美元修建霍尔木兹海峡周围的道路 纽约时报 海湾国家争夺霍尔木兹海峡替代方案 DW.com 美国内部 以色列 沙特计划将伊朗排除在全球石油之外OilPrice.comTODAY：埃及和利比亚想要一条新管道+战争仍然对盈利造成压力企业AM石油生产商可以绕过霍尔木兹海峡吗？ Dryad Global 解释风险channel16.dryadglobal.com",
+      "title": "CoreWeave, Super Micro surge on signs of sustained AI buildout - Reuters",
+      "title_zh": "CoreWeave 和 Super Micro 因人工智能持续扩张的迹象而飙升 - 路透中文网",
+      "summary": "CoreWeave, Super Micro surge on signs of sustained AI buildout ReutersCoreWeave gains 19%, Nebius surges 34% in post-earnings neocloud rally CNBCAI infrastructure stocks surge after strong earnings from CoreWeave, Supermicro Yahoo FinanceCoreWeave Shares Jump as Revenue Doubles From Year Earlier WSJCoreWeave Shares Soar After Booming AI Demand Boosts Outlook Bloomberg.com",
+      "summary_zh": "CoreWeave、Super Micro 因人工智能持续扩张的迹象而飙升 ReutersCoreWeave 上涨 19%，Nebius 在财报后新云反弹中飙升 34% CNBCAI 基础设施股在 CoreWeave、Supermicro 强劲盈利后飙升 Yahoo FinanceCoreWeave 股价飙升，收入较上年同期翻倍 WSJCoreWeave 股价在蓬勃发展的 AI 需求提振前景后飙升 Bloomberg.com",
+      "analysis": "市场大涨显示风险偏好回暖，关注领涨板块的持续性和资金流向",
+      "category": "market_performance",
+      "category_label": "市场表现",
+      "category_icon": "📊",
+      "category_color": "#15803d",
+      "category_bg": "#dcfce7",
+      "source": "Google News Business",
+      "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQN1NWQ1duSk1Sa2xQVHlVZjFyUUVmUDJleTJkOG9vM05LUjk4aWtsaUZoUTY2eWdWY2ZKcGNjaVd5Z0lULTFMNlBEeDhTWl84Q05vb0kzMjB6RjVtRkNTYmIyRkFOLWhDLWdHU2loU2ZTY0o5TURxTUFpb0hWejN6NG9VNE5RTTFTMmJzTVBYa3Q4RjhCRXpjek9LOTdnV01RRHc?oc=5",
+      "pubDate": "Wed, 12 Aug 2026 15:47:43 GMT",
+      "time": "08/12 23:47",
+      "score": 16
+    },
+    {
+      "title": "CoreWeave gains 19%, Nebius surges 34% in post-earnings neocloud rally",
+      "title_zh": "财报发布后 Neocloud 反弹，CoreWeave 上涨 19%，Nebius 飙升 34%",
+      "summary": "AI cloud giant CoreWeave jumped in premarket trading after reporting that its second-quarter revenue doubled on surging AI demand from hyperscalers.",
+      "summary_zh": "人工智能云巨头 CoreWeave 报告称，由于超大规模企业的人工智能需求激增，其第二季度收入翻了一番，该公司在盘前交易中大涨。",
+      "analysis": "市场大涨显示风险偏好回暖，关注领涨板块的持续性和资金流向",
+      "category": "market_performance",
+      "category_label": "市场表现",
+      "category_icon": "📊",
+      "category_color": "#15803d",
+      "category_bg": "#dcfce7",
+      "source": "CNBC Markets",
+      "link": "https://www.cnbc.com/2026/08/12/coreweave-q2-earnings-ai-demand.html",
+      "pubDate": "Wed, 12 Aug 2026 20:00:52 GMT",
+      "time": "08/13 04:00",
+      "score": 13
+    },
+    {
+      "title": "Gulf states scramble for Strait of Hormuz alternative - dw.com",
+      "title_zh": "海湾国家争夺霍尔木兹海峡替代方案 - dw.com",
+      "summary": "Gulf states scramble for Strait of Hormuz alternative dw.comGulf Oil Giants Are Spending Billions to Build Ways Around Strait of Hormuz The New York TimesInside the U.S.IsraelSaudi Plan to Cut Iran Out of Global Oil Crude Oil Prices Today | OilPrice.comTODAY: Egypt and Libya want a new pipeline + The war still weighs on earnings EnterpriseAMCan Oil Producers Bypass the Strait of Hormuz?. Dryad Global Explains the Risks channel16.dryadglobal.com",
+      "summary_zh": "海湾国家争夺霍尔木兹海峡替代方案 dw.com 海湾石油巨头正斥资数十亿美元修建霍尔木兹海峡周围的道路 纽约时报 美国内部 以色列沙特计划将伊朗排除在全球石油价格之外OilPrice.comTODAY：埃及和利比亚想要一条新管道+战争仍然对盈利造成压力企业AM石油生产商可以绕过霍尔木兹海峡吗？ Dryad Global 解释风险channel16.dryadglobal.com",
       "analysis": "地缘冲突升级推升避险情绪，利好黄金、原油和军工板块；航空、旅游和能源进口国承压",
       "category": "geopolitics",
       "category_label": "地缘政治",
@@ -873,16 +873,33 @@
       "category_color": "#b91c1c",
       "category_bg": "#fee2e2",
       "source": "Google News World",
-      "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE01V2kwZ25wZzhtU0NQQUR3Yk44Y2xidVZtV1FyLWVNTHZ0REd0eWtsM2xFVF9vaEtueHZDd2c3Yk9xN0ZHcFhVdmF6MjB4eXFTd1FZOG13QkNVcmJacWdDQ2JiZ3BveXprX3U2LWdiVDdNNzlOaUxR?oc=5",
-      "pubDate": "Wed, 12 Aug 2026 15:34:06 GMT",
-      "time": "08/12 23:34",
+      "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOdXZ4M09fZkVWRUw1T1hEM1BfSmpCTDUwZVJvLVhRTjBTTE5sbENwbjVXc1pBUmVzVHhua2N4SzNaT09TTXQ5OFJDeVlLaURaZG9KRmFtUEo5YUVuN3pnSk82WGg0SFFyMExnazlJUlVHUVpOQU9LazYweDFHNV9jMEpwMVdTRHdKblZVR0hoQdIBjwFBVV95cUxQX2dYVUZzQUdPSG5GVm02bjBUUlUwYmFHcEJmY1BWbFpFWEZKdEdrMlk2MV9WMngzbzBqNVh4bnZHMWtjTHUyQlNZbHB4dThNSjEwYUtwOHRBMzNTbzNCU0VLOFFnZFB6X1FxbDc2dldiMU1EREItN1FIQ1Jjd3lxWGxqYXdnVFZaU1BjcHRxNA?oc=5",
+      "pubDate": "Wed, 12 Aug 2026 15:01:13 GMT",
+      "time": "08/12 23:01",
       "score": 13
+    },
+    {
+      "title": "US consumer inflation mild in July, economy still not out of the woods - Reuters",
+      "title_zh": "美国7月消费者通胀温和，经济仍未走出困境 - 路透中文网",
+      "summary": "US consumer inflation mild in July, economy still not out of the woods ReutersConsumer prices rose 0.1% in July, as expected, putting the annual rate at 3.4% CNBCS&P 500 ends higher as CoreWeave results fuel AI optimism ReutersFed's Warsh gets a break as inflation eases PoliticoBenign Inflation Data Offers Reprieve to Fed as It Weighs Rate Increase The New York Times",
+      "summary_zh": "美国 7 月消费者通胀温和，经济仍未走出困境 路透 7 月消费者价格上涨 0.1%，符合预期，年利率为 3.4% CNBC 标普 500 指数收高，因 CoreWeave 结果助长人工智能乐观情绪 路透美联储 Warsh 因通胀缓和而休息 Politico 良性通胀数据为美联储带来喘息之机，因为它权衡加息 《纽约时报》",
+      "analysis": "央行政策动向影响市场流动性预期和资产定价方向",
+      "category": "fed_policy",
+      "category_label": "美联储政策",
+      "category_icon": "🏦",
+      "category_color": "#7c3aed",
+      "category_bg": "#f3e8ff",
+      "source": "Google News Business",
+      "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxONVo4RlREbjZCeDFybnNPaTFlMDl0SnhGblQ3ZjE4NzA2WlVKU0diWDJqN1lPWXFvVk13eDY5TVhKYXROYXVJb2tLRzM0YVFaNXEzRWxLNWI0blFUSHZqbVN6aVRrMWFPR3Foa0hJd1FLZTluRVAtWlp0d3k1U1doeUhRVlRoRFltSzRneHcyYw?oc=5",
+      "pubDate": "Wed, 12 Aug 2026 22:27:21 GMT",
+      "time": "08/13 06:27",
+      "score": 11
     },
     {
       "title": "Cerebras raises annual targets on strong AI chip demand - Yahoo Finance",
       "title_zh": "Cerebras 因人工智能芯片需求强劲而提高年度目标 - 雅虎财经",
-      "summary": "Cerebras raises annual targets on strong AI chip demand Yahoo FinanceCerebras stock plunges 14% after second earnings report following IPO CNBCCerebras Systems Reports Solid Earnings.. The Stock Is Plunging.. barrons.comCerebras shares plummet 16% after results fail to impress investors ReutersCerebras Hardware Business Declines in Sign of ‘Lumpy’ Demand Bloomberg.com",
-      "summary_zh": "Cerebras 因人工智能芯片需求强劲而上调年度目标 雅虎财经 Cerebras 股价在 IPO 后第二份财报暴跌 14% CNBCCerebras Systems 报告稳健的盈利.. 股价暴跌.. barrons.com 业绩未能给投资者留下深刻印象后，Cerebras 股价暴跌 16% 路透 Cerebras 硬件业务下滑，需求“不稳定”迹象 Bloomberg.com",
+      "summary": "Cerebras raises annual targets on strong AI chip demand Yahoo FinanceCerebras stock plunges 14% after second earnings report following IPO CNBCCerebras Systems Reports Solid Earnings.. The Stock Is Plunging.. Barron'sCerebras shares plummet 16% after results fail to impress investors ReutersCerebras Hardware Business Declines in Sign of ‘Lumpy’ Demand Bloomberg.com",
+      "summary_zh": "Cerebras 因人工智能芯片需求强劲而上调年度目标 雅虎财经 IPO 后第二份财报公布后，Cerebras 股价暴跌 14% CNBCCerebras Systems 报告稳健盈利。股价暴跌。巴伦周刊 (Barron's) 业绩未能给投资者留下深刻印象，Cerebras 股价暴跌 16% 路透 Cerebras 硬件业务下滑，需求“不稳定”",
       "analysis": "AI技术突破推动相关产业链投资机会，关注芯片、算力和应用层受益标的",
       "category": "tech_breakthrough",
       "category_label": "科技突破",
@@ -910,23 +927,6 @@
       "link": "https://www.cnbc.com/2026/08/12/ais-costly-buildout-complicates-the-feds-inflation-fight.html",
       "pubDate": "Wed, 12 Aug 2026 15:23:12 GMT",
       "time": "08/12 23:23",
-      "score": 11
-    },
-    {
-      "title": "Supermicro stock jumps on Q4 results, strong Q1 outlook - Yahoo Finance",
-      "title_zh": "Supermicro 股价因第四季度业绩上涨，第一季度前景强劲 - 雅虎财经",
-      "summary": "Supermicro stock jumps on Q4 results, strong Q1 outlook Yahoo FinanceSuper Micro Stock Jumps 13.6% on Stunning $72 Billion Outlook Yahoo FinanceSuper Micro Stock Surges as Earnings Smash Expectations and Revive AI Hope barrons.comSuper Micro forecasts upbeat annual revenue on data center adoption ReutersSupermicro Soars On Report.. Why Nvidia Is Also Rallying.. Investor's Business Daily",
-      "summary_zh": "Supermicro 股票因第四季度业绩上涨，第一季度前景强劲雅虎财经Super Micro 股票上涨 13.6%，前景令人惊叹 720 亿美元雅虎财经 Super Micro 股票飙升，因为盈利低于预期并重振人工智能希望 barrons.comSuper Micro 预测数据中心采用的乐观年收入路透社Supermicro 飙升.. 为什么 Nvidia 也在上涨.. 投资者商业日报",
-      "analysis": "AI技术突破推动相关产业链投资机会，关注芯片、算力和应用层受益标的",
-      "category": "tech_breakthrough",
-      "category_label": "科技突破",
-      "category_icon": "🔬",
-      "category_color": "#0369a1",
-      "category_bg": "#e0f2fe",
-      "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPaFpVUFEybjgzN0ZKdEs2cTc5RTRDNFBQYVZyYXlDNlk2NlVCUi1HODBTRzdtaFotcFVETUtRVTR3dUcycjdIN0tCdDRRdnlXa08tZHFqZHZQakVqOE9UVjJETzdkTGZpNmp0Sk40TUQwcEEtWFZtWVFkb05CclRWSzl5cmpZcjFnZ2l4NnZLVjM2bGJjYVlldzJhVGJoV1ZLRGZBa29ZN2NFeDBYVVMxWlFWcXM?oc=5",
-      "pubDate": "Wed, 12 Aug 2026 13:44:40 GMT",
-      "time": "08/12 21:44",
       "score": 11
     }
   ],
@@ -983,12 +983,22 @@
       {
         "market": "crypto",
         "type": "individual_weak",
+        "symbol": "DOGE",
+        "name": "Dogecoin",
+        "description": "Dogecoin(DOGE)跌幅-3.5%，表现疲弱",
+        "confidence": "中",
+        "price": 0.069705,
+        "change_pct": -3.5
+      },
+      {
+        "market": "crypto",
+        "type": "individual_weak",
         "symbol": "UNI",
         "name": "Uniswap",
-        "description": "Uniswap(UNI)跌幅-5.7%，表现疲弱",
-        "confidence": "高",
-        "price": 3.54,
-        "change_pct": -5.7
+        "description": "Uniswap(UNI)跌幅-4.6%，表现疲弱",
+        "confidence": "中",
+        "price": 3.57,
+        "change_pct": -4.6
       },
       {
         "market": "crypto",
@@ -997,7 +1007,7 @@
         "name": "Filecoin",
         "description": "Filecoin(FIL)跌幅-5.9%，表现疲弱",
         "confidence": "高",
-        "price": 0.670089,
+        "price": 0.669375,
         "change_pct": -5.9
       },
       {
@@ -1005,10 +1015,10 @@
         "type": "individual_weak",
         "symbol": "APT",
         "name": "Aptos",
-        "description": "Aptos(APT)跌幅-4.3%，表现疲弱",
+        "description": "Aptos(APT)跌幅-3.6%，表现疲弱",
         "confidence": "中",
-        "price": 0.556909,
-        "change_pct": -4.3
+        "price": 0.559907,
+        "change_pct": -3.6
       },
       {
         "market": "commodity",
@@ -1091,22 +1101,32 @@
       {
         "market": "crypto",
         "type": "dip_buying",
+        "symbol": "DOGE",
+        "name": "Dogecoin",
+        "description": "Dogecoin回调3.5%，关注低吸机会",
+        "confidence": "中",
+        "price": 0.069705,
+        "change_pct": -3.5
+      },
+      {
+        "market": "crypto",
+        "type": "dip_buying",
         "symbol": "UNI",
         "name": "Uniswap",
-        "description": "Uniswap回调5.7%，关注低吸机会",
-        "confidence": "低",
-        "price": 3.54,
-        "change_pct": -5.7
+        "description": "Uniswap回调4.6%，关注低吸机会",
+        "confidence": "中",
+        "price": 3.57,
+        "change_pct": -4.6
       },
       {
         "market": "crypto",
         "type": "breakout_watch",
         "symbol": "NEAR",
         "name": "NEAR Protocol",
-        "description": "NEAR Protocol温和上涨2.5%，留意突破信号",
+        "description": "NEAR Protocol温和上涨2.7%，留意突破信号",
         "confidence": "低",
-        "price": 1.62,
-        "change_pct": 2.5
+        "price": 1.65,
+        "change_pct": 2.7
       },
       {
         "market": "crypto",
@@ -1115,7 +1135,7 @@
         "name": "Filecoin",
         "description": "Filecoin回调5.9%，关注低吸机会",
         "confidence": "低",
-        "price": 0.670089,
+        "price": 0.669375,
         "change_pct": -5.9
       },
       {
@@ -1123,23 +1143,13 @@
         "type": "dip_buying",
         "symbol": "APT",
         "name": "Aptos",
-        "description": "Aptos回调4.3%，关注低吸机会",
+        "description": "Aptos回调3.6%，关注低吸机会",
         "confidence": "中",
-        "price": 0.556909,
-        "change_pct": -4.3
+        "price": 0.559907,
+        "change_pct": -3.6
       }
     ],
     "risks": [
-      {
-        "market": "crypto",
-        "type": "crash_warning",
-        "symbol": "UNI",
-        "name": "Uniswap",
-        "description": "Uniswap暴跌5.7%，风险极高",
-        "confidence": "高",
-        "price": 3.54,
-        "change_pct": -5.7
-      },
       {
         "market": "crypto",
         "type": "crash_warning",
@@ -1147,7 +1157,7 @@
         "name": "Filecoin",
         "description": "Filecoin暴跌5.9%，风险极高",
         "confidence": "高",
-        "price": 0.670089,
+        "price": 0.669375,
         "change_pct": -5.9
       },
       {
@@ -1199,11 +1209,11 @@
         "upCount": 3,
         "downCount": 16,
         "flatCount": 0,
-        "avgChange": -1.55,
+        "avgChange": -1.58,
         "maxUp": {
           "symbol": "NEAR",
           "name": "NEAR Protocol",
-          "change_pct": 2.5
+          "change_pct": 2.7
         },
         "maxDown": {
           "symbol": "FIL",
@@ -1214,24 +1224,24 @@
       "commodity": {
         "total": 10,
         "upCount": 6,
-        "downCount": 4,
-        "flatCount": 0,
-        "avgChange": 0.89,
+        "downCount": 3,
+        "flatCount": 1,
+        "avgChange": 0.93,
         "maxUp": {
           "symbol": "CORN",
           "name": "玉米期货",
           "change_pct": 4.51
         },
         "maxDown": {
-          "symbol": "SILVER",
-          "name": "白银期货",
-          "change_pct": -0.15
+          "symbol": "ALUMINUM",
+          "name": "铝期货",
+          "change_pct": -0.04
         }
       }
     }
   },
   "report": {
-    "summary": "美股: 平均-0.08%, 涨跌比7:13 | A股: 平均+0.14%, 涨跌比11:11 | 数字货币: 平均-1.55%, 涨跌比3:16 | 大宗商品: 平均+0.89%, 涨跌比6:4 | 风险预警: 3条 | 机会提示: 9条"
+    "summary": "美股: 平均-0.08%, 涨跌比7:13 | A股: 平均+0.14%, 涨跌比11:11 | 数字货币: 平均-1.58%, 涨跌比3:16 | 大宗商品: 平均+0.93%, 涨跌比6:3 | 风险预警: 2条 | 机会提示: 10条"
   },
   "emailResults": [
     {
