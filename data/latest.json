@@ -1,6 +1,6 @@
 {
   "date": "2026-08-16",
-  "updatedAt": "2026-08-16T22:42:45.809921",
+  "updatedAt": "2026-08-16T22:51:25.085179",
   "markets": {
     "us": [
       {
@@ -472,42 +472,42 @@
       {
         "symbol": "BTC",
         "name": "Bitcoin",
-        "price": 62695.0,
+        "price": 62720.0,
         "change_pct": -0.2,
-        "volume": 9284063077.0,
+        "volume": 9365832243.0,
         "high": 63315.0,
         "low": 62797.0,
-        "open": 63044.33,
-        "prev_close": 63044.33
+        "open": 63046.12,
+        "prev_close": 63046.12
       },
       {
         "symbol": "ETH",
         "name": "Ethereum",
-        "price": 1869.21,
+        "price": 1872.03,
         "change_pct": -0.4,
-        "volume": 3241725585.0,
+        "volume": 3270503875.0,
         "high": 1889.82,
         "low": 1870.55,
-        "open": 1882.06,
-        "prev_close": 1882.06
+        "open": 1881.34,
+        "prev_close": 1881.34
       },
       {
         "symbol": "BNB",
         "name": "BNB",
-        "price": 601.25,
+        "price": 601.38,
         "change_pct": -1.0,
-        "volume": 497414557.0,
+        "volume": 499179173.0,
         "high": 608.7,
         "low": 603.32,
-        "open": 607.09,
-        "prev_close": 607.09
+        "open": 607.48,
+        "prev_close": 607.48
       },
       {
         "symbol": "XRP",
         "name": "XRP",
-        "price": 0.9916,
+        "price": 0.992542,
         "change_pct": -0.8,
-        "volume": 468416072.0,
+        "volume": 469906832.0,
         "high": 1.004,
         "low": 0.993323,
         "open": 1.0,
@@ -516,86 +516,86 @@
       {
         "symbol": "SOL",
         "name": "Solana",
-        "price": 74.28,
+        "price": 74.32,
         "change_pct": -1.5,
-        "volume": 705990776.0,
+        "volume": 710012742.0,
         "high": 75.62,
         "low": 74.16,
-        "open": 75.32,
-        "prev_close": 75.32
+        "open": 75.29,
+        "prev_close": 75.29
       },
       {
         "symbol": "TRX",
         "name": "TRON",
-        "price": 0.330956,
+        "price": 0.330953,
         "change_pct": 0.0,
-        "volume": 228864223.0,
+        "volume": 229537372.0,
         "high": 0.33227,
         "low": 0.330648,
-        "open": 0.330971,
-        "prev_close": 0.330971
+        "open": 0.33096,
+        "prev_close": 0.33096
       },
       {
         "symbol": "DOGE",
         "name": "Dogecoin",
-        "price": 0.069455,
+        "price": 0.069527,
         "change_pct": -0.6,
-        "volume": 189847865.0,
+        "volume": 189809352.0,
         "high": 0.070084,
         "low": 0.069209,
-        "open": 0.069606,
-        "prev_close": 0.069606
+        "open": 0.069565,
+        "prev_close": 0.069565
       },
       {
         "symbol": "LINK",
         "name": "Chainlink",
         "price": 9.36,
         "change_pct": -1.6,
-        "volume": 236047543.0,
+        "volume": 235556612.0,
         "high": 9.53,
         "low": 9.3,
-        "open": 9.46,
-        "prev_close": 9.46
+        "open": 9.48,
+        "prev_close": 9.48
       },
       {
         "symbol": "ADA",
         "name": "Cardano",
-        "price": 0.175432,
+        "price": 0.174891,
         "change_pct": -1.0,
-        "volume": 160567031.0,
+        "volume": 162664535.0,
         "high": 0.179014,
         "low": 0.175125,
-        "open": 0.175969,
-        "prev_close": 0.175969
+        "open": 0.176033,
+        "prev_close": 0.176033
       },
       {
         "symbol": "XLM",
         "name": "Stellar",
-        "price": 0.156407,
+        "price": 0.156294,
         "change_pct": -1.0,
-        "volume": 62821064.0,
+        "volume": 63492493.0,
         "high": 0.159453,
         "low": 0.156091,
-        "open": 0.157958,
-        "prev_close": 0.157958
+        "open": 0.157875,
+        "prev_close": 0.157875
       },
       {
         "symbol": "LTC",
         "name": "Litecoin",
-        "price": 44.05,
+        "price": 44.07,
         "change_pct": 0.0,
-        "volume": 108407903.0,
+        "volume": 107899906.0,
         "high": 44.74,
         "low": 44.01,
-        "open": 44.06,
-        "prev_close": 44.06
+        "open": 44.07,
+        "prev_close": 44.07
       },
       {
         "symbol": "AVAX",
         "name": "Avalanche",
-        "price": 6.3,
+        "price": 6.31,
         "change_pct": -3.0,
-        "volume": 158486654.0,
+        "volume": 153317669.0,
         "high": 6.43,
         "low": 6.24,
         "open": 6.33,
@@ -606,7 +606,7 @@
         "name": "Shiba Inu",
         "price": 4e-06,
         "change_pct": -3.1,
-        "volume": 44773823.0,
+        "volume": 45296669.0,
         "high": 4.53e-06,
         "low": 4.39e-06,
         "open": 5e-06,
@@ -617,7 +617,7 @@
         "name": "NEAR Protocol",
         "price": 1.59,
         "change_pct": -2.9,
-        "volume": 52229799.0,
+        "volume": 52454991.0,
         "high": 1.63,
         "low": 1.59,
         "open": 1.62,
@@ -628,7 +628,7 @@
         "name": "Uniswap",
         "price": 3.28,
         "change_pct": 1.0,
-        "volume": 122891121.0,
+        "volume": 122807230.0,
         "high": 3.33,
         "low": 3.22,
         "open": 3.23,
@@ -637,20 +637,20 @@
       {
         "symbol": "DOT",
         "name": "Polkadot",
-        "price": 0.754861,
+        "price": 0.754922,
         "change_pct": -1.1,
-        "volume": 39571522.0,
+        "volume": 39742110.0,
         "high": 0.767835,
         "low": 0.754311,
-        "open": 0.75914,
-        "prev_close": 0.75914
+        "open": 0.759047,
+        "prev_close": 0.759047
       },
       {
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "price": 6.06,
+        "price": 6.07,
         "change_pct": -3.1,
-        "volume": 25465643.0,
+        "volume": 25560600.0,
         "high": 6.26,
         "low": 6.04,
         "open": 6.21,
@@ -659,33 +659,33 @@
       {
         "symbol": "FIL",
         "name": "Filecoin",
-        "price": 0.665125,
+        "price": 0.665553,
         "change_pct": -3.5,
-        "volume": 26042766.0,
+        "volume": 26154172.0,
         "high": 0.683969,
         "low": 0.662364,
-        "open": 0.676108,
-        "prev_close": 0.676108
+        "open": 0.675861,
+        "prev_close": 0.675861
       },
       {
         "symbol": "APT",
         "name": "Aptos",
-        "price": 0.521128,
+        "price": 0.52024,
         "change_pct": -3.6,
-        "volume": 26050457.0,
+        "volume": 26059230.0,
         "high": 0.53927,
         "low": 0.516083,
-        "open": 0.537512,
-        "prev_close": 0.537512
+        "open": 0.537083,
+        "prev_close": 0.537083
       }
     ],
     "commodity": [
       {
         "symbol": "GOLD",
         "name": "黄金期货",
-        "price": 4432.1,
-        "change_pct": -0.18,
-        "volume": 1424,
+        "price": 4434.0,
+        "change_pct": -0.14,
+        "volume": 1626,
         "high": 4443.1,
         "low": 4429.0,
         "open": 4440.0,
@@ -694,9 +694,9 @@
       {
         "symbol": "SILVER",
         "name": "白银期货",
-        "price": 65.06,
-        "change_pct": -0.01,
-        "volume": 530,
+        "price": 65.12,
+        "change_pct": 0.09,
+        "volume": 597,
         "high": 65.32,
         "low": 64.85,
         "open": 65.06,
@@ -705,22 +705,22 @@
       {
         "symbol": "CRUDE_OIL",
         "name": "原油期货(WTI)",
-        "price": 82.51,
-        "change_pct": -0.02,
-        "volume": 1264,
+        "price": 82.41,
+        "change_pct": -0.15,
+        "volume": 1633,
         "high": 82.73,
-        "low": 82.5,
+        "low": 82.38,
         "open": 82.53,
         "prev_close": 82.53
       },
       {
         "symbol": "BRENT",
         "name": "原油期货(布伦特)",
-        "price": 88.72,
-        "change_pct": 0.0,
-        "volume": 173,
+        "price": 88.68,
+        "change_pct": -0.05,
+        "volume": 202,
         "high": 88.97,
-        "low": 88.71,
+        "low": 88.65,
         "open": 88.72,
         "prev_close": 88.72
       },
@@ -728,8 +728,8 @@
         "symbol": "NATURAL_GAS",
         "name": "天然气期货",
         "price": 2.68,
-        "change_pct": -0.33,
-        "volume": 1735,
+        "change_pct": -0.3,
+        "volume": 1795,
         "high": 2.7,
         "low": 2.68,
         "open": 2.69,
@@ -738,10 +738,10 @@
       {
         "symbol": "COPPER",
         "name": "铜期货",
-        "price": 6.63,
-        "change_pct": 0.26,
-        "volume": 590,
-        "high": 6.64,
+        "price": 6.64,
+        "change_pct": 0.4,
+        "volume": 905,
+        "high": 6.65,
         "low": 6.61,
         "open": 6.62,
         "prev_close": 6.62
@@ -763,8 +763,8 @@
     {
       "title": "Stock-Market Calm Masks Fast Shifting Investor Sentiment - Bloomberg.com",
       "title_zh": "股市平静掩盖了快速变化的投资者情绪 - Bloomberg.com",
-      "summary": "Stock-Market Calm Masks Fast Shifting Investor Sentiment Bloomberg.comMarkets are looking eerily calm as investors chase FOMO rally MarketWatchWall Street’s Fear Gauge Goes Silent.. It’s Worth Listening To.. Barron'sVIX Holds at 14.56 Despite 6% Oil Jolt as Analysts Flag Increased Tail Risk TechStock²The S&P 500 May Be Heading For A Major Volatility Shift This Week Seeking Alpha",
-      "summary_zh": "股市平静掩盖了快速变化的投资者情绪 Bloomberg.com 随着投资者追逐 FOMO 反弹，市场显得出奇的平静 MarketWatch 华尔街的恐惧指标陷入沉默……值得一听……尽管分析师指出尾部风险增加，油价波动 6%，巴伦 VIX 仍保持在 14.56 TechStock²标普 500 指数本周可能会出现重大波动寻找阿尔法",
+      "summary": "Stock-Market Calm Masks Fast Shifting Investor Sentiment Bloomberg.comMarkets are looking eerily calm as investors chase FOMO rally MarketWatchWall Street’s Fear Gauge Goes Silent.. It’s Worth Listening To.. Barron'sVIX Holds at 14.56 Despite 6% Oil Jolt as Analysts Flag Increased Tail Risk ts2.techThe S&P 500 May Be Heading For A Major Volatility Shift This Week Seeking Alpha",
+      "summary_zh": "股市平静掩盖了快速变化的投资者情绪 Bloomberg.com 随着投资者追逐 FOMO 反弹，市场看起来出奇的平静 MarketWatch 华尔街的恐惧指标陷入沉默……值得一听……尽管分析师指出尾部风险增加，油价波动 6%，巴伦 VIX 仍保持在 14.56 ts2.tech 标准普尔 500 指数可能会出现重大波动性转变周寻求阿尔法",
       "analysis": "市场大涨显示风险偏好回暖，关注领涨板块的持续性和资金流向",
       "category": "market_performance",
       "category_label": "市场表现",
@@ -815,7 +815,7 @@
       "title": "Dollar Falls on Weak US Retail Sales and Consumer Sentiment Reports",
       "title_zh": "美国零售销售和消费者信心报告疲软，美元下跌",
       "summary": "The dollar index (DXY00 ) fell -0.27% on Friday as weak US retail sales and consumer sentiment reports reduced the odds of a September Fed rate hike to 32% from 35% on Thursday.. The dollar's decline was curbed by the 10-year T-note yield rising +5 bp despite the weak US...",
-      "summary_zh": "美元指数（DXY00）周五下跌-0.27%，因美国零售销售疲软和消费者信心报告将9月美联储加息的可能性从周四的35%降低至32%。尽管美国疲软，但10年期国债收益率上涨+5个基点限制了美元跌势。",
+      "summary_zh": "美元指数（DXY00）周五下跌-0.27%，因美国零售销售疲软和消费者信心报告将美联储9月加息的可能性从周四的35%降低至32%。尽管美国疲软，但10年期国债收益率上涨+5个基点限制了美元跌势。",
       "analysis": "美联储收紧货币政策，加息预期升温，可能压制高估值成长股；银行股或受益于息差扩大",
       "category": "fed_policy",
       "category_label": "美联储政策",
@@ -829,10 +829,10 @@
       "score": 10
     },
     {
-      "title": "Ukraine attacks Wildberries, Russia's biggest online market - dw.com",
-      "title_zh": "乌克兰攻击俄罗斯最大在线市场Wildberry - dw.com",
-      "summary": "Ukraine attacks Wildberries, Russia's biggest online market dw.comWildberries Depot Ablaze Near Moscow as Drone Downed in Romania Bloomberg.comVideo: Apocalyptic Blaze After Massive Drone Attack Hits Moscow Region NDTVUkraine-Russia war latest: Kyiv blows up biggest ‘Russian Amazon’ hub in massive drone attack The IndependentUkraine Knocks 7 of Russia’s 10 Largest Wildberries Logistics Hubs Out of Operation UNITED24 Media",
-      "summary_zh": "乌克兰袭击俄罗斯最大的在线市场野莓 dw.com 无人机在罗马尼亚被击落，莫斯科附近的野莓仓库着火 Bloomberg.com 视频：大规模无人机袭击莫斯科地区后引发的世界末日大火 NDTV乌克兰-俄罗斯战争最新消息：基辅在大规模无人机袭击中炸毁了最大的“俄罗斯亚马逊”中心 独立乌克兰使俄罗斯 10 个最大野莓物流中心中的 7 个停止运营 UNITED24 Media",
+      "title": "Ukraine attacks Wildberries, Russia's biggest online market - DW.com",
+      "title_zh": "乌克兰攻击俄罗斯最大在线市场Wildberry - DW.com",
+      "summary": "Ukraine attacks Wildberries, Russia's biggest online market DW.comWildberries Depot Ablaze Near Moscow as Drone Downed in Romania Bloomberg.comVideo: Apocalyptic Blaze After Massive Drone Attack Hits Moscow Region NDTVUkraine-Russia war latest: Kyiv blows up biggest ‘Russian Amazon’ hub in massive drone attack The IndependentUkraine Knocks 7 of Russia’s 10 Largest Wildberries Logistics Hubs Out of Operation UNITED24 Media",
+      "summary_zh": "乌克兰袭击俄罗斯最大的在线市场野莓 DW.com 无人机在罗马尼亚被击落，莫斯科附近的野莓仓库着火 Bloomberg.com 视频：大规模无人机袭击袭击莫斯科地区后引发的世界末日大火 NDTV乌克兰-俄罗斯战争最新消息：基辅在大规模无人机袭击中炸毁了最大的“俄罗斯亚马逊”枢纽 乌克兰独立报导致俄罗斯 10 个最大野莓物流中心中的 7 个停止运营 UNITED24 Media",
       "analysis": "地缘冲突升级推升避险情绪，利好黄金、原油和军工板块；航空、旅游和能源进口国承压",
       "category": "geopolitics",
       "category_label": "地缘政治",
@@ -846,27 +846,10 @@
       "score": 9
     },
     {
-      "title": "Kyiv launches large attack on Russian military and energy facilities - Euronews.com",
-      "title_zh": "基辅对俄罗斯军事和能源设施发动大规模袭击 - Euronews.com",
-      "summary": "Kyiv launches large attack on Russian military and energy facilities Euronews.comUkraine attacks Russia with hundreds of drones - one of Kyiv’s largest assaults of the conflict CNNUkraine launches one of its largest aerial attacks of the war, killing at least 6 people in Russia Anchorage Daily NewsUkrainian drone attack on Russia kills at least six, says Moscow The GuardianUkraine targets Moscow in mass drone attack as Russia bombards Kyiv Al Jazeera",
-      "summary_zh": "基辅对俄罗斯军事和能源设施发动大规模袭击 Euronews.com 乌克兰用数百架无人机袭击俄罗斯 - 这是基辅冲突中最大规模的袭击之一 CNNU乌克兰发动了战争中最大规模的空袭之一，造成俄罗斯至少 6 人死亡 安克雷奇每日新闻莫斯科称，乌克兰对俄罗斯的无人机袭击造成至少六人死亡，俄罗斯轰炸基辅半岛电视台时，乌克兰对莫斯科进行大规模无人机袭击",
-      "analysis": "地缘冲突升级推升避险情绪，利好黄金、原油和军工板块；航空、旅游和能源进口国承压",
-      "category": "geopolitics",
-      "category_label": "地缘政治",
-      "category_icon": "⚔️",
-      "category_color": "#b91c1c",
-      "category_bg": "#fee2e2",
-      "source": "Google News World",
-      "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNQ2hhaUsxR3BDcm92cTJiclVLLVNIQ1kxZktzajNHSkRNN0t5LTdKVGVDS05XaTZZTldZOUdZWDR1dHFiWGZrYjV6di1qMmZydW5tbGd5eEFQLTA5THRuV1k4MGN4cUxjY3BXTTkxOVFyaUNBNUNqQnFHZzBYOWdqQlRBZTA0UWh1NTNXcW5XaXliSXM0UlFMX3E1dkp1aGFkajdrb09DY2FJSHoydm1ESjRDdEJMSVh1YVBiM3FrTEc1LXhram56WmpkcmJxVlk?oc=5",
-      "pubDate": "Sun, 16 Aug 2026 14:29:51 GMT",
-      "time": "08/16 22:29",
-      "score": 9
-    },
-    {
-      "title": "Stripe will reportedly acquire AI gateway startup OpenRouter for $7B+ - techcrunch.com",
-      "title_zh": "据报道，Stripe 将以 70 亿美元以上的价格收购人工智能网关初创公司 OpenRouter - techcrunch.com",
-      "summary": "Stripe will reportedly acquire AI gateway startup OpenRouter for $7B+ techcrunch.comStripe Clinches Over $7 Billion Deal to Buy AI Firm OpenRouter Bloomberg.comStripe is said to agree to buy OpenRouter for more than $7B Seeking AlphaStripe completes OpenRouter acquisition in deal worth over $7 billion Межа.. Новини України.Stripe in advanced talks to acquire OpenRouter for around $10B Crypto Briefing",
-      "summary_zh": "据报道，Stripe 将以超过 70 亿美元的价格收购人工智能网关初创公司 OpenRouter techcrunch.comStripe 达成超过 70 亿美元的收购人工智能公司 OpenRouter 的交易 Bloomberg.com 据说 Stripe 同意以超过 70 亿美元的价格收购 OpenRouter 寻求 AlphaStripe 以超过 70 亿美元的交易完成对 OpenRouter 的收购。 Новини України.Stripe 正在进行高级谈判以约 10B 美元收购 OpenRouter Crypto Briefing",
+      "title": "Stripe Clinches Over $7 Billion Deal to Buy AI Firm OpenRouter - Bloomberg.com",
+      "title_zh": "Stripe 达成逾 70 亿美元收购人工智能公司 OpenRouter 的交易 - Bloomberg.com",
+      "summary": "Stripe Clinches Over $7 Billion Deal to Buy AI Firm OpenRouter Bloomberg.comStripe will reportedly acquire AI gateway startup OpenRouter for $7B+ TechCrunchStripe is said to agree to buy OpenRouter for more than $7B Seeking AlphaStripe completes OpenRouter acquisition in deal worth over $7 billion Межа.. Новини України.Stripe in advanced talks to acquire OpenRouter for around $10B Crypto Briefing",
+      "summary_zh": "Stripe 以超过 70 亿美元的价格收购人工智能公司 OpenRouter Bloomberg.com 据报道，Stripe 将以超过 7B 美元的价格收购人工智能网关初创公司 OpenRouter TechCrunchStripe 据说同意以超过 70 亿美元的价格收购 OpenRouter 寻求 AlphaStripe 以超过 70 亿美元的交易完成对 OpenRouter 的收购。以约 10B 美元收购 OpenRouter Crypto Briefing",
       "analysis": "并购交易影响相关公司估值和行业格局，关注溢价和协同效应",
       "category": "investor_insight",
       "category_label": "投资人动态",
@@ -874,9 +857,26 @@
       "category_color": "#9d174d",
       "category_bg": "#fce7f3",
       "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOWE5zb2s5ZnFNRHkzRWl1OWlhMS1CUTc5b1lwRHl3eFNEWWlmdDByaDFRbDVrbmRTOUhGY0IyMU1QOXk1VktSSFBlZ2R3Q0pwSzhkN2pZbWgyRDdtYUoxbzUtRkh4N0xPdmJIRTE0SlZ2TnNNTjUzMGZVNnhycVNSWVB6T1hBTHVLcTBBaXlEZnpDVTQtaTZjVXUzRkxzSTBUUDVyOA?oc=5",
-      "pubDate": "Sun, 16 Aug 2026 20:57:04 GMT",
-      "time": "08/17 04:57",
+      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNT2VMMXR1X3Jzd1hQZ0pobFMxT0gzQWFFNjFnekt4dlR1ak9lS2NUc3V2RjVodU5BemxCSmFqVDFBUUJRbHJuUEQxb1dyT3JXWk1YSi0zRDI1NU0yNTJuMnNIZkRMVHB2TTEtc0dPbjNMSnJpTm1CUlVpbmg5Q2x4X0VQZXNiZTRJcFpTdDljbHRwVVM1eE51dmt2XzNFemRqTnZMRUJFZ3ZPMDJuX0ZjZndiWQ?oc=5",
+      "pubDate": "Sun, 16 Aug 2026 20:08:01 GMT",
+      "time": "08/17 04:08",
+      "score": 8
+    },
+    {
+      "title": "Rescuers in Indonesia recover 6 more bodies in earthquake aftermath, raising death toll to 53 - AP News",
+      "title_zh": "印尼救援人员在地震中又打捞出 6 具尸体，死亡人数增至 53 人 - 美联社新闻",
+      "summary": "Rescuers in Indonesia recover 6 more bodies in earthquake aftermath, raising death toll to 53 AP NewsSee more headlines & perspectives on Google News",
+      "summary_zh": "印度尼西亚救援人员在地震后又打捞出 6 具尸体，死亡人数增至 53 人 美联社新闻在 Google 新闻上查看更多头条新闻和观点",
+      "analysis": "地震灾害可能影响当地产业链和基础设施，关注保险赔付和重建需求",
+      "category": "natural_disaster",
+      "category_label": "自然灾害",
+      "category_icon": "🌪️",
+      "category_color": "#c2410c",
+      "category_bg": "#ffedd5",
+      "source": "Google News World",
+      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxOekM5VXhLY1NEVEZnWUFWdzdpd3VnekF5UUkzdzQxSDFLWnJpbHlzN2ZQU2hwTDRVcWthLTJMWmNWUjVQdXRyejZwNllFMm1TNHFSZ05DQjBVQXc3Z01Tc3BiX29TVHVwNlhfakI5eHl5UTZmUm82VGtaR3o2eF9UODl3RHZQTHFwQ2RxdjJqLTJoaHVJSUFSdTBQV3VIdw?oc=5",
+      "pubDate": "Sun, 16 Aug 2026 19:25:00 GMT",
+      "time": "08/17 03:25",
       "score": 8
     },
     {
@@ -944,7 +944,7 @@
         "name": "Ethereum Classic",
         "description": "Ethereum Classic(ETC)跌幅-3.1%，表现疲弱",
         "confidence": "中",
-        "price": 6.06,
+        "price": 6.07,
         "change_pct": -3.1
       },
       {
@@ -954,7 +954,7 @@
         "name": "Filecoin",
         "description": "Filecoin(FIL)跌幅-3.5%，表现疲弱",
         "confidence": "中",
-        "price": 0.665125,
+        "price": 0.665553,
         "change_pct": -3.5
       },
       {
@@ -964,13 +964,13 @@
         "name": "Aptos",
         "description": "Aptos(APT)跌幅-3.6%，表现疲弱",
         "confidence": "中",
-        "price": 0.521128,
+        "price": 0.52024,
         "change_pct": -3.6
       },
       {
         "market": "commodity",
         "type": "market_trend",
-        "description": "大宗商品整体普遍下跌，上涨占比29%",
+        "description": "大宗商品整体偏弱，上涨占比43%",
         "confidence": "中"
       }
     ],
@@ -1012,7 +1012,7 @@
         "name": "Ethereum Classic",
         "description": "Ethereum Classic回调3.1%，关注低吸机会",
         "confidence": "中",
-        "price": 6.06,
+        "price": 6.07,
         "change_pct": -3.1
       },
       {
@@ -1022,7 +1022,7 @@
         "name": "Filecoin",
         "description": "Filecoin回调3.5%，关注低吸机会",
         "confidence": "中",
-        "price": 0.665125,
+        "price": 0.665553,
         "change_pct": -3.5
       },
       {
@@ -1032,7 +1032,7 @@
         "name": "Aptos",
         "description": "Aptos回调3.6%，关注低吸机会",
         "confidence": "中",
-        "price": 0.521128,
+        "price": 0.52024,
         "change_pct": -3.6
       }
     ],
@@ -1100,25 +1100,25 @@
       },
       "commodity": {
         "total": 7,
-        "upCount": 2,
+        "upCount": 3,
         "downCount": 4,
-        "flatCount": 1,
-        "avgChange": 0.0,
+        "flatCount": 0,
+        "avgChange": 0.02,
         "maxUp": {
-          "symbol": "ALUMINUM",
-          "name": "铝期货",
-          "change_pct": 0.29
+          "symbol": "COPPER",
+          "name": "铜期货",
+          "change_pct": 0.4
         },
         "maxDown": {
           "symbol": "NATURAL_GAS",
           "name": "天然气期货",
-          "change_pct": -0.33
+          "change_pct": -0.3
         }
       }
     }
   },
   "report": {
-    "summary": "美股: 平均+0.36%, 涨跌比8:12 | A股: 平均-0.84%, 涨跌比4:17 | 数字货币: 平均-1.44%, 涨跌比1:16 | 大宗商品: 平均0.00%, 涨跌比2:4 | 风险预警: 1条 | 机会提示: 6条"
+    "summary": "美股: 平均+0.36%, 涨跌比8:12 | A股: 平均-0.84%, 涨跌比4:17 | 数字货币: 平均-1.44%, 涨跌比1:16 | 大宗商品: 平均+0.02%, 涨跌比3:4 | 风险预警: 1条 | 机会提示: 6条"
   },
   "emailResults": [
     {
