@@ -1,11 +1,7 @@
 name: Daily Market Pipeline
 
 on:
-  # GitHub 内部 cron 不靠谱，仅保留 1 个作为备用
-  # 主要靠 Vercel Cron Jobs 触发 workflow_dispatch
-  schedule:
-    - cron: '0 22 * * *'     # 6:00 AM CST (备用, 常规模式)
-  # 外部触发 (Vercel Cron) + 手动测试
+  # 主要靠 Vercel Cron Jobs 触发 workflow_dispatch (保留单一调度源, 避免与 Vercel 重复触发早上推送)
   workflow_dispatch:
     inputs:
       mode:

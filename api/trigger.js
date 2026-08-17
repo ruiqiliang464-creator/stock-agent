@@ -4,8 +4,8 @@
  * 由 Vercel Cron Jobs 调用此接口，再 POST 到 GitHub Actions dispatch API。
  *
  * 两个 cron:
- *   6:00 AM CST → /api/trigger         (常规模式: 市场数据 + 新闻)
- *   12:00 PM CST → /api/trigger?mode=review  (复盘模式: A股市场复盘)
+ *   6:00 AM CST → /api/trigger              (常规模式: 市场数据 + 新闻)
+ *   4:00 PM CST → /api/trigger?mode=review  (复盘模式: A股市场复盘, 收市后)
  *
  * 手动测试:
  *   常规: GET /api/trigger
