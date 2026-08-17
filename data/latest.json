@@ -1,6 +1,6 @@
 {
   "date": "2026-08-17",
-  "updatedAt": "2026-08-17T22:32:33.167660",
+  "updatedAt": "2026-08-17T22:56:10.921849",
   "markets": {
     "us": [
       {
@@ -226,36 +226,58 @@
     ],
     "cn": [
       {
+        "symbol": "000001",
+        "name": "上证指数",
+        "price": 3982.65,
+        "change_pct": 1.41,
+        "volume": 489834027,
+        "high": 3983.51,
+        "low": 3924.47,
+        "open": 3930.1,
+        "prev_close": 3927.18
+      },
+      {
+        "symbol": "399001",
+        "name": "深证成指",
+        "price": 14704.27,
+        "change_pct": 2.44,
+        "volume": 641864873,
+        "high": 14704.55,
+        "low": 14348.47,
+        "open": 14399.2,
+        "prev_close": 14354.31
+      },
+      {
         "symbol": "399006",
         "name": "创业板指",
         "price": 3740.16,
-        "change_pct": 0.0,
-        "volume": 3690289008,
-        "high": 3740.15673828125,
-        "low": 3604.166015625,
-        "open": 3632.77685546875,
-        "prev_close": 3740.16
+        "change_pct": 3.14,
+        "volume": 199036941,
+        "high": 3740.16,
+        "low": 3604.17,
+        "open": 3632.78,
+        "prev_close": 3626.3
       },
       {
         "symbol": "600519",
         "name": "贵州茅台",
         "price": 1293.09,
         "change_pct": -3.64,
-        "volume": 7842956,
+        "volume": 78430,
         "high": 1301.0,
-        "low": 1280.3399658203125,
+        "low": 1280.34,
         "open": 1295.0,
         "prev_close": 1341.99
       },
       {
         "symbol": "000858",
-        "name": "五粮液",
+        "name": "五 粮 液",
         "price": 72.55,
         "change_pct": -1.63,
-        "volume": 33214854,
-        "high": 72.80000305175781,
-        "low": 71.87000274658203,
-        "open": 72.38999938964844,
+        "volume": 332149,
+        "high": 72.8,
+        "low": 71.87,
+        "open": 72.39,
         "prev_close": 73.75
       },
       {
@@ -263,9 +285,9 @@
         "name": "中国平安",
         "price": 51.8,
         "change_pct": 0.1,
-        "volume": 50214338,
-        "high": 51.9900016784668,
-        "low": 51.5099983215332,
+        "volume": 502143,
+        "high": 51.99,
+        "low": 51.51,
         "open": 51.75,
         "prev_close": 51.75
       },
@@ -274,10 +296,10 @@
         "name": "美的集团",
         "price": 82.61,
         "change_pct": -0.51,
-        "volume": 18845181,
-        "high": 83.27999877929688,
-        "low": 82.38999938964844,
-        "open": 83.1500015258789,
+        "volume": 188452,
+        "high": 83.28,
+        "low": 82.39,
+        "open": 83.15,
         "prev_close": 83.03
       },
       {
@@ -285,10 +307,10 @@
         "name": "招商银行",
         "price": 38.2,
         "change_pct": -0.68,
-        "volume": 65674416,
-        "high": 38.459999084472656,
-        "low": 38.060001373291016,
-        "open": 38.349998474121094,
+        "volume": 656744,
+        "high": 38.46,
+        "low": 38.06,
+        "open": 38.35,
         "prev_close": 38.46
       },
       {
@@ -296,9 +318,9 @@
         "name": "隆基绿能",
         "price": 12.83,
         "change_pct": 1.42,
-        "volume": 77002988,
-        "high": 12.899999618530273,
-        "low": 12.65999984741211,
+        "volume": 770030,
+        "high": 12.9,
+        "low": 12.66,
         "open": 12.75,
         "prev_close": 12.65
       },
@@ -307,32 +329,21 @@
         "name": "比亚迪",
         "price": 89.88,
         "change_pct": 1.1,
-        "volume": 24625494,
-        "high": 90.44000244140625,
-        "low": 88.61000061035156,
-        "open": 88.9000015258789,
+        "volume": 246255,
+        "high": 90.44,
+        "low": 88.61,
+        "open": 88.9,
         "prev_close": 88.9
-      },
-      {
-        "symbol": "000001",
-        "name": "平安银行",
-        "price": 11.1,
-        "change_pct": -0.09,
-        "volume": 92904344,
-        "high": 11.220000267028809,
-        "low": 11.069999694824219,
-        "open": 11.199999809265137,
-        "prev_close": 11.11
       },
       {
         "symbol": "600900",
         "name": "长江电力",
         "price": 27.96,
         "change_pct": -0.5,
-        "volume": 75398039,
-        "high": 28.149999618530273,
-        "low": 27.90999984741211,
-        "open": 28.079999923706055,
+        "volume": 753980,
+        "high": 28.15,
+        "low": 27.91,
+        "open": 28.08,
         "prev_close": 28.1
       },
       {
@@ -340,10 +351,10 @@
         "name": "宁德时代",
         "price": 399.98,
         "change_pct": 1.54,
-        "volume": 20399838,
+        "volume": 203998,
         "high": 400.5,
         "low": 390.5,
-        "open": 393.92999267578125,
+        "open": 393.93,
         "prev_close": 393.93
       },
       {
@@ -351,10 +362,10 @@
         "name": "紫金矿业",
         "price": 33.36,
         "change_pct": 2.55,
-        "volume": 197196754,
-        "high": 33.650001525878906,
-        "low": 33.0099983215332,
-        "open": 33.33000183105469,
+        "volume": 1971968,
+        "high": 33.65,
+        "low": 33.01,
+        "open": 33.33,
         "prev_close": 32.53
       },
       {
@@ -362,10 +373,10 @@
         "name": "海康威视",
         "price": 35.09,
         "change_pct": 0.6,
-        "volume": 62848904,
-        "high": 35.20000076293945,
-        "low": 34.7599983215332,
-        "open": 34.90999984741211,
+        "volume": 628489,
+        "high": 35.2,
+        "low": 34.76,
+        "open": 34.91,
         "prev_close": 34.88
       },
       {
@@ -373,10 +384,10 @@
         "name": "恒瑞医药",
         "price": 52.87,
         "change_pct": 0.48,
-        "volume": 66853034,
-        "high": 53.630001068115234,
-        "low": 51.849998474121094,
-        "open": 52.4900016784668,
+        "volume": 668530,
+        "high": 53.63,
+        "low": 51.85,
+        "open": 52.49,
         "prev_close": 52.62
       },
       {
@@ -384,9 +395,9 @@
         "name": "格力电器",
         "price": 39.89,
         "change_pct": -0.03,
-        "volume": 32566960,
-        "high": 40.09000015258789,
-        "low": 39.61000061035156,
+        "volume": 325670,
+        "high": 40.09,
+        "low": 39.61,
         "open": 40.0,
         "prev_close": 39.9
       },
@@ -395,9 +406,9 @@
         "name": "药明康德",
         "price": 166.89,
         "change_pct": 4.8,
-        "volume": 68943301,
-        "high": 168.3800048828125,
-        "low": 157.39999389648438,
+        "volume": 689433,
+        "high": 168.38,
+        "low": 157.4,
         "open": 159.0,
         "prev_close": 159.24
       },
@@ -406,10 +417,10 @@
         "name": "牧原股份",
         "price": 39.29,
         "change_pct": 0.0,
-        "volume": 44977487,
-        "high": 40.040000915527344,
-        "low": 38.90999984741211,
-        "open": 39.599998474121094,
+        "volume": 449775,
+        "high": 40.04,
+        "low": 38.91,
+        "open": 39.6,
         "prev_close": 39.29
       },
       {
@@ -417,9 +428,9 @@
         "name": "中芯国际",
         "price": 136.76,
         "change_pct": 2.93,
-        "volume": 68011300,
-        "high": 137.4199981689453,
-        "low": 130.8000030517578,
+        "volume": 680113,
+        "high": 137.42,
+        "low": 130.8,
         "open": 132.0,
         "prev_close": 132.87
       },
@@ -428,10 +439,10 @@
         "name": "东方财富",
         "price": 19.58,
         "change_pct": 0.56,
-        "volume": 170855258,
-        "high": 19.600000381469727,
-        "low": 19.270000457763672,
-        "open": 19.420000076293945,
+        "volume": 1708553,
+        "high": 19.6,
+        "low": 19.27,
+        "open": 19.42,
         "prev_close": 19.47
       },
       {
@@ -439,9 +450,9 @@
         "name": "中信证券",
         "price": 27.54,
         "change_pct": 0.84,
-        "volume": 97095985,
-        "high": 27.600000381469727,
-        "low": 27.149999618530273,
+        "volume": 970960,
+        "high": 27.6,
+        "low": 27.15,
         "open": 27.25,
         "prev_close": 27.31
       },
@@ -450,10 +461,10 @@
         "name": "工商银行",
         "price": 7.56,
         "change_pct": 0.0,
-        "volume": 229591979,
-        "high": 7.599999904632568,
-        "low": 7.519999980926514,
-        "open": 7.550000190734863,
+        "volume": 2295920,
+        "high": 7.6,
+        "low": 7.52,
+        "open": 7.55,
         "prev_close": 7.56
       }
     ],
@@ -461,86 +472,86 @@
       {
         "symbol": "BTC",
         "name": "Bitcoin",
-        "price": 64248.0,
+        "price": 64245.0,
         "change_pct": 2.1,
-        "volume": 21623906426.0,
+        "volume": 21543764738.0,
         "high": 64516.0,
         "low": 62705.0,
-        "open": 62794.41,
-        "prev_close": 62794.41
+        "open": 62839.26,
+        "prev_close": 62839.26
       },
       {
         "symbol": "ETH",
         "name": "Ethereum",
-        "price": 1902.63,
+        "price": 1902.73,
         "change_pct": 1.3,
-        "volume": 6765059761.0,
+        "volume": 6703619684.0,
         "high": 1912.95,
         "low": 1871.61,
-        "open": 1872.35,
-        "prev_close": 1872.35
+        "open": 1874.52,
+        "prev_close": 1874.52
       },
       {
         "symbol": "BNB",
         "name": "BNB",
-        "price": 604.25,
+        "price": 604.2,
         "change_pct": 0.0,
-        "volume": 546833993.0,
+        "volume": 540861757.0,
         "high": 607.32,
         "low": 600.89,
-        "open": 602.25,
-        "prev_close": 602.25
+        "open": 602.84,
+        "prev_close": 602.84
       },
       {
         "symbol": "XRP",
         "name": "XRP",
-        "price": 0.999757,
+        "price": 0.999412,
         "change_pct": 0.2,
-        "volume": 841560263.0,
+        "volume": 838297943.0,
         "high": 1.007,
         "low": 0.988683,
-        "open": 0.991284,
-        "prev_close": 0.991284
+        "open": 0.992247,
+        "prev_close": 0.992247
       },
       {
         "symbol": "SOL",
         "name": "Solana",
-        "price": 75.76,
+        "price": 75.68,
         "change_pct": 1.3,
-        "volume": 1268840138.0,
+        "volume": 1264528770.0,
         "high": 76.13,
         "low": 74.4,
-        "open": 74.46,
-        "prev_close": 74.46
+        "open": 74.56,
+        "prev_close": 74.56
       },
       {
         "symbol": "TRX",
         "name": "TRON",
-        "price": 0.331047,
+        "price": 0.331129,
         "change_pct": -0.1,
-        "volume": 338670409.0,
+        "volume": 337209807.0,
         "high": 0.333358,
         "low": 0.328334,
-        "open": 0.330988,
-        "prev_close": 0.330988
+        "open": 0.330927,
+        "prev_close": 0.330927
       },
       {
         "symbol": "DOGE",
         "name": "Dogecoin",
-        "price": 0.070238,
+        "price": 0.070173,
         "change_pct": 0.8,
-        "volume": 281700309.0,
+        "volume": 281456417.0,
         "high": 0.070518,
         "low": 0.069439,
-        "open": 0.069539,
-        "prev_close": 0.069539
+        "open": 0.069499,
+        "prev_close": 0.069499
       },
       {
         "symbol": "LINK",
         "name": "Chainlink",
         "price": 9.48,
         "change_pct": 0.4,
-        "volume": 242597185.0,
+        "volume": 241376457.0,
         "high": 9.56,
         "low": 9.36,
         "open": 9.38,
@@ -549,53 +560,53 @@
       {
         "symbol": "ADA",
         "name": "Cardano",
-        "price": 0.173385,
+        "price": 0.173425,
         "change_pct": -1.9,
-        "volume": 198145799.0,
+        "volume": 196809484.0,
         "high": 0.177683,
         "low": 0.172616,
-        "open": 0.175145,
-        "prev_close": 0.175145
+        "open": 0.174902,
+        "prev_close": 0.174902
       },
       {
         "symbol": "XLM",
         "name": "Stellar",
-        "price": 0.157257,
+        "price": 0.157225,
         "change_pct": 0.2,
-        "volume": 76813371.0,
+        "volume": 76621442.0,
         "high": 0.159131,
         "low": 0.155906,
-        "open": 0.156194,
-        "prev_close": 0.156194
+        "open": 0.156263,
+        "prev_close": 0.156263
       },
       {
         "symbol": "LTC",
         "name": "Litecoin",
-        "price": 44.45,
+        "price": 44.41,
         "change_pct": 0.4,
-        "volume": 146973866.0,
+        "volume": 146855859.0,
         "high": 44.59,
         "low": 43.8,
-        "open": 44.19,
-        "prev_close": 44.19
+        "open": 44.14,
+        "prev_close": 44.14
       },
       {
         "symbol": "AVAX",
         "name": "Avalanche",
-        "price": 6.32,
+        "price": 6.31,
         "change_pct": 0.2,
-        "volume": 127303739.0,
+        "volume": 126627771.0,
         "high": 6.39,
         "low": 6.29,
-        "open": 6.31,
-        "prev_close": 6.31
+        "open": 6.32,
+        "prev_close": 6.32
       },
       {
         "symbol": "SHIB",
         "name": "Shiba Inu",
         "price": 4e-06,
         "change_pct": 0.8,
-        "volume": 52956857.0,
+        "volume": 52769063.0,
         "high": 4.5e-06,
         "low": 4.4e-06,
         "open": 4e-06,
@@ -606,7 +617,7 @@
         "name": "NEAR Protocol",
         "price": 1.63,
         "change_pct": 2.2,
-        "volume": 111986076.0,
+        "volume": 109409560.0,
         "high": 1.65,
         "low": 1.6,
         "open": 1.6,
@@ -615,88 +626,88 @@
       {
         "symbol": "UNI",
         "name": "Uniswap",
-        "price": 3.28,
+        "price": 3.27,
         "change_pct": -0.1,
-        "volume": 134144597.0,
+        "volume": 133737843.0,
         "high": 3.32,
         "low": 3.23,
-        "open": 3.28,
-        "prev_close": 3.28
+        "open": 3.27,
+        "prev_close": 3.27
       },
       {
         "symbol": "DOT",
         "name": "Polkadot",
-        "price": 0.758183,
+        "price": 0.758074,
         "change_pct": -0.4,
-        "volume": 44092961.0,
+        "volume": 42391535.0,
         "high": 0.768814,
         "low": 0.753642,
-        "open": 0.75779,
-        "prev_close": 0.75779
+        "open": 0.757941,
+        "prev_close": 0.757941
       },
       {
         "symbol": "ETC",
         "name": "Ethereum Classic",
-        "price": 6.17,
+        "price": 6.18,
         "change_pct": 1.0,
-        "volume": 25540474.0,
+        "volume": 25545307.0,
         "high": 6.23,
         "low": 6.08,
-        "open": 6.09,
-        "prev_close": 6.09
+        "open": 6.1,
+        "prev_close": 6.1
       },
       {
         "symbol": "FIL",
         "name": "Filecoin",
-        "price": 0.670587,
+        "price": 0.670701,
         "change_pct": -0.5,
-        "volume": 40676973.0,
+        "volume": 40208271.0,
         "high": 0.675352,
         "low": 0.66153,
-        "open": 0.665495,
-        "prev_close": 0.665495
+        "open": 0.66618,
+        "prev_close": 0.66618
       },
       {
         "symbol": "APT",
         "name": "Aptos",
-        "price": 0.531244,
+        "price": 0.530034,
         "change_pct": 0.9,
-        "volume": 35146958.0,
+        "volume": 36313788.0,
         "high": 0.53382,
         "low": 0.515709,
-        "open": 0.518887,
-        "prev_close": 0.518887
+        "open": 0.518261,
+        "prev_close": 0.518261
       }
     ],
     "commodity": [
       {
         "symbol": "GOLD",
         "name": "黄金期货",
-        "price": 4472.1,
-        "change_pct": -0.03,
-        "volume": 415,
+        "price": 4470.9,
+        "change_pct": -0.06,
+        "volume": 1254,
         "high": 4475.9,
-        "low": 4471.5,
+        "low": 4467.6,
         "open": 4473.4,
         "prev_close": 4473.4
       },
       {
         "symbol": "SILVER",
         "name": "白银期货",
-        "price": 65.88,
-        "change_pct": -0.03,
-        "volume": 99,
+        "price": 65.86,
+        "change_pct": -0.05,
+        "volume": 344,
         "high": 65.98,
-        "low": 65.87,
+        "low": 65.76,
         "open": 65.89,
         "prev_close": 65.89
       },
       {
         "symbol": "CRUDE_OIL",
         "name": "原油期货(WTI)",
-        "price": 85.22,
-        "change_pct": 0.28,
-        "volume": 464,
+        "price": 85.11,
+        "change_pct": 0.15,
+        "volume": 652,
         "high": 85.37,
         "low": 84.87,
         "open": 84.98,
@@ -705,11 +716,11 @@
       {
         "symbol": "BRENT",
         "name": "原油期货(布伦特)",
-        "price": 91.43,
-        "change_pct": 0.12,
-        "volume": 10,
+        "price": 91.28,
+        "change_pct": -0.04,
+        "volume": 27,
         "high": 91.43,
-        "low": 91.3,
+        "low": 91.21,
         "open": 91.32,
         "prev_close": 91.32
       },
@@ -718,7 +729,7 @@
         "name": "天然气期货",
         "price": 2.7,
         "change_pct": 0.0,
-        "volume": 411,
+        "volume": 434,
         "high": 2.72,
         "low": 2.7,
         "open": 2.7,
@@ -728,8 +739,8 @@
         "symbol": "COPPER",
         "name": "铜期货",
         "price": 6.61,
-        "change_pct": 0.01,
-        "volume": 224,
+        "change_pct": 0.03,
+        "volume": 254,
         "high": 6.61,
         "low": 6.6,
         "open": 6.61,
@@ -738,11 +749,11 @@
       {
         "symbol": "ALUMINUM",
         "name": "铝期货",
-        "price": 3422.0,
-        "change_pct": -0.12,
-        "volume": 3,
+        "price": 3419.0,
+        "change_pct": -0.2,
+        "volume": 6,
         "high": 3426.0,
-        "low": 3408.5,
+        "low": 3405.0,
         "open": 3426.0,
         "prev_close": 3426.0
       },
@@ -783,27 +794,10 @@
   },
   "news": [
     {
-      "title": "Stock Market Today: Indexes End Lower to Begin New Trading Week as Oil Prices Rise; Memory Shares Outperform - Investopedia",
-      "title_zh": "今日股市：随着油价上涨，指数收低，开始新的交易周；内存股跑赢大盘 - Investopedia",
-      "summary": "Stock Market Today: Indexes End Lower to Begin New Trading Week as Oil Prices Rise; Memory Shares Outperform InvestopediaStock futures are little changed after Wall Street starts the week with losses, hurt by higher oil prices and rising yields: Live updates CNBCStock Market Pulls Back On Risk Of Widening War; Big Box Earnings Ahead Investor's Business DailyStock market today: Dow, S&P 500, Nasdaq fall as oil rises amid US-Iran tensions, 30-year yield hits highest level in decades Yahoo FinanceStocks slip as oil climbs; investors eye Fed minutes, retail earnings this week By Investing.com Investing.com",
-      "summary_zh": "今日股市：随着油价上涨，指数收低，开始新的交易周；内存股表现优于 Investopedia 受油价上涨和收益率上升影响，华尔街本周开局下跌，股票期货几乎没有变化：实时更新 CNBC 股票市场因战争扩大的风险而回落；投资者商业日报今日股市：道指、标准普尔 500 指数、纳斯达克指数下跌，因美伊紧张局势导致油价上涨，30 年期国债收益率创数十年来最高水平投资者本周关注美联储会议纪要和零售收益 作者：Investing.com Investing.com",
-      "analysis": "美联储会议纪要透露政策走向线索，市场据此调整利率路径预期",
-      "category": "fed_policy",
-      "category_label": "美联储政策",
-      "category_icon": "🏦",
-      "category_color": "#7c3aed",
-      "category_bg": "#f3e8ff",
-      "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNQWlDaXE0ODlUNVY5b25xb3dORk1yYXcyc1JXa1N1Rjd6NzNwN1ZyUmptSFNPR1hnbjVVNXBsbkVlb1k3aGZwZEZUS0dJSmRpdzc3SjEyeTlDSkYwN1J2blo3S1hjSEdkWUZpTHFOb1dLVHpTYkdaX3p3MGtUUi1fMTA1ZGJuRlROS0JVZGJuYmU?oc=5",
-      "pubDate": "Mon, 17 Aug 2026 20:15:50 GMT",
-      "time": "08/18 04:15",
-      "score": 22
-    },
-    {
       "title": "US tech stock correction likely, warn ECB economists - Financial Times",
       "title_zh": "欧洲央行经济学家警告称，美国科技股可能出现回调 - 英国《金融时报》",
       "summary": "US tech stock correction likely, warn ECB economists Financial TimesAI market correction is coming, ECB blog predicts ReutersEurope risks financial crisis if AI bubble bursts, warns ECB The TelegraphAI Rally Set to Trigger Stock-Market Correction, ECB Blog Says Bloomberg.comThe AI boom: rational enthusiasm or the next dot-com bubble?. EIN News",
-      "summary_zh": "欧洲央行经济学家警告，英国《金融时报》人工智能市场调整即将到来，欧洲央行博客预测，如果人工智能泡沫破灭，欧洲央行将面临金融危机风险。彭博社博客称，欧洲央行博客称人工智能反弹将引发股市调整人工智能繁荣：理性热情还是下一个互联网泡沫？埃因霍温新闻",
+      "summary_zh": "欧洲央行经济学家警告，英国《金融时报》人工智能市场调整即将到来，欧洲央行博客预测，如果人工智能泡沫破灭，欧洲央行将面临金融危机风险。彭博社博客称，欧洲央行博客称人工智能反弹将引发股市调整人工智能繁荣：理性热情还是下一个互联网泡沫？艾因新闻",
       "analysis": "欧洲央行政策影响欧元汇率和欧洲资产定价，利率决议引导资本流动方向",
       "category": "central_bank",
       "category_label": "央行政策",
@@ -817,44 +811,44 @@
       "score": 14
     },
     {
-      "title": "Jensen Huang Doubled Nvidia's Own Sales Forecast to $1 Trillion Through 2027. Here's What That Guidance Means for the Stock's Valuation. - Yahoo Finance",
-      "title_zh": "黄仁勋 (Jensen Huang) 将 Nvidia 自己的销售预测翻了一番，到 2027 年将达到 1 万亿美元。以下是该指引对股票估值的影响。 - 雅虎财经",
-      "summary": "Jensen Huang Doubled Nvidia's Own Sales Forecast to $1 Trillion Through 2027.. Here's What That Guidance Means for the Stock's Valuation.. Yahoo FinanceNVIDIA’s earnings report next week: likely another “Beat & Raise,” but the market may remain unsatisfied MoomooNvidia: One Number In Q2 Decides Where This Stock Goes (NASDAQ:NVDA) Seeking AlphaPrediction: Nvidia Stock Will Fall After Aug....",
-      "summary_zh": "黄仁勋将 Nvidia 自己的销售预测翻了一番，到 2027 年将达到 1 万亿美元。这就是该指导对股票估值的意义。雅虎财经 NVIDIA 下周的收益报告：可能会再次“击败并提高”，但市场可能仍然不满意 MoomooNvidia：第二季度的一个数字决定这只股票的走势（纳斯达克股票代码：NVDA）八月....",
-      "analysis": "全球市场表现反映资金风险偏好变化，关注跨市场联动",
+      "title": "Investors Remember Why They Love Memory-Chip Stocks - Investor's Business Daily",
+      "title_zh": "投资者记得为什么他们喜欢存储芯片股票 - 投资者商业日报",
+      "summary": "Investors Remember Why They Love Memory-Chip Stocks Investor's Business DailySanDisk Rallies 8%, Western Digital Rises 6%, Micron Gains 5% as Elon Musk Flags a Memory Bottleneck Yahoo FinanceMicron, Sandisk and other chip stocks climb as investors get more confident about AI spending MarketWatchThe Bull Market Is Almost Back for Chip Stocks investopedia.comWall Street finished lower as investors look ahead to retail earnings Seeking Alpha",
+      "summary_zh": "投资者记得为什么他们喜欢存储芯片股票投资者每日业务SanDisk 上涨 8%，西部数据上涨 6%，美光上涨 5%，埃隆·马斯克指出内存瓶颈雅虎财经随着投资者对人工智能支出更有信心，Micron、Sandisk 和其他芯片股上涨",
+      "analysis": "维持牛市格局，风险偏好积极，关注领涨主线持续性",
       "category": "market_performance",
       "category_label": "市场表现",
       "category_icon": "📊",
       "category_color": "#15803d",
       "category_bg": "#dcfce7",
       "source": "Google News Business",
-      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxQd0hzUEo4WE1sQTZnMWRDM3R3dHRSWWpzRXMwMXJES19RT1pRSTFORDZUMndBcmRocXd3ZkhjbjRyU19sQVNmSzd0N2hPMl9palVZMXE2d21aWUZxRjBHRVlaamRIcVN2bGVrZnZfZzJRcHlSanZRaXc5SnZDM09weC1BVGM0a1NNaTRxUi1sc2xiaURFSFh2ejJneXBvUQ?oc=5",
-      "pubDate": "Mon, 17 Aug 2026 03:20:00 GMT",
-      "time": "08/17 11:20",
+      "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOUnBXVmJsLUhCcHhhNEI5TDZxbThrQjRNb01JaFhZU0lXVGlJLTd5YkZIU2QzYWF6S29hX1hRNHY5MTd2NWVTVWZUOFNmZGt6VlAtYzVkYm9LUnd5QmRVenNyQmlTSHRJTlRRSEdpbHJMYkloR0pTVUVUc0VsbXpEZXdmMlVtN0NlMlRxOE9R?oc=5",
+      "pubDate": "Mon, 17 Aug 2026 20:37:00 GMT",
+      "time": "08/18 04:37",
       "score": 13
     },
     {
-      "title": "Gold gains as dollar moves lower on reduced bets for Fed rate hike",
-      "title_zh": "由于美联储加息押注减少，美元走低，金价上涨",
-      "summary": "Gold gains as dollar moves lower on reduced bets for Fed rate hike",
-      "summary_zh": "由于美联储加息押注减少，美元走低，金价上涨",
-      "analysis": "美联储收紧货币政策，加息预期升温，可能压制高估值成长股；银行股或受益于息差扩大",
-      "category": "fed_policy",
-      "category_label": "美联储政策",
-      "category_icon": "🏦",
-      "category_color": "#7c3aed",
-      "category_bg": "#f3e8ff",
-      "source": "Seeking Alpha Market",
-      "link": "https://seekingalpha.com/news/4634130-gold-gains-as-dollar-moves-lower-on-reduced-bets-for-fed-rate-hike?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "pubDate": "Mon, 17 Aug 2026 17:37:07 -0400",
-      "time": "08/18 05:37",
-      "score": 11
+      "title": "Stock market today: Dow, S&P 500, Nasdaq fall as oil rises amid US-Iran tensions, 30-year yield hits highest level in decades - Yahoo Finance",
+      "title_zh": "今日股市：美伊紧张局势下油价上涨，道指、标普500指数、纳斯达克指数下跌，30年期国债收益率创数十年来最高水平 - 雅虎财经",
+      "summary": "Stock market today: Dow, S&P 500, Nasdaq fall as oil rises amid US-Iran tensions, 30-year yield hits highest level in decades Yahoo FinanceSee more headlines & perspectives on Google News",
+      "summary_zh": "今日股市：道琼斯指数、标准普尔 500 指数、纳斯达克指数因美伊紧张局势而油价上涨而下跌，30 年期国债收益率触及数十年来最高水平 雅虎财经在 Google 新闻上查看更多头条新闻和观点",
+      "analysis": "伊朗局势影响中东地缘稳定和油价，能源和军工板块关注",
+      "category": "geopolitics",
+      "category_label": "地缘政治",
+      "category_icon": "⚔️",
+      "category_color": "#b91c1c",
+      "category_bg": "#fee2e2",
+      "source": "Google News Business",
+      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNV2taUjRKLVIyMjlxNFdUYWVEVmkwY0Uyd1Mydk1kREdrTUhidEgtazBidkFzWl9VR3lXMTAyVmdxTHk1eU1tN0U5SXQ1QnRfbGZoaWxzbjJZaFhWVjlkcHhyLUFIS1dRZ045NVotdEx1Rm5QeEV0NUZnQm9lY2JvbHhOR2g4bUM2cHU0NFhEcDZUd1ZTM2VnaV9QMUdCYzlnNlhkQ3prOHVfNmpmbV9iNUNYa3ZXOW5kUWRjLXBB?oc=5",
+      "pubDate": "Mon, 17 Aug 2026 20:01:19 GMT",
+      "time": "08/18 04:01",
+      "score": 13
     },
     {
       "title": "Dollar slips on pared Fed rate hike bets, but losses capped by rising oil prices",
-      "title_zh": "美联储加息预期减弱，美元下跌，但油价上涨限制了跌幅",
+      "title_zh": "美元因美联储加息预期下滑而下跌，但油价上涨限制了跌幅",
       "summary": "Dollar slips on pared Fed rate hike bets, but losses capped by rising oil prices",
-      "summary_zh": "美联储加息预期减弱，美元下跌，但油价上涨限制了跌幅",
+      "summary_zh": "美元因美联储加息预期下滑而下跌，但油价上涨限制了跌幅",
       "analysis": "美联储收紧货币政策，加息预期升温，可能压制高估值成长股；银行股或受益于息差扩大",
       "category": "fed_policy",
       "category_label": "美联储政策",
@@ -868,10 +862,10 @@
       "score": 11
     },
     {
-      "title": "Berkshire Raised Its Alphabet Share Count by 658% in a Single Quarter. Here's Where The Stock is Headed - 247wallst.com",
-      "title_zh": "伯克希尔单季度将 Alphabet 股票数量增加了 658%。这就是股票的走向 - 247wallst.com",
-      "summary": "Berkshire Raised Its Alphabet Share Count by 658% in a Single Quarter.. Here's Where The Stock is Headed 247wallst.comBerkshire's Alphabet stake, Meta goes back to court, Europe's champagne problems and more in Morning Squawk CNBCBerkshire Hathaway adds $17 billion to Alphabet stake in Q2 2026 Yahoo FinanceWarren Buffett's Portfolio Is Looking Even More Like The Dow Jones Index.. This Is Why....",
-      "summary_zh": "伯克希尔在一个季度内将其 Alphabet 股票数量增加了 658%。这就是该股的走向 247wallst.com 伯克希尔的 Alphabet 股份、Meta 回到法庭、欧洲的香槟问题以及 Morning Squawk CNBC 中的更多内容伯克希尔哈撒韦公司在 2026 年第二季度向 Alphabet 股份增持了 170 亿美元雅虎财经沃伦·巴菲特的投资组合看起来更像道琼斯指数琼斯指数.. 这就是为什么......",
+      "title": "Berkshire Raised Its Alphabet Share Count by 658% in a Single Quarter. Here's Where The Stock is Headed - 24/7 Wall St.",
+      "title_zh": "伯克希尔单季度将 Alphabet 股票数量增加了 658%。这就是股票的走向 - 24/7 Wall St.",
+      "summary": "Berkshire Raised Its Alphabet Share Count by 658% in a Single Quarter.. Here's Where The Stock is Headed 24/7 Wall St.Berkshire's Alphabet stake, Meta goes back to court, Europe's champagne problems and more in Morning Squawk CNBCBerkshire Hathaway adds $17 billion to Alphabet stake in Q2 2026 Yahoo FinanceWarren Buffett's Portfolio Is Looking Even More Like The Dow Jones Index.. This Is Why....",
+      "summary_zh": "伯克希尔在一个季度内将其 Alphabet 股票数量增加了 658%。这就是股票的走向 24/7 Wall St.伯克希尔的 Alphabet 股份、Meta 回到法庭、欧洲的香槟问题以及早间 Squawk CNBC 的更多信息伯克希尔哈撒韦公司在 2026 年第二季度向 Alphabet 股份增持了 170 亿美元雅虎财经沃伦·巴菲特的投资组合看起来更像道琼斯指数琼斯指数.. 这就是为什么......",
       "analysis": "全球市场表现反映资金风险偏好变化，关注跨市场联动",
       "category": "market_performance",
       "category_label": "市场表现",
@@ -888,7 +882,7 @@
       "title": "Roundup: Strategic Petroleum Reserve / Invisible AI trail / Verizon’s request declined - Baton Rouge Business Report",
       "title_zh": "综述：战略石油储备/隐形人工智能踪迹/Verizon 的请求被拒绝 - 巴吞鲁日商业报告",
       "summary": "Roundup: Strategic Petroleum Reserve / Invisible AI trail / Verizon’s request declined Baton Rouge Business ReportDepleted strategic oil reserve nears level that raises concerns about damage to caverns, operations CNBCU.S.. strategic reserves are getting so low it threatens damaging the 60 underground salt caverns storing American oil FortuneStrategic Petroleum Reserve Drawn Down to Lowest Since 1982 WSJStrategic oil stockpiles have hit a 40-year low amid the Iran war Global News",
-      "summary_zh": "综述：战略石油储备/隐形人工智能踪迹/Verizon 的请求被拒绝 巴吞鲁日商业报告 战略石油储备枯竭接近水平，引发人们对洞穴、运营受损的担忧 CNBCU.. 战略石油储备已变得如此之低，可能会损坏储存美国石油的 60 个地下盐穴 《财富》战略石油储备降至 1982 年以来的最低水平 《华尔街日报》战略石油库存已降至 40 年来的最低水平伊朗战争全球新闻",
+      "summary_zh": "综述：战略石油储备/隐形人工智能踪迹/Verizon 的请求被拒绝 巴吞鲁日商业报告 战略石油储备枯竭接近水平，引发人们对洞穴、运营受损的担忧 CNBCU.. 战略石油储备已变得如此之低，可能会损坏储存美国石油的 60 个地下盐穴 《财富》战略石油储备降至 1982 年以来的最低水平 《华尔街日报》战略石油库存已降至 40 年来的最低点伊朗战争全球新闻",
       "analysis": "地缘冲突升级推升避险情绪，利好黄金、原油和军工板块；航空、旅游和能源进口国承压",
       "category": "geopolitics",
       "category_label": "地缘政治",
@@ -916,6 +910,23 @@
       "link": "https://www.cnbc.com/2026/08/17/santoli-earnings-bonanza-that-lifted-market-to-record-may-not-be-all-that-it-appears-to-be.html",
       "pubDate": "Mon, 17 Aug 2026 10:31:33 GMT",
       "time": "08/17 18:31",
+      "score": 10
+    },
+    {
+      "title": "Dollar Falls Sharply as Prospects Dim for Fed Rate Rise - WSJ",
+      "title_zh": "美联储加息前景黯淡，美元大幅下跌 - 华尔街日报",
+      "summary": "Dollar Falls Sharply as Prospects Dim for Fed Rate Rise WSJ(USD) Dollar Extends Slide as Traders Scale Back Fed Tightening Bets Bloomberg.comDollar falls against euro as markets trim rate hike bets CNBCUS Dollar Exceptionalism Fades as EUR/USD Eyes Breakout FOREX.comDollar gains, yen slips as US CPI meets expectations Reuters",
+      "summary_zh": "美联储加息前景黯淡，美元大幅下跌 华尔街日报(美元) 交易员缩减美联储紧缩押注，美元继续下滑 Bloomberg.com 由于市场削减加息押注，美元兑欧元下跌 CNBC 美元例外主义消退，欧元/美元着眼突破 FOREX.com 美国 CPI 符合预期，美元上涨，日元下滑 路透",
+      "analysis": "美联储收紧货币政策，加息预期升温，可能压制高估值成长股；银行股或受益于息差扩大",
+      "category": "fed_policy",
+      "category_label": "美联储政策",
+      "category_icon": "🏦",
+      "category_color": "#7c3aed",
+      "category_bg": "#f3e8ff",
+      "source": "Google News Business",
+      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPdUpiUHhKbEtobmthQ1VQV0VIX2tCUGxYMjFMRUFvR2FXNnRCVmJyX0c1NWdvR1NGanNUc2xoNUcyVUp2TkIxc2pmU1NyS245SEdTMWtIcTFyYVdtM1JRZ0xUT0ZocDdrNjB6OVJ6X2F1OWVCYWowLW5iS0NmMklVTy0xSWJvWW80ZWdIX2xqWlBVOGZfN1lnWHRUd1lUZENLSzlFVEE4UU9hcGJBYW9NQ1dJTmFGVWd4OFNnUg?oc=5",
+      "pubDate": "Mon, 17 Aug 2026 09:03:00 GMT",
+      "time": "08/17 17:03",
       "score": 10
     }
   ],
@@ -960,8 +971,18 @@
       {
         "market": "cn",
         "type": "market_trend",
-        "description": "A股整体偏强，上涨占比52%",
+        "description": "A股整体偏强，上涨占比64%",
         "confidence": "中"
+      },
+      {
+        "market": "cn",
+        "type": "individual_strong",
+        "symbol": "399006",
+        "name": "创业板指",
+        "description": "创业板指(399006)涨幅3.14%，表现强势",
+        "confidence": "中",
+        "price": 3740.16,
+        "change_pct": 3.14
       },
       {
         "market": "cn",
@@ -992,8 +1013,8 @@
       {
         "market": "commodity",
         "type": "market_trend",
-        "description": "大宗商品整体震荡，上涨占比50%",
-        "confidence": "低"
+        "description": "大宗商品整体偏弱，上涨占比40%",
+        "confidence": "中"
       }
     ],
     "opportunities": [
@@ -1026,6 +1047,16 @@
         "confidence": "中",
         "price": 103.5,
         "change_pct": -3.14
+      },
+      {
+        "market": "cn",
+        "type": "breakout_watch",
+        "symbol": "399001",
+        "name": "深证成指",
+        "description": "深证成指温和上涨2.44%，留意突破信号",
+        "confidence": "低",
+        "price": 14704.27,
+        "change_pct": 2.44
       },
       {
         "market": "cn",
@@ -1074,7 +1105,7 @@
         "name": "Bitcoin",
         "description": "Bitcoin温和上涨2.1%，留意突破信号",
         "confidence": "低",
-        "price": 64248.0,
+        "price": 64245.0,
         "change_pct": 2.1
       },
       {
@@ -1094,7 +1125,7 @@
         "name": "比特币",
         "description": "BTC领涨2.1%，关注主流币联动机会",
         "confidence": "中",
-        "price": 64248.0,
+        "price": 64245.0,
         "change_pct": 2.1
       },
       {
@@ -1128,11 +1159,11 @@
         }
       },
       "cn": {
-        "total": 21,
-        "upCount": 11,
-        "downCount": 7,
-        "flatCount": 3,
-        "avgChange": 0.47,
+        "total": 22,
+        "upCount": 14,
+        "downCount": 6,
+        "flatCount": 2,
+        "avgChange": 0.77,
         "maxUp": {
           "symbol": "603259",
           "name": "药明康德",
@@ -1163,10 +1194,10 @@
       },
       "commodity": {
         "total": 10,
-        "upCount": 5,
-        "downCount": 4,
+        "upCount": 4,
+        "downCount": 5,
         "flatCount": 1,
-        "avgChange": 0.29,
+        "avgChange": 0.25,
         "maxUp": {
           "symbol": "SOYBEAN",
           "name": "大豆期货",
@@ -1181,7 +1212,7 @@
     }
   },
   "report": {
-    "summary": "美股: 平均-0.92%, 涨跌比5:15 | A股: 平均+0.47%, 涨跌比11:7 | 数字货币: 平均+0.46%, 涨跌比13:5 | 大宗商品: 平均+0.29%, 涨跌比5:4 | 机会提示: 11条"
+    "summary": "美股: 平均-0.92%, 涨跌比5:15 | A股: 平均+0.77%, 涨跌比14:6 | 数字货币: 平均+0.46%, 涨跌比13:5 | 大宗商品: 平均+0.25%, 涨跌比4:5 | 机会提示: 12条"
   },
   "emailResults": [
     {
