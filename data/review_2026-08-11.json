@@ -1,0 +1,225 @@
+{
+  "date": "2026-08-11",
+  "summary": "放量上涨，市场情绪中性偏冷",
+  "indices": [
+    {
+      "name": "上证指数",
+      "code": "000001",
+      "close": 3964.79,
+      "change_pct": 0.36,
+      "volume": 340337215,
+      "amount": 692473596147.0,
+      "source": "sina"
+    },
+    {
+      "name": "深证成指",
+      "code": "399001",
+      "close": 14410.34,
+      "change_pct": 1.01,
+      "volume": 41897692344,
+      "amount": 826881326544.936,
+      "source": "sina"
+    },
+    {
+      "name": "创业板指",
+      "code": "399006",
+      "close": 3587.24,
+      "change_pct": 1.51,
+      "volume": 12271196274,
+      "amount": 395969106249.77,
+      "source": "sina"
+    },
+    {
+      "name": "沪深300",
+      "code": "000300",
+      "close": 4709.1,
+      "change_pct": 0.42,
+      "volume": 129542939,
+      "amount": 420446278560.0,
+      "source": "sina"
+    },
+    {
+      "name": "科创50",
+      "code": "000688",
+      "close": 1740.62,
+      "change_pct": 1.6,
+      "volume": 7757538,
+      "amount": 74074394324.0,
+      "source": "sina"
+    }
+  ],
+  "market_breadth": {
+    "advance_count": 2125,
+    "decline_count": 3168,
+    "flat_count": 207,
+    "limit_up_count": 67,
+    "limit_down_count": 1,
+    "advance_ratio": 0.3864,
+    "total_count": 5500,
+    "source": "sina"
+  },
+  "northbound": {},
+  "margin": {
+    "total_balance": 2662156322119.0,
+    "finance_balance": 2636616407049.0,
+    "securities_balance": 25539915070.0,
+    "date": "",
+    "source": "eastmoney",
+    "total_balance_yi": 26621.56,
+    "finance_balance_yi": 26366.16,
+    "securities_balance_yi": 255.4,
+    "balance_change": 14614852374.0,
+    "balance_change_yi": 146.15
+  },
+  "sector_flow": [
+    {
+      "name": "电子",
+      "stock_count": 100,
+      "net_inflow": 332267190615.0,
+      "net_inflow_yi": 3322.67,
+      "change_pct": 8.32,
+      "turnover_yi": 3322.67,
+      "up_count": 63,
+      "down_count": 37,
+      "source": "sina"
+    },
+    {
+      "name": "有色金属",
+      "stock_count": 100,
+      "net_inflow": 129583320651.0,
+      "net_inflow_yi": 1295.83,
+      "change_pct": -0.65,
+      "turnover_yi": 1295.83,
+      "up_count": 29,
+      "down_count": 71,
+      "source": "sina"
+    },
+    {
+      "name": "通信",
+      "stock_count": 100,
+      "net_inflow": 112066440386.0,
+      "net_inflow_yi": 1120.66,
+      "change_pct": 0.49,
+      "turnover_yi": 1120.66,
+      "up_count": 51,
+      "down_count": 45,
+      "source": "sina"
+    },
+    {
+      "name": "医药生物",
+      "stock_count": 100,
+      "net_inflow": 95506752514.0,
+      "net_inflow_yi": 955.07,
+      "change_pct": 3.86,
+      "turnover_yi": 955.07,
+      "up_count": 80,
+      "down_count": 20,
+      "source": "sina"
+    },
+    {
+      "name": "电力设备",
+      "stock_count": 100,
+      "net_inflow": 84901748098.0,
+      "net_inflow_yi": 849.02,
+      "change_pct": 0.92,
+      "turnover_yi": 849.02,
+      "up_count": 58,
+      "down_count": 40,
+      "source": "sina"
+    },
+    {
+      "name": "计算机",
+      "stock_count": 100,
+      "net_inflow": 69242956932.0,
+      "net_inflow_yi": 692.43,
+      "change_pct": 1.39,
+      "turnover_yi": 692.43,
+      "up_count": 73,
+      "down_count": 26,
+      "source": "sina"
+    },
+    {
+      "name": "机械设备",
+      "stock_count": 100,
+      "net_inflow": 68207118507.0,
+      "net_inflow_yi": 682.07,
+      "change_pct": 4.21,
+      "turnover_yi": 682.07,
+      "up_count": 53,
+      "down_count": 46,
+      "source": "sina"
+    },
+    {
+      "name": "基础化工",
+      "stock_count": 100,
+      "net_inflow": 58099161329.0,
+      "net_inflow_yi": 580.99,
+      "change_pct": 0.4,
+      "turnover_yi": 580.99,
+      "up_count": 46,
+      "down_count": 52,
+      "source": "sina"
+    },
+    {
+      "name": "国防军工",
+      "stock_count": 100,
+      "net_inflow": 38272081896.0,
+      "net_inflow_yi": 382.72,
+      "change_pct": -1.62,
+      "turnover_yi": 382.72,
+      "up_count": 14,
+      "down_count": 85,
+      "source": "sina"
+    },
+    {
+      "name": "传媒",
+      "stock_count": 100,
+      "net_inflow": 33825821689.0,
+      "net_inflow_yi": 338.26,
+      "change_pct": 0.53,
+      "turnover_yi": 338.26,
+      "up_count": 43,
+      "down_count": 53,
+      "source": "sina"
+    }
+  ],
+  "signals": {
+    "market_breadth": "偏弱",
+    "advance_ratio": 38.6,
+    "sentiment": "中性偏冷",
+    "fund_flow_signals": [
+      "两融余额增加146.2亿，杠杆资金积极入场",
+      "电子板块成交活跃，成交额3322.7亿",
+      "电子板块均涨8.3%，领涨市场"
+    ],
+    "volatility_percentile": 65,
+    "volatility_desc": "中等偏高",
+    "max_index_change": 1.6
+  },
+  "anomalies": [
+    {
+      "type": "volume_price",
+      "description": "创业板指放量上涨1.51%，多头力量强劲",
+      "severity": "中"
+    },
+    {
+      "type": "volume_price",
+      "description": "科创50放量上涨1.60%，多头力量强劲",
+      "severity": "中"
+    },
+    {
+      "type": "sentiment_extreme",
+      "description": "涨停家数达67家，市场情绪过热",
+      "severity": "高"
+    },
+    {
+      "type": "sector_rotation",
+      "description": "电子板块均涨8.3%，成交3323亿，领涨资金方向",
+      "severity": "中"
+    }
+  ],
+  "tomorrow_focus": [
+    "关注电子板块资金持续流入情况",
+    "涨停家数达67家，市场情绪过热"
+  ]
+}
