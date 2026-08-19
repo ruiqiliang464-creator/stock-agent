@@ -333,6 +333,10 @@ def generate_review_report(review_data):
     lhb_capital = review_data.get('lhb_capital', {})
     stock_rank = review_data.get('stock_rank', {})
 
+    # ── Batch C 新增字段提取 ──
+    market_events = review_data.get('market_events', {})
+    stock_technicals = review_data.get('stock_technicals', [])
+
     # ── 1. 市场概况 ──
     index_cards = ''
     total_amount_yi = 0
@@ -656,6 +660,68 @@ def generate_review_report(review_data):
         <div style="font-size:10px;color:#94a3b8;margin-top:6px">单位：主力净流入/净量为亿元；概念字段批次C补充；5日/10日涨幅经东财clist补充（CI验证）</div>
     </div>'''
 
+    # ── 九、事件驱动 ──
+    events_section = ''
+    if market_events and market_events.get('has_data'):
+        def _ev_table(title, rows, cols):
+            if not rows:
+                return ''
+            body = ''
+            for r in rows:
+                tds = ''.join(f'<td style="padding:3px 6px;font-size:11px;color:#475569">{r.get(c, "-") or "-"}</td>' for h, c in cols)
+                body += f'<tr>{tds}</tr>'
+            head = ''.join(f'<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">{h}</th>' for h, c in cols)
+            return f'<h3 style="font-size:13px;font-weight:600;margin:8px 0 4px;color:#1e40af">{title}（{len(rows)}）</h3><table style="width:100%;border-collapse:collapse;margin-bottom:8px"><thead><tr style="background:#eff6ff">{head}</tr></thead><tbody>{body}</tbody></table>'
+        blocks = ''
+        blocks += _ev_table('重大事项公告', market_events.get('notices', []), [('代码','code'),('名称','name'),('公告','title'),('日期','date')])
+        blocks += _ev_table('财报预告', market_events.get('earnings', []), [('代码','code'),('名称','name'),('类型','type'),('日期','date')])
+        blocks += _ev_table('停复牌', market_events.get('suspension', []), [('代码','code'),('名称','name'),('状态','type'),('日期','date')])
+        blocks += _ev_table('解禁', market_events.get('unlocks', []), [('代码','code'),('名称','name'),('解禁市值(亿)','amount_yi'),('日期','date')])
+        events_section = f'''
+    <div style="background:#eff6ff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #bfdbfe">
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 8px 0;color:#1e40af">九、事件驱动（公告 / 财报 / 停复牌 / 解禁）</h3>
+        {blocks}
+    </div>'''
+
+    # ── 十、高低点 / MACD / 筹码（主力净流入 TOP20）──
+    technical_section = ''
+    if stock_technicals:
+        rows = ''
+        for r in stock_technicals[:20]:
+            st = r.get('macd_state', '-')
+            stc = '#16a34a' if st in ('金叉','多头') else '#dc2626' if st in ('死叉','空头') else '#64748b'
+            draw = r.get('drawdown_from_high_pct')
+            draw_s = f'{draw:+.2f}%' if draw is not None else '-'
+            rows += f'''<tr>
+<td style="padding:3px 6px;font-size:11px;color:#475569">{r.get('name','')}</td>
+<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('high20','-')}</td>
+<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('low20','-')}</td>
+<td style="padding:3px 6px;font-size:11px;color:#64748b">{draw_s}</td>
+<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('macd_dif','-')}</td>
+<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('macd_dea','-')}</td>
+<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('macd_bar','-')}</td>
+<td style="padding:3px 6px;font-size:11px;color:{stc};font-weight:500">{st}</td>
+<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('cyq_profit_pct','-')}</td>
+<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('cyq_avg_cost','-')}</td>
+</tr>'''
+        technical_section = f'''
+    <div style="background:#f5f3ff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #ddd6fe">
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 8px 0;color:#6d28d9">十、高低点 / MACD / 筹码（主力净流入 TOP20）</h3>
+        <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#ede9fe">
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">名称</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">20日高</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">20日低</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">距高回撤%</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">DIF</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">DEA</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">MACD柱</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">状态</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">获利%</th>
+<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">平均成本</th>
+</tr></thead><tbody>{rows}</tbody></table>
+        <div style="font-size:10px;color:#94a3b8;margin-top:6px">MACD(12,26,9)；筹码经东财 cyq 接口（CI）；K线不足35日则 MACD 为空</div>
+    </div>'''
+
     focus_section = f'''
     <div style="background:#f0fdf4;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #bbf7d0">
         <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#16a34a">八、明日关注</h3>
@@ -684,6 +750,8 @@ def generate_review_report(review_data):
             {pva_section}
             {lhb_section}
             {rank_section}
+            {events_section}
+            {technical_section}
             {focus_section}
             {source_note}
 
@@ -696,6 +764,19 @@ def generate_review_report(review_data):
     return html
 
 
+def generate_review_pdf(review_data, base_url=None):
+    """生成复盘 PDF (weasyprint)。复用 generate_review_report 的 HTML 模板。
+    返回 PDF 字节；若 weasyprint 未安装或无头依赖缺失则抛异常，由调用方降级。"""
+    try:
+        import weasyprint
+    except Exception as e:
+        raise RuntimeError(f'weasyprint 不可用: {e}')
+    html = generate_review_report(review_data)
+    wp = weasyprint.HTML(string=html, base_url=base_url or '')
+    pdf_bytes = wp.write_pdf()
+    return pdf_bytes
+
+
 def generate_review_summary_text(review_data):
     """生成复盘简要文字摘要"""
     summary = review_data.get('summary', '')
@@ -706,7 +787,7 @@ def generate_review_summary_text(review_data):
     return ' | '.join(parts)
 
 
-def send_email(smtp_user, smtp_pass, smtp_host, smtp_port, subscribers, html_content, summary_text, today, subject=None):
+def send_email(smtp_user, smtp_pass, smtp_host, smtp_port, subscribers, html_content, summary_text, today, subject=None, pdf_bytes=None):
     """发送邮件给订阅者"""
     results = []
 
@@ -724,7 +805,7 @@ def send_email(smtp_user, smtp_pass, smtp_host, smtp_port, subscribers, html_con
             if not target:
                 continue
 
-            msg = MIMEMultipart('alternative')
+            msg = MIMEMultipart('mixed')
             # 使用 formataddr 正确编码 From header (RFC5322/RFC2047)
             msg['From'] = formataddr(('Stock Agent Daily Report', smtp_user))
             msg['To'] = target
@@ -737,8 +818,19 @@ def send_email(smtp_user, smtp_pass, smtp_host, smtp_port, subscribers, html_con
             msg['X-Auto-Response-Suppress'] = 'OOF, AutoReply'
             msg['Auto-Submitted'] = 'auto-generated'
 
-            msg.attach(MIMEText(f'每日市场情报 {today} - 请查看HTML版本获取完整内容', 'plain'))
-            msg.attach(MIMEText(html_content, 'html'))
+            alt = MIMEMultipart('alternative')
+            alt.attach(MIMEText(f'每日市场情报 {today} - 请查看HTML版本获取完整内容', 'plain'))
+            alt.attach(MIMEText(html_content, 'html'))
+            msg.attach(alt)
+
+            if pdf_bytes:
+                try:
+                    from email.mime.application import MIMEApplication
+                    part = MIMEApplication(pdf_bytes, Name='review.pdf')
+                    part['Content-Disposition'] = f'attachment; filename="市场复盘_{today}.pdf"'
+                    msg.attach(part)
+                except Exception as e:
+                    print(f'[Pipeline] PDF附件附加失败: {e}')
 
             try:
                 server.sendmail(smtp_user, target, msg.as_string())

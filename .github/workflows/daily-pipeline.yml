@@ -28,6 +28,11 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
+      - name: Install system deps (weasyprint / pandas)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev fonts-liberation
+
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
@@ -54,6 +59,6 @@ jobs:
         run: |
           git config user.name "Stock Agent Bot"
           git config user.email "bot@stock-agent.dev"
-          git add data/latest.json data/latest_review.json data/raw_*.json data/processed_*.json data/analysis_*.json data/review_*.json || true
+          git add data/latest.json data/latest_review.json data/raw_*.json data/processed_*.json data/analysis_*.json data/review_*.json data/review_*.pdf || true
           git diff --staged --quiet || git commit -m "📊 Update market data $(date -u +%Y-%m-%d) [${{ env.PIPELINE_MODE }}]"
           git push

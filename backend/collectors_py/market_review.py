@@ -2284,6 +2284,207 @@ def fetch_stock_rank():
 
 
 # ═══════════════════════════════════════════════════
+# 12. 事件驱动 (公告/财报预告/停复牌/解禁)
+# ═══════════════════════════════════════════════════
+
+def _ak_cell(row, df, *keywords):
+    """从 akshare 行中按列名关键词提取第一个匹配列的值"""
+    for col in df.columns:
+        cs = str(col)
+        if any(k in cs for k in keywords):
+            return row[col]
+    return None
+
+def fetch_market_events():
+    """事件驱动: 聚合当日重大公告/财报预告/停复牌/解禁 (akshare 主源, 单类隔离降级)"""
+    print('[MarketReview] 采集事件驱动(公告/财报/停复牌/解禁)...')
+    today_str = datetime.now().strftime('%Y%m%d')
+    result = {'notices': [], 'earnings': [], 'suspension': [], 'unlocks': [],
+              'source': 'akshare', 'has_data': False}
+
+    # ── 重大事项公告 ──
+    try:
+        func = getattr(ak, 'stock_notice_report', None)
+        if func:
+            df = call_with_timeout(func, timeout=15, symbol='重大事项')
+            if df is not None and len(df) > 0:
+                for _, row in df.iterrows():
+                    code = _ak_cell(row, df, '代码')
+                    name = _ak_cell(row, df, '名称', '简称')
+                    title = _ak_cell(row, df, '公告标题', '标题', '事项')
+                    date = _ak_cell(row, df, '公告日期', '日期')
+                    if code:
+                        result['notices'].append({
+                            'code': str(code), 'name': str(name or ''),
+                            'title': str(title or ''), 'date': str(date or '')[:10],
+                        })
+                result['notices'] = result['notices'][:15]
+    except Exception as e:
+        print(f'  [MarketReview] 重大事项公告失败: {e}')
+
+    # ── 财报预告 ──
+    try:
+        func = getattr(ak, 'stock_yjyg_em', None)
+        if func:
+            df = call_with_timeout(func, timeout=15)
+            if df is not None and len(df) > 0:
+                for _, row in df.iterrows():
+                    code = _ak_cell(row, df, '代码')
+                    name = _ak_cell(row, df, '名称', '简称')
+                    typ = _ak_cell(row, df, '业绩变动类型', '类型', '预告类型')
+                    date = _ak_cell(row, df, '公告日期', '业绩预告日期', '日期')
+                    if code:
+                        result['earnings'].append({
+                            'code': str(code), 'name': str(name or ''),
+                            'type': str(typ or ''), 'date': str(date or '')[:10],
+                        })
+                result['earnings'] = result['earnings'][:15]
+    except Exception as e:
+        print(f'  [MarketReview] 财报预告失败: {e}')
+
+    # ── 停复牌 ──
+    try:
+        func = getattr(ak, 'stock_tfp_em', None)
+        if func:
+            df = call_with_timeout(func, timeout=15)
+            if df is not None and len(df) > 0:
+                for _, row in df.iterrows():
+                    code = _ak_cell(row, df, '代码')
+                    name = _ak_cell(row, df, '名称', '简称')
+                    typ = _ak_cell(row, df, '停牌', '复牌', '类型')
+                    date = _ak_cell(row, df, '日期', '停牌时间', '复牌时间')
+                    if code:
+                        result['suspension'].append({
+                            'code': str(code), 'name': str(name or ''),
+                            'type': str(typ or ''), 'date': str(date or '')[:10],
+                        })
+                result['suspension'] = result['suspension'][:15]
+    except Exception as e:
+        print(f'  [MarketReview] 停复牌失败: {e}')
+
+    # ── 解禁 ──
+    try:
+        func = getattr(ak, 'stock_restricted_release_detail_em', None)
+        if func:
+            df = call_with_timeout(func, timeout=15, date=today_str)
+            if df is not None and len(df) > 0:
+                for _, row in df.iterrows():
+                    code = _ak_cell(row, df, '代码')
+                    name = _ak_cell(row, df, '名称', '简称')
+                    amt = _ak_cell(row, df, '解禁数量', '解禁市值', '解禁股数')
+                    date = _ak_cell(row, df, '解禁日期', '上市日期', '日期')
+                    item = {'code': str(code), 'name': str(name or ''), 'date': str(date or '')[:10]}
+                    try:
+                        if amt is not None:
+                            item['amount_yi'] = round(float(amt) / 1e8, 2) if float(amt) > 1e8 else round(float(amt), 2)
+                    except (ValueError, TypeError):
+                        pass
+                    if code:
+                        result['unlocks'].append(item)
+                result['unlocks'] = result['unlocks'][:15]
+    except Exception as e:
+        print(f'  [MarketReview] 解禁失败: {e}')
+
+    total = len(result['notices']) + len(result['earnings']) + len(result['suspension']) + len(result['unlocks'])
+    result['has_data'] = total > 0
+    print(f'[MarketReview] 事件驱动: 公告{len(result["notices"])} 财报{len(result["earnings"])} 停复牌{len(result["suspension"])} 解禁{len(result["unlocks"])}')
+    return result
+
+
+# ═══════════════════════════════════════════════════
+# 15. 高低点 + MACD + 筹码分布 (仅主力净流入 TOP20)
+# ═══════════════════════════════════════════════════
+
+def _compute_macd(closes):
+    """返回 (dif, dea, bar, state) 最近一日值; 参数 12/26/9"""
+    try:
+        import numpy as np
+        import pandas as pd
+    except Exception:
+        return None, None, None, 'NA'
+    s = pd.Series(closes, dtype=float)
+    if len(s) < 35:
+        return None, None, None, 'NA'
+    ema12 = s.ewm(span=12, adjust=False).mean()
+    ema26 = s.ewm(span=26, adjust=False).mean()
+    dif = ema12 - ema26
+    dea = dif.ewm(span=9, adjust=False).mean()
+    bar = 2 * (dif - dea)
+    dif_v, dea_v, bar_v = float(dif.iloc[-1]), float(dea.iloc[-1]), float(bar.iloc[-1])
+    # 状态: 金叉(dif上穿dea)/死叉(dif下穿dea)/多头(dif>dea)/空头
+    prev_dif, prev_dea = float(dif.iloc[-2]), float(dea.iloc[-2])
+    if prev_dif <= prev_dea and dif_v > dea_v:
+        state = '金叉'
+    elif prev_dif >= prev_dea and dif_v < dea_v:
+        state = '死叉'
+    elif dif_v > dea_v:
+        state = '多头'
+    else:
+        state = '空头'
+    return round(dif_v, 3), round(dea_v, 3), round(bar_v, 3), state
+
+
+def fetch_stock_technicals(top_inflow):
+    """技术指标: 对主力净流入 TOP20 算 MACD(12/26/9)+近20日高低点+筹码分布"""
+    print('[MarketReview] 采集技术指标(高低点/MACD/筹码)...')
+    if not top_inflow:
+        print('  [MarketReview] 无个股排名, 跳过技术指标')
+        return []
+    codes = [(r.get('code'), r.get('name')) for r in top_inflow[:20] if r.get('code')]
+    out = []
+    hist_func = getattr(ak, 'stock_zh_a_hist', None)
+    cyq_func = getattr(ak, 'stock_cyq_em', None)
+    for i, (code, name) in enumerate(codes):
+        item = {'code': code, 'name': name or ''}
+        # ── K线 + MACD + 高低点 ──
+        try:
+            if hist_func:
+                df = call_with_timeout(hist_func, timeout=8, symbol=code, period='daily', adjust='qfq')
+                if df is not None and len(df) > 0:
+                    close = df['收盘'] if '收盘' in df.columns else df.iloc[:, 0]
+                    closes = [float(x) for x in close.tolist()]
+                    last = closes[-1]
+                    hi20 = max(closes[-20:])
+                    lo20 = min(closes[-20:])
+                    item['close'] = round(last, 2)
+                    item['high20'] = round(hi20, 2)
+                    item['low20'] = round(lo20, 2)
+                    item['drawdown_from_high_pct'] = round((last - hi20) / hi20 * 100, 2) if hi20 else None
+                    dif, dea, bar, state = _compute_macd(closes)
+                    item['macd_dif'] = dif
+                    item['macd_dea'] = dea
+                    item['macd_bar'] = bar
+                    item['macd_state'] = state
+        except Exception as e:
+            print(f'  [MarketReview] K线/MACD {code} 失败: {e}')
+        # ── 筹码分布 ──
+        try:
+            if cyq_func:
+                cdf = call_with_timeout(cyq_func, timeout=8, symbol=code, adjust='')
+                if cdf is not None and len(cdf) > 0:
+                    last = cdf.iloc[-1]
+                    for col in cdf.columns:
+                        cs = str(col)
+                        if '获利比例' in cs or '盈利比例' in cs:
+                            try: item['cyq_profit_pct'] = round(float(last[col]), 2)
+                            except (ValueError, TypeError): pass
+                        elif '平均成本' in cs:
+                            try: item['cyq_avg_cost'] = round(float(last[col]), 2)
+                            except (ValueError, TypeError): pass
+                        elif '集中度' in cs:
+                            try: item['cyq_concentration'] = round(float(last[col]), 2)
+                            except (ValueError, TypeError): pass
+        except Exception as e:
+            print(f'  [MarketReview] 筹码 {code} 失败: {e}')
+        out.append(item)
+        if i < len(codes) - 1:
+            time.sleep(0.2)  # 控频
+    ok = [x for x in out if x.get('macd_state') and x.get('macd_state') != 'NA']
+    print(f'[MarketReview] 技术指标: {len(out)}只, 有效MACD {len(ok)}只')
+    return out
+
+
+# ═══════════════════════════════════════════════════
 # 主函数
 # ═══════════════════════════════════════════════════
 
@@ -2308,6 +2509,8 @@ def run():
     price_volume_anomalies = fetch_price_volume_anomalies()
     lhb_capital = fetch_lhb_capital()
     stock_rank = fetch_stock_rank()
+    market_events = fetch_market_events()
+    stock_technicals = fetch_stock_technicals(stock_rank.get('top_inflow'))
 
     # 2. 信号计算
     signals = calculate_signals(index_data, breadth, northbound, margin, sector_flow)
@@ -2336,6 +2539,8 @@ def run():
         'price_volume_anomalies': price_volume_anomalies,
         'lhb_capital': lhb_capital,
         'stock_rank': stock_rank,
+        'market_events': market_events,
+        'stock_technicals': stock_technicals,
         'signals': signals,
         'anomalies': anomalies,
         'tomorrow_focus': tomorrow_focus,

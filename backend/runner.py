@@ -415,7 +415,7 @@ def run_review():
     print('\n[Pipeline] ═══ 复盘模式启动 ═══')
 
     from collectors_py.market_review import run as review_run
-    from formatter_py.report import generate_review_report, generate_review_summary_text, send_email
+    from formatter_py.report import generate_review_report, generate_review_summary_text, send_email, generate_review_pdf
 
     # 1. 采集复盘数据
     review_data = review_run()
@@ -453,11 +453,20 @@ def run_review():
 
     print(f'[Pipeline] {len(subscribers)} 位订阅者')
 
-    # 5. 发送邮件
+    # 5. 发送邮件（带 PDF 附件，weasyprint 不可用时降级纯文本+看板链接）
     subject = f'市场复盘与异动简报 {today}'
+    pdf_bytes = None
+    try:
+        pdf_bytes = generate_review_pdf(review_data, base_url=os.path.dirname(os.path.abspath(__file__)))
+        pdf_path = os.path.join(DATA_DIR, f'review_{today}.pdf')
+        with open(pdf_path, 'wb') as f:
+            f.write(pdf_bytes)
+        print(f'[Pipeline] PDF 已生成: review_{today}.pdf ({len(pdf_bytes)} bytes)')
+    except Exception as e:
+        print(f'[Pipeline] PDF 生成跳过(降级): {e}')
     results = send_email(
         SMTP_USER, SMTP_PASS, SMTP_HOST, SMTP_PORT,
-        subscribers, html_content, summary_text, today, subject=subject
+        subscribers, html_content, summary_text, today, subject=subject, pdf_bytes=pdf_bytes
     )
 
     sent = sum(1 for r in results if r.get('success'))
