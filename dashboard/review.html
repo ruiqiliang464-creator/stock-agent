@@ -158,7 +158,7 @@ function buildTrackChart(d) {
 
 function buildSentimentKpi(d) {
   const s = d.sentiment_pools||{};
-  if (s.limit_up_count===undefined && s.limit_up_count===null && s.zhaban_count===undefined && s.zhaban_count===null) { document.getElementById('c_sentiment').innerHTML='<div class="empty">暂无数据</div>'; return; }
+  if (s.limit_up_count == null && s.zhaban_count == null) { document.getElementById('c_sentiment').innerHTML='<div class="empty">暂无数据</div>'; return; }
   const cards = [
     {l:'涨停', v:s.limit_up_count, c:COLORS.up},
     {l:'炸板', v:s.zhaban_count, c:'#f59e0b'},
