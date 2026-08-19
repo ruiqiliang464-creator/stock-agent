@@ -19,7 +19,7 @@
     },
     {
       "path": "/api/trigger?mode=review",
-      "schedule": "0 8 * * *"
+      "schedule": "0 10 * * *"
     }
   ]
 }
