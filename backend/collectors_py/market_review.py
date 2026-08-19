@@ -1571,21 +1571,96 @@ def _em_clist(fields, fs, pz=50, fid='f3', po='1', kw=None):
 # ═══════════════════════════════════════════════════
 
 INTL_INDICES = [
-    {'name': '恒生指数', 'yf': '^HSI', 'region': '香港'},
-    {'name': '日经225', 'yf': '^N225', 'region': '日本'},
-    {'name': '韩国综合', 'yf': '^KS11', 'region': '韩国'},
-    {'name': '标普500', 'yf': '^GSPC', 'region': '美国'},
-    {'name': '纳斯达克', 'yf': '^IXIC', 'region': '美国'},
-    {'name': '道琼斯', 'yf': '^DJI', 'region': '美国'},
-    {'name': '英国富时', 'yf': '^FTSE', 'region': '英国'},
+    {'name': '恒生指数', 'yf': '^HSI', 'region': '香港', 'sina': 'int_hangseng', 'em_secid': '100.HSI'},
+    {'name': '日经225', 'yf': '^N225', 'region': '日本', 'sina': 'int_nikkei', 'em_secid': '100.N225'},
+    {'name': '韩国综合', 'yf': '^KS11', 'region': '韩国', 'sina': 'int_kospi', 'em_secid': '100.KS11'},
+    {'name': '标普500', 'yf': '^GSPC', 'region': '美国', 'sina': 'int_sp500', 'em_secid': None},
+    {'name': '纳斯达克', 'yf': '^IXIC', 'region': '美国', 'sina': 'int_nasdaq', 'em_secid': None},
+    {'name': '道琼斯', 'yf': '^DJI', 'region': '美国', 'sina': 'int_dji', 'em_secid': '100.DJIA'},
+    {'name': '英国富时', 'yf': '^FTSE', 'region': '英国', 'sina': 'int_ftse', 'em_secid': '100.FTSE'},
 ]
+
+SINA_HEADERS = {
+    'User-Agent': 'Mozilla/5.0',
+    'Referer': 'https://finance.sina.com.cn/',
+}
+
+
+def _sina_intl_indices():
+    """新浪国际指数兜底: hq.sinajs.cn/list=int_* (gbk编码, 格式: 名称,现价,涨跌点,涨跌幅%)"""
+    mapping = {idx['sina']: idx for idx in INTL_INDICES if idx.get('sina')}
+    url = 'https://hq.sinajs.cn/list=' + ','.join(mapping.keys())
+    try:
+        r = requests.get(url, headers=SINA_HEADERS, timeout=(4, 8))
+        r.encoding = 'gbk'
+        out = []
+        for ln in r.text.strip().split('\n'):
+            m = re.search(r'var\s+(\w+)\s*=\s*"([^"]*)"', ln)
+            if not m:
+                continue
+            key, val = m.group(1), m.group(2)
+            # 新浪变量名带 hq_str_ 前缀, 去掉以匹配 mapping
+            key = key.replace('hq_str_', '')
+            idx = mapping.get(key)
+            if not idx or not val:
+                continue
+            parts = val.split(',')
+            if len(parts) < 4:
+                continue
+            try:
+                close = float(parts[1])
+                chg_pct = float(parts[3])
+            except (ValueError, IndexError):
+                continue
+            if close <= 0:
+                continue
+            out.append({
+                'name': idx['name'], 'symbol': idx['yf'], 'region': idx['region'],
+                'close': round(close, 2), 'change_pct': round(chg_pct, 2), 'source': 'sina',
+            })
+        return out
+    except Exception as e:
+        print(f'  [MarketReview] 新浪国际指数失败: {e}')
+        return []
+
+
+def _em_intl_indices():
+    """东财 push2 stock/get 国际指数兜底 (secid=100.*, retry, 仅已知secid)"""
+    out = []
+    for idx in INTL_INDICES:
+        sec = idx.get('em_secid')
+        if not sec:
+            continue
+        for _ in range(2):
+            try:
+                r = requests.get('https://push2.eastmoney.com/api/qt/stock/get',
+                                  params={'secid': sec, 'fields': 'f43,f170,f58'},
+                                  headers=EM_HEADERS, timeout=(4, 8))
+                d = r.json().get('data') or {}
+                price = d.get('f43')
+                chg = d.get('f170')
+                if price not in (None, '-', 0):
+                    p = float(price)
+                    # 指数f43为原值*100 或 原值, 按量级自适应
+                    close = round(p / 100, 2) if p > 10000 else round(p, 2)
+                    cp = round(float(chg) / 100, 2) if chg not in (None, '-') else 0
+                    out.append({
+                        'name': idx['name'], 'symbol': idx['yf'], 'region': idx['region'],
+                        'close': close, 'change_pct': cp, 'source': 'eastmoney',
+                    })
+                    break
+            except Exception:
+                continue
+    return out
 
 
 def fetch_intl_indices():
-    """国际指数: yfinance 主源(海外IP可用), akshare 兜底"""
+    """国际指数: yfinance主源(美国IP稳) → 新浪兜底(覆盖6/7) → 东财末位(已知secid)"""
     print('[MarketReview] 采集国际指数...')
     results = []
-    # 方法1: yfinance (Vercel/CI 美国IP可用)
+    seen = set()
+
+    # 方法1: yfinance (美国IP可用, 最稳)
     try:
         for idx in INTL_INDICES:
             try:
@@ -1599,41 +1674,32 @@ def fetch_intl_indices():
                         'name': idx['name'], 'symbol': idx['yf'], 'region': idx['region'],
                         'close': round(close, 2), 'change_pct': chg, 'source': 'yfinance',
                     })
+                    seen.add(idx['name'])
             except Exception as e:
                 print(f'  [MarketReview] yfinance {idx["name"]}: {e}')
-        if len(results) >= 3:
+        if len(results) >= 5:
             print(f'[MarketReview] 国际指数(yfinance): {len(results)}条')
             return results
     except Exception as e:
         print(f'  [MarketReview] yfinance 国际指数整体失败: {e}')
 
-    # 方法2: akshare (部分国际指数)
-    try:
-        func = getattr(ak, 'stock_us_daily', None)
-        if func:
-            for idx in INTL_INDICES:
-                try:
-                    # 美股/港股指数 akshare 支持有限, 尽力而为
-                    sym = idx['yf'].lstrip('^')
-                    df = call_with_timeout(func, timeout=8, symbol=sym)
-                    if df is not None and len(df) > 0:
-                        latest = df.iloc[-1]
-                        prev = df.iloc[-2] if len(df) > 1 else latest
-                        close = float(latest.get('close', 0) or 0)
-                        prev_c = float(prev.get('close', 0) or 0)
-                        if close > 0:
-                            results.append({
-                                'name': idx['name'], 'symbol': idx['yf'], 'region': idx['region'],
-                                'close': round(close, 2),
-                                'change_pct': round((close - prev_c) / prev_c * 100, 2) if prev_c else 0,
-                                'source': 'akshare',
-                            })
-                except Exception:
-                    continue
-        if results:
-            print(f'[MarketReview] 国际指数(akshare兜底): {len(results)}条')
-    except Exception as e:
-        print(f'  [MarketReview] akshare 国际指数兜底失败: {e}')
+    # 方法2: 新浪兜底 (覆盖道琼斯/纳斯达克/标普/恒生/日经/富时, 韩国除外)
+    sina_out = _sina_intl_indices()
+    for it in sina_out:
+        if it['name'] not in seen:
+            results.append(it)
+            seen.add(it['name'])
+    print(f'[MarketReview] 国际指数(+新浪兜底): {len(results)}条')
+
+    # 方法3: 东财末位 (韩国等新浪未覆盖的, 用已知secid)
+    missing = [idx for idx in INTL_INDICES if idx['name'] not in seen and idx.get('em_secid')]
+    if missing:
+        em_out = _em_intl_indices()
+        for it in em_out:
+            if it['name'] not in seen:
+                results.append(it)
+                seen.add(it['name'])
+        print(f'[MarketReview] 国际指数(+东财末位): {len(results)}条')
 
     print(f'[MarketReview] 国际指数: {len(results)}条')
     return results
@@ -1752,55 +1818,118 @@ def _em_clist_stock_get(secid):
 # 8. 情绪池 (涨停/炸板/昨日涨停)
 # ═══════════════════════════════════════════════════
 
+def _em_zt_pool(kind, date_str):
+    """东财 push2ex 涨停池直连 (kind: zt/yz/zb), 返回 pool list. 字段: c=代码 n=名称 zdp=涨跌幅 lbc=连板数 zbc=炸板次数"""
+    urls = {
+        'zt': 'https://push2ex.eastmoney.com/getTopicZTPool',
+        'yz': 'https://push2ex.eastmoney.com/getYesterdayZTPool',
+        'zb': 'https://push2ex.eastmoney.com/getTopicZBPool',
+    }
+    params = {'ut': '7eea3edcaed734bea9cbfc24409ed989', 'dpt': 'wz.ztzt',
+              'Pageindex': '0', 'pagesize': '200', 'sort': 'fbt:asc', 'date': date_str}
+    try:
+        r = requests.get(urls[kind], params=params, headers=EM_HEADERS, timeout=(4, 10))
+        d = r.json().get('data') or {}
+        return d.get('pool') or []
+    except Exception as e:
+        print(f'  [MarketReview] 东财涨停池({kind})失败: {e}')
+        return []
+
+
+def _em_zt_pool_recent(kind, days=5):
+    """东财涨停池: 遍历近days日, 返回首个有数据的(pool, date)"""
+    for off in range(days):
+        d = (datetime.now() - timedelta(days=off)).strftime('%Y%m%d')
+        pool = _em_zt_pool(kind, d)
+        if pool:
+            return pool, d
+    return [], None
+
+
 def fetch_sentiment_pools():
-    """情绪: 涨停池 / 昨日涨停池 / 炸板率 (akshare 主源, 新浪/广度兜底)"""
+    """情绪: 涨停池/昨日涨停池/炸板率 (akshare主源 → 东财push2ex直连兜底)"""
     print('[MarketReview] 采集情绪池(涨停/炸板/昨日涨停)...')
     result = {'limit_up_count': None, 'yesterday_zt_count': None, 'zhaban_count': None,
               'zhaban_rate': None, 'limit_up_names': [], 'yesterday_zt_names': [], 'source': 'akshare'}
 
     today_str = datetime.now().strftime('%Y%m%d')
+
+    # ── 涨停池 ──
     try:
         zt_func = getattr(ak, 'stock_zt_pool_em', None)
         if zt_func:
             df = call_with_timeout(zt_func, timeout=12, date=today_str)
             if df is not None and len(df) > 0:
-                names = []
-                for _, row in df.iterrows():
-                    nm = row.get('名称') or row.get('name')
-                    if nm:
-                        names.append(str(nm))
+                names = [str(row.get('名称') or row.get('name') or '') for _, row in df.iterrows()]
+                names = [n for n in names if n]
                 result['limit_up_count'] = len(names)
                 result['limit_up_names'] = names[:20]
+    except Exception as e:
+        print(f'  [MarketReview] akshare 涨停池失败: {e}')
 
+    # 东财直连兜底
+    if result['limit_up_count'] is None:
+        pool, d = _em_zt_pool_recent('zt')
+        if pool:
+            names = [str(it.get('n') or '') for it in pool]
+            names = [n for n in names if n]
+            result['limit_up_count'] = len(names)
+            result['limit_up_names'] = names[:20]
+            result['source'] = 'eastmoney'
+            print(f'  [MarketReview] 涨停池走东财直连(date={d}): {len(names)}只')
+
+    # ── 昨日涨停 ──
+    try:
         yz_func = getattr(ak, 'stock_zt_pool_previous_em', None)
         if yz_func:
             df2 = call_with_timeout(yz_func, timeout=12, date=today_str)
             if df2 is not None and len(df2) > 0:
-                names2 = []
-                for _, row in df2.iterrows():
-                    nm = row.get('名称') or row.get('name')
-                    if nm:
-                        names2.append(str(nm))
+                names2 = [str(row.get('名称') or row.get('name') or '') for _, row in df2.iterrows()]
+                names2 = [n for n in names2 if n]
                 result['yesterday_zt_count'] = len(names2)
                 result['yesterday_zt_names'] = names2[:20]
+    except Exception as e:
+        print(f'  [MarketReview] akshare 昨日涨停失败: {e}')
 
+    if result['yesterday_zt_count'] is None:
+        pool, d = _em_zt_pool_recent('yz')
+        if pool:
+            names2 = [str(it.get('n') or '') for it in pool]
+            names2 = [n for n in names2 if n]
+            result['yesterday_zt_count'] = len(names2)
+            result['yesterday_zt_names'] = names2[:20]
+            if result['source'] == 'akshare':
+                result['source'] = 'eastmoney'
+
+    # ── 炸板池 ──
+    zb_count = None
+    try:
         zb_func = getattr(ak, 'stock_zt_pool_zbgc_em', None) or getattr(ak, 'stock_zt_pool_strong_em', None)
         if zb_func:
             df3 = call_with_timeout(zb_func, timeout=12, date=today_str)
             if df3 is not None and len(df3) > 0:
-                result['zhaban_count'] = len(df3)
+                zb_count = len(df3)
     except Exception as e:
-        print(f'  [MarketReview] akshare 情绪池失败: {e}')
+        print(f'  [MarketReview] akshare 炸板池失败: {e}')
+
+    if zb_count is None:
+        pool, d = _em_zt_pool_recent('zb')
+        if pool:
+            zb_count = len(pool)
+            if result['source'] == 'akshare':
+                result['source'] = 'eastmoney'
+    result['zhaban_count'] = zb_count
 
     # 炸板率: 炸板/(涨停+炸板)
-    if result['zhaban_count'] and result['limit_up_count']:
+    if result['zhaban_count'] is not None and result['limit_up_count']:
         total = result['zhaban_count'] + result['limit_up_count']
         result['zhaban_rate'] = round(result['zhaban_count'] / total * 100, 1) if total else None
 
-    # 兜底: 用市场广度里的涨停数
-    if result['limit_up_count'] is None:
+    if result['limit_up_count'] is None and result['zhaban_count'] is None:
+        result['source'] = 'none'
+    elif result['limit_up_count'] is None:
         result['source'] = 'breadth'
-    print(f'[MarketReview] 情绪池: 涨停{result["limit_up_count"]} 昨日涨停{result["yesterday_zt_count"]} 炸板{result["zhaban_count"]}')
+    print(f'[MarketReview] 情绪池(src={result["source"]}): 涨停{result["limit_up_count"]} 昨日涨停{result["yesterday_zt_count"]} 炸板{result["zhaban_count"]}')
     return result
 
 
@@ -1910,11 +2039,73 @@ def fetch_price_volume_anomalies():
 # 11. 资金异动 / 龙虎榜 (机构净买 TOP + 北向扫货)
 # ═══════════════════════════════════════════════════
 
-def fetch_lhb_capital():
-    """资金异动: 龙虎榜机构净买TOP (akshare 主源)"""
-    print('[MarketReview] 采集龙虎榜机构异动...')
-    result = {'lhb_institution': [], 'source': 'akshare'}
+def _em_lhb_detail():
+    """东财 datacenter-web 龙虎榜直连: 取最近交易日个股净买TOP. 字段: SECURITY_CODE/NAME_ABBR/BILLBOARD_NET_AMT/BILLBOARD_BUY_AMT/BILLBOARD_SELL_AMT"""
+    url = 'https://datacenter-web.eastmoney.com/api/data/v1/get'
+    params = {
+        'reportName': 'RPT_DAILYBILLBOARD_DETAILSNEW',
+        'columns': 'ALL',
+        'pageNumber': 1, 'pageSize': 500,
+        'sortColumns': 'SECURITY_CODE',
+        'sortTypes': 1,
+    }
+    try:
+        r = requests.get(url, params=params, headers=EM_HEADERS, timeout=(4, 12))
+        j = r.json()
+        # 鲁棒解析: result.data 或 result 直接 list
+        res = j.get('result')
+        if isinstance(res, dict):
+            rows = res.get('data') or []
+        elif isinstance(res, list):
+            rows = res
+        else:
+            rows = j.get('data') or []
+        if not rows:
+            return [], None
+        # 取最近交易日
+        dates = sorted({row.get('TRADE_DATE', '') for row in rows if row.get('TRADE_DATE')}, reverse=True)
+        latest = dates[0] if dates else None
+        if latest:
+            rows = [row for row in rows if row.get('TRADE_DATE') == latest]
+        ranked = []
+        for row in rows:
+            code = row.get('SECURITY_CODE')
+            name = row.get('NAME_ABBR') or row.get('SECURITY_NAME_ABBR') or ''
+            net = row.get('BILLBOARD_NET_AMT')
+            buy = row.get('BILLBOARD_BUY_AMT')
+            sell = row.get('BILLBOARD_SELL_AMT')
+            if not code or net is None:
+                continue
+            try:
+                ranked.append({
+                    'code': str(code), 'name': str(name),
+                    'inst_net_buy_yi': round(float(net) / 1e8, 2),
+                    'inst_buy_yi': round(float(buy) / 1e8, 2) if buy is not None else 0,
+                    'inst_sell_yi': round(float(sell) / 1e8, 2) if sell is not None else 0,
+                })
+            except (ValueError, TypeError):
+                continue
+        ranked.sort(key=lambda x: x['inst_net_buy_yi'], reverse=True)
+        return ranked, latest
+    except Exception as e:
+        print(f'  [MarketReview] 东财龙虎榜直连失败: {e}')
+        return [], None
 
+
+def fetch_lhb_capital():
+    """资金异动: 龙虎榜净买TOP (东财datacenter-web直连主源 → akshare兜底)"""
+    print('[MarketReview] 采集龙虎榜机构异动...')
+    result = {'lhb_institution': [], 'source': 'none'}
+
+    # ── 主源: 东财 datacenter-web 直连 ──
+    ranked, latest_date = _em_lhb_detail()
+    if ranked:
+        result['lhb_institution'] = ranked[:15]
+        result['source'] = 'eastmoney'
+        print(f'[MarketReview] 龙虎榜(东财直连 date={latest_date}): {len(ranked)}只, 取TOP15')
+        return result
+
+    # ── 兜底: akshare ──
     today_str = datetime.now().strftime('%Y%m%d')
     try:
         func = getattr(ak, 'stock_lhb_detail_em', None)
@@ -1928,38 +2119,34 @@ def fetch_lhb_capital():
                     if not name:
                         continue
                     key = (str(code), str(name))
-                    # 机构买入/卖出总额
                     buy = sell = 0.0
                     for col in df.columns:
                         cs = str(col)
                         if '机构' in cs and ('买入' in cs or '买进' in cs):
                             try: buy += float(row[col] or 0)
                             except (ValueError, TypeError): pass
-                        elif '机构' in cs and ('卖出' in cs or '卖出' in cs):
+                        elif '机构' in cs and '卖出' in cs:
                             try: sell += float(row[col] or 0)
                             except (ValueError, TypeError): pass
                     if key not in inst_net:
                         inst_net[key] = {'code': str(code), 'name': str(name), 'inst_buy': 0.0, 'inst_sell': 0.0}
                     inst_net[key]['inst_buy'] += buy
                     inst_net[key]['inst_sell'] += sell
-                ranked = []
+                ak_ranked = []
                 for k, v in inst_net.items():
-                    net = round((v['inst_buy'] - v['inst_sell']) / 1e8, 2)  # 万元->亿
-                    ranked.append({
+                    net = round((v['inst_buy'] - v['inst_sell']) / 1e8, 2)
+                    ak_ranked.append({
                         'code': v['code'], 'name': v['name'],
                         'inst_net_buy_yi': net,
                         'inst_buy_yi': round(v['inst_buy'] / 1e8, 2),
                         'inst_sell_yi': round(v['inst_sell'] / 1e8, 2),
                     })
-                ranked.sort(key=lambda x: x['inst_net_buy_yi'], reverse=True)
-                result['lhb_institution'] = ranked[:15]
-        if result['lhb_institution']:
-            print(f'[MarketReview] 龙虎榜机构净买TOP: {len(result["lhb_institution"])}条')
-        else:
-            result['source'] = 'none'
+                ak_ranked.sort(key=lambda x: x['inst_net_buy_yi'], reverse=True)
+                result['lhb_institution'] = ak_ranked[:15]
+                result['source'] = 'akshare'
+                print(f'[MarketReview] 龙虎榜(akshare兜底): {len(ak_ranked)}只, 取TOP15')
     except Exception as e:
         print(f'  [MarketReview] akshare 龙虎榜失败: {e}')
-        result['source'] = 'none'
     return result
 
 
