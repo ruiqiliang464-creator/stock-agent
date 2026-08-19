@@ -49,6 +49,8 @@ CORE_INDICES = [
     {'code': '399006', 'name': '创业板指', 'em_secid': '0.399006', 'ak_symbol': 'sz399006', 'yf_symbol': '399006.SZ', 'sina_code': 'sz399006'},
     {'code': '000300', 'name': '沪深300', 'em_secid': '1.000300', 'ak_symbol': 'sh000300', 'yf_symbol': '000300.SS', 'sina_code': 'sh000300'},
     {'code': '000688', 'name': '科创50', 'em_secid': '1.000688', 'ak_symbol': 'sh000688', 'yf_symbol': '000688.SS', 'sina_code': 'sh000688'},
+    {'code': '899050', 'name': '北证50', 'em_secid': '0.899050', 'ak_symbol': 'bj899050', 'yf_symbol': '899050.BJ', 'sina_code': 'bj899050'},
+    {'code': '000680', 'name': '科创综指', 'em_secid': '1.000680', 'ak_symbol': 'sh000680', 'yf_symbol': '000680.SH', 'sina_code': 'sh000680'},
 ]
 
 EM_HEADERS = {
@@ -912,6 +914,20 @@ def fetch_margin_stats():
     return {}
 
 
+def _fetch_total_market_amount():
+    """两市A股总成交额(元) — 用于融资买入占比分母"""
+    diff = _em_clist('f12,f6', 'm:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', pz=6000, fid='f6', po='1')
+    total = 0.0
+    for it in diff:
+        amt = it.get('f6')
+        if amt not in (None, '-'):
+            try:
+                total += float(amt)
+            except (ValueError, TypeError):
+                pass
+    return total
+
+
 def _fetch_margin_eastmoney():
     """东方财富 datacenter API 获取两融数据 (使用正确的报表名 RPTA_RZRQ_LSHJ)"""
     try:
@@ -933,10 +949,11 @@ def _fetch_margin_eastmoney():
                 rows = data.get('data', [])
             if rows and len(rows) >= 1:
                 latest = rows[0]
-                # RPTA_RZRQ_LSHJ 字段: dim_date, rzye, rqye, rzrqye
+                # RPTA_RZRQ_LSHJ 字段: dim_date, rzye, rqye, rzrqye, rzmre(融资买入额), rzche(融资偿还额)
                 finance = float(latest.get('rzye', 0) or latest.get('RZYE', 0) or 0)
                 securities = float(latest.get('rqye', 0) or latest.get('RQYE', 0) or 0)
                 total = float(latest.get('rzrqye', 0) or latest.get('RZRQYE', 0) or 0)
+                financing_buy = float(latest.get('rzmre', 0) or latest.get('RZMRE', 0) or 0)
                 if total == 0:
                     total = finance + securities
                 date_str = str(latest.get('dim_date', '') or latest.get('DATE', '') or latest.get('RQ', ''))
@@ -947,6 +964,16 @@ def _fetch_margin_eastmoney():
                     'date': date_str[:10] if date_str else '',
                     'source': 'eastmoney',
                 }
+                # 融资买入额 + 融资买入占比(占两市成交额)
+                if financing_buy > 0:
+                    result['financing_buy'] = financing_buy
+                    result['financing_buy_yi'] = round(financing_buy / 1e8, 2)
+                    try:
+                        mkt_amt = _fetch_total_market_amount()
+                        if mkt_amt and mkt_amt > 0:
+                            result['financing_buy_ratio_pct'] = round(financing_buy / mkt_amt * 100, 2)
+                    except Exception:
+                        pass
                 result['total_balance_yi'] = round(result['total_balance'] / 1e8, 2)
                 result['finance_balance_yi'] = round(result['finance_balance'] / 1e8, 2)
                 result['securities_balance_yi'] = round(result['securities_balance'] / 1e8, 2)
@@ -1517,6 +1544,558 @@ def generate_tomorrow_focus(signals, anomalies, sector_flow, northbound):
     return unique[:5]
 
 
+# ─────────────────────────────────────────────────────
+# 通用: 东财 push2 clist 辅助 (diff 可能为 dict, 统一转 list)
+# ─────────────────────────────────────────────────────
+
+def _em_clist(fields, fs, pz=50, fid='f3', po='1', kw=None):
+    """东财 push2 clist 通用查询, 返回 list(dict)"""
+    url = 'https://push2.eastmoney.com/api/qt/clist/get'
+    params = {'fid': fid, 'po': po, 'pz': str(pz), 'pn': '1', 'fs': fs, 'fields': fields}
+    if kw:
+        params['kw'] = kw
+    try:
+        r = requests.get(url, params=params, headers=EM_HEADERS, timeout=(4, 10))
+        d = r.json().get('data') or {}
+        diff = d.get('diff', [])
+        if isinstance(diff, dict):
+            diff = list(diff.values())
+        return diff
+    except Exception as e:
+        print(f'  [MarketReview] _em_clist 失败(fs={fs}): {e}')
+        return []
+
+
+# ═══════════════════════════════════════════════════
+# 6. 国际指数 (恒生/日经/韩综/标普/纳指/道指/富时)
+# ═══════════════════════════════════════════════════
+
+INTL_INDICES = [
+    {'name': '恒生指数', 'yf': '^HSI', 'region': '香港'},
+    {'name': '日经225', 'yf': '^N225', 'region': '日本'},
+    {'name': '韩国综合', 'yf': '^KS11', 'region': '韩国'},
+    {'name': '标普500', 'yf': '^GSPC', 'region': '美国'},
+    {'name': '纳斯达克', 'yf': '^IXIC', 'region': '美国'},
+    {'name': '道琼斯', 'yf': '^DJI', 'region': '美国'},
+    {'name': '英国富时', 'yf': '^FTSE', 'region': '英国'},
+]
+
+
+def fetch_intl_indices():
+    """国际指数: yfinance 主源(海外IP可用), akshare 兜底"""
+    print('[MarketReview] 采集国际指数...')
+    results = []
+    # 方法1: yfinance (Vercel/CI 美国IP可用)
+    try:
+        for idx in INTL_INDICES:
+            try:
+                t = yf.Ticker(idx['yf'])
+                hist = t.history(period='5d')
+                if hist is not None and len(hist) >= 1:
+                    close = float(hist.iloc[-1]['Close'])
+                    prev = float(hist.iloc[-2]['Close']) if len(hist) > 1 else close
+                    chg = round((close - prev) / prev * 100, 2) if prev else 0
+                    results.append({
+                        'name': idx['name'], 'symbol': idx['yf'], 'region': idx['region'],
+                        'close': round(close, 2), 'change_pct': chg, 'source': 'yfinance',
+                    })
+            except Exception as e:
+                print(f'  [MarketReview] yfinance {idx["name"]}: {e}')
+        if len(results) >= 3:
+            print(f'[MarketReview] 国际指数(yfinance): {len(results)}条')
+            return results
+    except Exception as e:
+        print(f'  [MarketReview] yfinance 国际指数整体失败: {e}')
+
+    # 方法2: akshare (部分国际指数)
+    try:
+        func = getattr(ak, 'stock_us_daily', None)
+        if func:
+            for idx in INTL_INDICES:
+                try:
+                    # 美股/港股指数 akshare 支持有限, 尽力而为
+                    sym = idx['yf'].lstrip('^')
+                    df = call_with_timeout(func, timeout=8, symbol=sym)
+                    if df is not None and len(df) > 0:
+                        latest = df.iloc[-1]
+                        prev = df.iloc[-2] if len(df) > 1 else latest
+                        close = float(latest.get('close', 0) or 0)
+                        prev_c = float(prev.get('close', 0) or 0)
+                        if close > 0:
+                            results.append({
+                                'name': idx['name'], 'symbol': idx['yf'], 'region': idx['region'],
+                                'close': round(close, 2),
+                                'change_pct': round((close - prev_c) / prev_c * 100, 2) if prev_c else 0,
+                                'source': 'akshare',
+                            })
+                except Exception:
+                    continue
+        if results:
+            print(f'[MarketReview] 国际指数(akshare兜底): {len(results)}条')
+    except Exception as e:
+        print(f'  [MarketReview] akshare 国际指数兜底失败: {e}')
+
+    print(f'[MarketReview] 国际指数: {len(results)}条')
+    return results
+
+
+# ═══════════════════════════════════════════════════
+# 7. ETF 申赎 / 宽基 ETF 资金流向
+# ═══════════════════════════════════════════════════
+
+BROAD_ETF_KEYWORDS = ['沪深300', '中证500', '中证1000', '创业板', '科创50', '上证50']
+
+
+def fetch_etf_flow():
+    """宽基ETF资金流向: akshare 主源(命名列), 东财 push2 stock/get 兜底价量"""
+    print('[MarketReview] 采集宽基ETF资金流向...')
+    result = []
+    seen = set()
+
+    # 方法1: akshare fund_etf_spot_em (价/涨跌/成交额) + fund_etf_fund_flow_em (资金流)
+    try:
+        spot_func = getattr(ak, 'fund_etf_spot_em', None)
+        flow_func = getattr(ak, 'fund_etf_fund_flow_em', None)
+        spot_df = call_with_timeout(spot_func, timeout=15) if spot_func else None
+        flow_df = call_with_timeout(flow_func, timeout=15) if flow_func else None
+
+        flow_map = {}
+        if flow_df is not None and len(flow_df) > 0:
+            for _, row in flow_df.iterrows():
+                name = str(row.get('名称', '') or '')
+                code = str(row.get('代码', '') or '')
+                item = {'name': name, 'code': code}
+                for col in flow_df.columns:
+                    cs = str(col)
+                    if '主力' in cs and ('净流入' in cs or '净额' in cs):
+                        try: item['main_net_inflow_yi'] = round(float(row[col] or 0) / 1e8, 2)
+                        except (ValueError, TypeError): pass
+                    elif '成交额' in cs or '成交金额' in cs:
+                        try: item['amount_yi'] = round(float(row[col] or 0) / 1e8, 2)
+                        except (ValueError, TypeError): pass
+                flow_map[code] = item
+
+        if spot_df is not None and len(spot_df) > 0:
+            for _, row in spot_df.iterrows():
+                name = str(row.get('名称', '') or '')
+                if not any(k in name for k in BROAD_ETF_KEYWORDS):
+                    continue
+                code = str(row.get('代码', '') or '')
+                if code in seen:
+                    continue
+                seen.add(code)
+                item = {'name': name, 'code': code}
+                for col in spot_df.columns:
+                    cs = str(col)
+                    if '最新价' in cs or '现价' in cs:
+                        try: item['close'] = round(float(row[col] or 0), 3)
+                        except (ValueError, TypeError): pass
+                    elif '涨跌幅' in cs:
+                        try: item['change_pct'] = round(float(row[col] or 0), 2)
+                        except (ValueError, TypeError): pass
+                    elif '成交额' in cs or '成交金额' in cs:
+                        try: item['amount_yi'] = round(float(row[col] or 0) / 1e8, 2)
+                        except (ValueError, TypeError): pass
+                flow = flow_map.get(code, {})
+                item['main_net_inflow_yi'] = flow.get('main_net_inflow_yi')
+                item['source'] = 'akshare'
+                result.append(item)
+        if result:
+            print(f'[MarketReview] 宽基ETF(akshare): {len(result)}只')
+            return result
+    except Exception as e:
+        print(f'  [MarketReview] akshare ETF失败: {e}')
+
+    # 方法2: 东财 push2 stock/get 兜底 (价/涨跌, 资金流标记为近似)
+    try:
+        for code, name in [('510300', '沪深300ETF'), ('510500', '中证500ETF'), ('159915', '创业板ETF'),
+                           ('588000', '科创50ETF'), ('510050', '上证50ETF'), ('512100', '中证1000ETF')]:
+            secid = ('1.' if code.startswith('5') and code[0] == '5' and code != '512100' else ('0.' if code.startswith('0') or code == '159915' else '1.')) + code
+            # 沪深/科创/中证1000 在上交所(1.), 创业板在深交所(0.)
+            secid = ('1.' if code in ('510300', '510500', '588000', '510050', '512100') else '0.') + code
+            d = _em_clist_stock_get(secid)
+            if d:
+                result.append(d)
+        if result:
+            print(f'[MarketReview] 宽基ETF(东财兜底): {len(result)}只')
+    except Exception as e:
+        print(f'  [MarketReview] 东财 ETF兜底失败: {e}')
+
+    return result
+
+
+def _em_clist_stock_get(secid):
+    """东财 push2 stock/get 单只查询 (ETF/个股兜底)"""
+    try:
+        url = 'https://push2.eastmoney.com/api/qt/stock/get'
+        params = {'secid': secid, 'fields': 'f43,f57,f58,f170,f62', 'invt': 2}
+        r = requests.get(url, params=params, headers=EM_HEADERS, timeout=(4, 8))
+        d = r.json().get('data') or {}
+        if not d:
+            return None
+        f43 = d.get('f43')
+        price = round(float(f43) / 1000, 3) if f43 not in (None, '-') else None  # ETF 3位小数
+        f170 = d.get('f170')
+        chg = round(float(f170) / 100, 2) if f170 not in (None, '-') else None
+        f62 = d.get('f62')
+        net = round(float(f62) / 1e8, 2) if f62 not in (None, '-') and float(f62 or 0) != 0 else None
+        return {
+            'name': d.get('f58', ''), 'code': d.get('f57', ''),
+            'close': price, 'change_pct': chg,
+            'main_net_inflow_yi': net, 'source': 'eastmoney',
+        }
+    except Exception:
+        return None
+
+
+# ═══════════════════════════════════════════════════
+# 8. 情绪池 (涨停/炸板/昨日涨停)
+# ═══════════════════════════════════════════════════
+
+def fetch_sentiment_pools():
+    """情绪: 涨停池 / 昨日涨停池 / 炸板率 (akshare 主源, 新浪/广度兜底)"""
+    print('[MarketReview] 采集情绪池(涨停/炸板/昨日涨停)...')
+    result = {'limit_up_count': None, 'yesterday_zt_count': None, 'zhaban_count': None,
+              'zhaban_rate': None, 'limit_up_names': [], 'yesterday_zt_names': [], 'source': 'akshare'}
+
+    today_str = datetime.now().strftime('%Y%m%d')
+    try:
+        zt_func = getattr(ak, 'stock_zt_pool_em', None)
+        if zt_func:
+            df = call_with_timeout(zt_func, timeout=12, date=today_str)
+            if df is not None and len(df) > 0:
+                names = []
+                for _, row in df.iterrows():
+                    nm = row.get('名称') or row.get('name')
+                    if nm:
+                        names.append(str(nm))
+                result['limit_up_count'] = len(names)
+                result['limit_up_names'] = names[:20]
+
+        yz_func = getattr(ak, 'stock_zt_pool_previous_em', None)
+        if yz_func:
+            df2 = call_with_timeout(yz_func, timeout=12, date=today_str)
+            if df2 is not None and len(df2) > 0:
+                names2 = []
+                for _, row in df2.iterrows():
+                    nm = row.get('名称') or row.get('name')
+                    if nm:
+                        names2.append(str(nm))
+                result['yesterday_zt_count'] = len(names2)
+                result['yesterday_zt_names'] = names2[:20]
+
+        zb_func = getattr(ak, 'stock_zt_pool_zbgc_em', None) or getattr(ak, 'stock_zt_pool_strong_em', None)
+        if zb_func:
+            df3 = call_with_timeout(zb_func, timeout=12, date=today_str)
+            if df3 is not None and len(df3) > 0:
+                result['zhaban_count'] = len(df3)
+    except Exception as e:
+        print(f'  [MarketReview] akshare 情绪池失败: {e}')
+
+    # 炸板率: 炸板/(涨停+炸板)
+    if result['zhaban_count'] and result['limit_up_count']:
+        total = result['zhaban_count'] + result['limit_up_count']
+        result['zhaban_rate'] = round(result['zhaban_count'] / total * 100, 1) if total else None
+
+    # 兜底: 用市场广度里的涨停数
+    if result['limit_up_count'] is None:
+        result['source'] = 'breadth'
+    print(f'[MarketReview] 情绪池: 涨停{result["limit_up_count"]} 昨日涨停{result["yesterday_zt_count"]} 炸板{result["zhaban_count"]}')
+    return result
+
+
+# ═══════════════════════════════════════════════════
+# 9. 赛道拥挤度 (AI/新能源 等成交额占全市场比)
+# ═══════════════════════════════════════════════════
+
+TRACK_SECTORS = {
+    'AI/人工智能': ['计算机', '传媒', '通信', '电子'],
+    '新能源': ['电力设备', '有色金属', '汽车'],
+    '半导体': ['电子'],
+    '医药': ['医药生物'],
+    '消费': ['食品饮料', '家用电器', '商贸零售', '社会服务'],
+    '金融': ['银行', '非银金融'],
+    '军工': ['国防军工'],
+    '周期资源': ['煤炭', '石油石化', '钢铁', '基础化工', '有色金属'],
+}
+
+
+def _fetch_industry_turnover():
+    """东财行业板块成交额(元) -> {行业名: 成交额元}"""
+    diff = _em_clist('f14,f6', 'm:90+t:2', pz=80, fid='f6', po='1')
+    out = {}
+    for it in diff:
+        name = it.get('f14')
+        amt = it.get('f6')
+        if name and amt not in (None, '-'):
+            try:
+                out[str(name)] = float(amt)
+            except (ValueError, TypeError):
+                pass
+    return out
+
+
+def fetch_track_crowding():
+    """赛道拥挤度: 赛道=所属行业集合, 计算各赛道成交额占全市场比"""
+    print('[MarketReview] 采集赛道拥挤度...')
+    ind_turn = _fetch_industry_turnover()
+    if not ind_turn:
+        print('  [MarketReview] 行业成交额获取失败')
+        return []
+    total = sum(ind_turn.values())
+    if total == 0:
+        return []
+    tracks = []
+    for track, sectors in TRACK_SECTORS.items():
+        amt = sum(ind_turn.get(s, 0) for s in sectors)
+        share = round(amt / total * 100, 2) if total else 0
+        tracks.append({
+            'track': track, 'turnover_yi': round(amt / 1e8, 2),
+            'share_pct': share, 'sectors': sectors,
+            'crowded': share >= 15,  # 占比>=15% 视为拥挤预警
+        })
+    tracks.sort(key=lambda x: x['share_pct'], reverse=True)
+    print(f'[MarketReview] 赛道拥挤度: {len(tracks)}条, 最高{ (tracks[0]["track"] if tracks else "-") } { (tracks[0]["share_pct"] if tracks else 0) }%')
+    return tracks
+
+
+# ═══════════════════════════════════════════════════
+# 10. 量价异动 (放量突破 / 缩量回调 / 底部放量)
+# ═══════════════════════════════════════════════════
+
+def fetch_price_volume_anomalies():
+    """量价异动: 东财 clist 按量比/涨幅筛选, 分类为 放量突破/缩量回调/底部放量"""
+    print('[MarketReview] 采集量价异动...')
+    fs = 'm:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23'
+    diff = _em_clist('f12,f14,f2,f3,f10,f8', fs, pz=600, fid='f10', po='1')
+    if not diff:
+        return []
+    items = []
+    for it in diff:
+        code = it.get('f12')
+        name = it.get('f14')
+        if not code or not name:
+            continue
+        try:
+            chg = float(it.get('f3', 0) or 0) / 100
+            vol_ratio = float(it.get('f10', 0) or 0) / 100  # 量比*100
+        except (ValueError, TypeError):
+            continue
+        if vol_ratio <= 0:
+            continue
+        kind = None
+        if vol_ratio >= 3 and chg >= 3:
+            kind = '放量突破'
+        elif 0 < vol_ratio <= 0.6 and -3 <= chg < 0:
+            kind = '缩量回调'
+        elif vol_ratio >= 3 and chg < 0:
+            kind = '底部放量'
+        if kind:
+            items.append({
+                'code': code, 'name': name, 'change_pct': round(chg, 2),
+                'vol_ratio': round(vol_ratio, 2), 'type': kind,
+            })
+    # 每类取前 10
+    by_type = {}
+    for it in items:
+        by_type.setdefault(it['type'], []).append(it)
+    out = []
+    for kind, lst in by_type.items():
+        out.extend(sorted(lst, key=lambda x: x['vol_ratio'], reverse=True)[:10])
+    print(f'[MarketReview] 量价异动: {len(out)}条')
+    return out
+
+
+# ═══════════════════════════════════════════════════
+# 11. 资金异动 / 龙虎榜 (机构净买 TOP + 北向扫货)
+# ═══════════════════════════════════════════════════
+
+def fetch_lhb_capital():
+    """资金异动: 龙虎榜机构净买TOP (akshare 主源)"""
+    print('[MarketReview] 采集龙虎榜机构异动...')
+    result = {'lhb_institution': [], 'source': 'akshare'}
+
+    today_str = datetime.now().strftime('%Y%m%d')
+    try:
+        func = getattr(ak, 'stock_lhb_detail_em', None)
+        if func:
+            df = call_with_timeout(func, timeout=15, date=today_str)
+            if df is not None and len(df) > 0:
+                inst_net = {}
+                for _, row in df.iterrows():
+                    name = row.get('名称') or row.get('name')
+                    code = row.get('代码') or row.get('code')
+                    if not name:
+                        continue
+                    key = (str(code), str(name))
+                    # 机构买入/卖出总额
+                    buy = sell = 0.0
+                    for col in df.columns:
+                        cs = str(col)
+                        if '机构' in cs and ('买入' in cs or '买进' in cs):
+                            try: buy += float(row[col] or 0)
+                            except (ValueError, TypeError): pass
+                        elif '机构' in cs and ('卖出' in cs or '卖出' in cs):
+                            try: sell += float(row[col] or 0)
+                            except (ValueError, TypeError): pass
+                    if key not in inst_net:
+                        inst_net[key] = {'code': str(code), 'name': str(name), 'inst_buy': 0.0, 'inst_sell': 0.0}
+                    inst_net[key]['inst_buy'] += buy
+                    inst_net[key]['inst_sell'] += sell
+                ranked = []
+                for k, v in inst_net.items():
+                    net = round((v['inst_buy'] - v['inst_sell']) / 1e8, 2)  # 万元->亿
+                    ranked.append({
+                        'code': v['code'], 'name': v['name'],
+                        'inst_net_buy_yi': net,
+                        'inst_buy_yi': round(v['inst_buy'] / 1e8, 2),
+                        'inst_sell_yi': round(v['inst_sell'] / 1e8, 2),
+                    })
+                ranked.sort(key=lambda x: x['inst_net_buy_yi'], reverse=True)
+                result['lhb_institution'] = ranked[:15]
+        if result['lhb_institution']:
+            print(f'[MarketReview] 龙虎榜机构净买TOP: {len(result["lhb_institution"])}条')
+        else:
+            result['source'] = 'none'
+    except Exception as e:
+        print(f'  [MarketReview] akshare 龙虎榜失败: {e}')
+        result['source'] = 'none'
+    return result
+
+
+# ═══════════════════════════════════════════════════
+# 13. 个股排名 (主力净流入/涨跌, 14子字段)
+# ═══════════════════════════════════════════════════
+
+def _parse_em_stock_row(it):
+    """东财 clist 单只股票行 -> 标准化 dict (字段码已探针标定)"""
+    try:
+        code = it.get('f12')
+        name = it.get('f14')
+        if not code or not name:
+            return None
+        price = float(it.get('f2', 0) or 0) / 100 if it.get('f2') not in (None, '-') else None
+        chg = float(it.get('f3', 0) or 0) / 100 if it.get('f3') not in (None, '-') else None
+        net = float(it.get('f62', 0) or 0) if it.get('f62') not in (None, '-') else 0
+        net_pct = float(it.get('f184', 0) or 0) / 100 if it.get('f184') not in (None, '-') else None
+        industry = it.get('f100')
+        net_5d = float(it.get('f164', 0) or 0) if it.get('f164') not in (None, '-') else 0
+        net_10d = float(it.get('f166', 0) or 0) if it.get('f166') not in (None, '-') else 0
+        chg_5d = float(it.get('f163', 0) or 0) / 100 if it.get('f163') not in (None, '-') else None
+        chg_10d = float(it.get('f169', 0) or 0) / 100 if it.get('f169') not in (None, '-') else None
+        return {
+            'code': code, 'name': name,
+            'close': round(price, 2) if price else None,
+            'change_pct': round(chg, 2) if chg is not None else None,
+            'main_net_inflow_yi': round(net / 1e8, 2),
+            'main_net_pct': net_pct,
+            'industry': industry or '',
+            'net_5d_yi': round(net_5d / 1e8, 2),
+            'net_10d_yi': round(net_10d / 1e8, 2),
+            'chg_5d': chg_5d, 'chg_10d': chg_10d,
+            'concept': '',  # 概念需 akshare 概念接口, 批次C补充
+            'source': 'eastmoney',
+        }
+    except Exception:
+        return None
+
+
+def _parse_akshare_stock_rank(df):
+    """akshare stock_individual_fund_flow_rank -> 标准化 list (命名列, 鲁棒)"""
+    rows = []
+    for _, row in df.iterrows():
+        item = {}
+        for col in df.columns:
+            cs = str(col)
+            if '代码' == cs or '代码' in cs:
+                item['code'] = str(row[col])
+            elif '名称' == cs:
+                item['name'] = str(row[col])
+            elif '最新价' in cs:
+                try: item['close'] = round(float(row[col] or 0), 2)
+                except (ValueError, TypeError): pass
+            elif '涨跌幅' == cs:
+                try: item['change_pct'] = round(float(row[col] or 0), 2)
+                except (ValueError, TypeError): pass
+            elif '主力净流入' in cs and ('净额' in cs or '净量' in cs or cs.endswith('主力净流入')):
+                try: item['main_net_inflow_yi'] = round(float(row[col] or 0) / 1e8, 2)
+                except (ValueError, TypeError): pass
+            elif '主力净流入' in cs and '主力流入' in cs:
+                try: item['main_inflow_yi'] = round(float(row[col] or 0) / 1e8, 2)
+                except (ValueError, TypeError): pass
+            elif '主力净流入' in cs and '主力流出' in cs:
+                try: item['main_outflow_yi'] = round(float(row[col] or 0) / 1e8, 2)
+                except (ValueError, TypeError): pass
+            elif '净占比' in cs:
+                try: item['main_net_pct'] = round(float(row[col] or 0), 2)
+                except (ValueError, TypeError): pass
+            elif '5日' in cs and '净额' in cs:
+                try: item['net_5d_yi'] = round(float(row[col] or 0) / 1e8, 2)
+                except (ValueError, TypeError): pass
+            elif '10日' in cs and '净额' in cs:
+                try: item['net_10d_yi'] = round(float(row[col] or 0) / 1e8, 2)
+                except (ValueError, TypeError): pass
+            elif '所属行业' in cs or '行业' == cs:
+                item['industry'] = str(row[col])
+        if item.get('code') and item.get('name'):
+            item.setdefault('concept', '')
+            item.setdefault('source', 'akshare')
+            rows.append(item)
+    return rows
+
+
+def fetch_stock_rank():
+    """个股排名: akshare 主源(主力流入/流出/概念命名列), 东财 clist 兜底并补充5日/10日涨幅"""
+    print('[MarketReview] 采集个股排名(主力净流入/涨跌)...')
+    rows = []
+    # 主源: akshare
+    try:
+        func = getattr(ak, 'stock_individual_fund_flow_rank', None)
+        if func:
+            df = call_with_timeout(func, timeout=20, indicator='今日')
+            if df is not None and len(df) > 0:
+                rows = _parse_akshare_stock_rank(df)
+    except Exception as e:
+        print(f'  [MarketReview] akshare 个股排名失败: {e}')
+
+    # 东财 clist: 兜底 + 补充 5日/10日涨幅/行业
+    em_map = {}
+    try:
+        diff = _em_clist('f12,f14,f2,f3,f62,f184,f100,f164,f166,f163,f169',
+                         'm:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', pz=4000, fid='f62', po='1')
+        for it in diff:
+            r = _parse_em_stock_row(it)
+            if r:
+                em_map[r['code']] = r
+    except Exception as e:
+        print(f'  [MarketReview] 东财 个股排名失败: {e}')
+
+    if not rows and em_map:
+        rows = list(em_map.values())
+    else:
+        # 用东财补 5日/10日涨幅 与 行业
+        for r in rows:
+            em = em_map.get(r.get('code'))
+            if em:
+                if r.get('chg_5d') is None:
+                    r['chg_5d'] = em.get('chg_5d')
+                if r.get('chg_10d') is None:
+                    r['chg_10d'] = em.get('chg_10d')
+                if not r.get('industry'):
+                    r['industry'] = em.get('industry')
+
+    if not rows:
+        print('  [MarketReview] 个股排名无数据')
+        return {}
+
+    top_inflow = sorted([r for r in rows if r.get('main_net_inflow_yi') is not None],
+                        key=lambda x: x['main_net_inflow_yi'], reverse=True)[:30]
+    top_gainers = sorted(rows, key=lambda x: (x.get('change_pct') if x.get('change_pct') is not None else -999), reverse=True)[:30]
+    top_losers = sorted(rows, key=lambda x: (x.get('change_pct') if x.get('change_pct') is not None else 999))[:30]
+    print(f'[MarketReview] 个股排名: 共{len(rows)}只, 净流入TOP{len(top_inflow)}, 涨TOP{len(top_gainers)}, 跌TOP{len(top_losers)}')
+    return {'top_inflow': top_inflow, 'top_gainers': top_gainers, 'top_losers': top_losers, 'count': len(rows)}
+
+
 # ═══════════════════════════════════════════════════
 # 主函数
 # ═══════════════════════════════════════════════════
@@ -1534,6 +2113,15 @@ def run():
     margin = fetch_margin_stats()
     sector_flow = fetch_sector_flow()
 
+    # 1.1 扩展采集 (批次A: 国际指数/ETF/情绪/赛道/量价/龙虎榜/个股排名)
+    intl_indices = fetch_intl_indices()
+    etf_flow = fetch_etf_flow()
+    sentiment_pools = fetch_sentiment_pools()
+    track_crowding = fetch_track_crowding()
+    price_volume_anomalies = fetch_price_volume_anomalies()
+    lhb_capital = fetch_lhb_capital()
+    stock_rank = fetch_stock_rank()
+
     # 2. 信号计算
     signals = calculate_signals(index_data, breadth, northbound, margin, sector_flow)
 
@@ -1550,10 +2138,17 @@ def run():
         'date': today,
         'summary': summary,
         'indices': index_data,
+        'intl_indices': intl_indices,
         'market_breadth': breadth,
         'northbound': northbound,
         'margin': margin,
+        'etf_flow': etf_flow,
         'sector_flow': sector_flow[:10] if sector_flow else [],  # TOP10
+        'sentiment_pools': sentiment_pools,
+        'track_crowding': track_crowding,
+        'price_volume_anomalies': price_volume_anomalies,
+        'lhb_capital': lhb_capital,
+        'stock_rank': stock_rank,
         'signals': signals,
         'anomalies': anomalies,
         'tomorrow_focus': tomorrow_focus,

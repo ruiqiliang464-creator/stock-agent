@@ -324,6 +324,15 @@ def generate_review_report(review_data):
     anomalies = review_data.get('anomalies', [])
     tomorrow_focus = review_data.get('tomorrow_focus', [])
 
+    # ── Phase A 新增字段提取 ──
+    intl_indices = review_data.get('intl_indices', [])
+    etf_flow = review_data.get('etf_flow', [])
+    sentiment_pools = review_data.get('sentiment_pools', {})
+    track_crowding = review_data.get('track_crowding', [])
+    price_volume_anomalies = review_data.get('price_volume_anomalies', [])
+    lhb_capital = review_data.get('lhb_capital', {})
+    stock_rank = review_data.get('stock_rank', {})
+
     # ── 1. 市场概况 ──
     index_cards = ''
     total_amount_yi = 0
@@ -357,11 +366,33 @@ def generate_review_report(review_data):
             <span style="padding:3px 10px;border-radius:4px;font-size:12px;color:#6b7280;background:#f3f4f6">平盘 {flat}</span>
         </div>'''
 
+    # ── 1.1 国际指数 ──
+    intl_cards = ''
+    if intl_indices:
+        for idx in intl_indices:
+            pct = idx.get('change_pct', 0)
+            color = '#dc2626' if pct > 0 else '#16a34a' if pct < 0 else '#6b7280'
+            sign = '+' if pct > 0 else ''
+            intl_cards += f'''
+            <div style="flex:1;text-align:center;padding:8px;background:#fff;border-radius:8px;border:1px solid #e5e7eb">
+                <div style="font-size:11px;color:#94a3b8;margin-bottom:2px">{idx.get('name','')}</div>
+                <div style="font-size:15px;font-weight:600;color:#1e293b">{idx.get('close',0):.2f}</div>
+                <div style="font-size:12px;font-weight:500;color:{color}">{sign}{pct:.2f}%</div>
+            </div>'''
+        intl_block = f'''
+        <div style="margin-top:10px">
+            <div style="font-size:12px;color:#64748b;margin-bottom:6px">国际指数</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">{intl_cards}</div>
+        </div>'''
+    else:
+        intl_block = ''
+
     overview_section = f'''
     <div style="background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e5e7eb">
         <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#1e293b">一、市场概况</h3>
         <div style="display:flex;gap:8px;margin-bottom:8px">{index_cards if index_cards else '<p style="color:#999;font-size:13px">指数数据暂不可用</p>'}</div>
         {breadth_html}
+        {intl_block}
         {f'<div style="margin-top:8px;font-size:12px;color:#64748b">两市合计成交约 <strong style="color:#1e293b">{total_amount_yi:.0f}亿元</strong></div>' if total_amount_yi > 0 else ''}
     </div>'''
 
@@ -404,6 +435,18 @@ def generate_review_report(review_data):
             <span style="font-size:14px;font-weight:500;color:#1e293b">{margin["total_balance_yi"]:.0f}亿</span>
             <span style="font-size:12px;color:{change_color};margin-left:8px">({change_sign}{change:.1f}亿)</span>
         </div>''')
+        # 融资买入额 + 占比 (杠杆资金情绪)
+        fb = margin.get('financing_buy_yi')
+        fbr = margin.get('financing_buy_ratio_pct')
+        if fb:
+            fb_txt = f'{fb:.0f}亿'
+            if fbr is not None:
+                fb_txt += f' <span style="font-size:11px;color:#94a3b8">(占两市成交{fbr:.1f}%)</span>'
+            capital_parts.append(f'''
+        <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9">
+            <span style="font-size:13px;color:#475569;width:80px">融资买入</span>
+            <span style="font-size:14px;font-weight:500;color:#1e293b">{fb_txt}</span>
+        </div>''')
 
     # 行业资金流TOP5
     if sector_flow:
@@ -426,10 +469,65 @@ def generate_review_report(review_data):
                 {flow_rows}
             </div>''')
 
+    # ── 2.1 宽基 ETF 资金流向 ──
+    etf_block = ''
+    if etf_flow:
+        rows = ''
+        for e in etf_flow[:10]:
+            pct = e.get('change_pct', 0) or 0
+            c = '#dc2626' if pct > 0 else '#16a34a' if pct < 0 else '#6b7280'
+            net = e.get('main_net_inflow_yi')
+            net_s = f'{net:+.2f}亿' if net is not None else '—'
+            net_c = '#dc2626' if (net or 0) > 0 else '#16a34a' if (net or 0) < 0 else '#6b7280'
+            rows += f'<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:#475569">{e.get("name","")}</span><span style="color:{c}">{pct:+.2f}%</span><span style="color:{net_c};font-weight:500">{net_s}</span></div>'
+        etf_block = f'''
+        <div style="margin-top:10px">
+            <div style="font-size:12px;color:#64748b;margin-bottom:4px">宽基ETF资金流向</div>
+            {rows}
+        </div>'''
+
+    # ── 2.2 情绪池 ──
+    sentiment_block = ''
+    if sentiment_pools:
+        sp = sentiment_pools
+        sent_items = []
+        if sp.get('limit_up_count') is not None:
+            sent_items.append(f'涨停 <strong>{sp["limit_up_count"]}</strong> 家')
+        if sp.get('yesterday_zt_count') is not None:
+            sent_items.append(f'昨日涨停 <strong>{sp["yesterday_zt_count"]}</strong> 家')
+        if sp.get('zhaban_count'):
+            sent_items.append(f'炸板 <strong>{sp["zhaban_count"]}</strong> 家')
+        if sp.get('zhaban_rate') is not None:
+            sent_items.append(f'炸板率 <strong>{sp["zhaban_rate"]}%</strong>')
+        if sent_items:
+            sentiment_block = f'''
+        <div style="margin-top:10px;padding:8px 10px;background:#fff;border-radius:8px;border:1px solid #e5e7eb">
+            <div style="font-size:12px;color:#64748b;margin-bottom:4px">涨停情绪</div>
+            <div style="font-size:12px;color:#475569">{' · '.join(sent_items)}</div>
+        </div>'''
+
+    # ── 2.3 赛道拥挤度 ──
+    track_block = ''
+    if track_crowding:
+        rows = ''
+        for t in track_crowding[:8]:
+            share = t.get('share_pct', 0)
+            c = '#dc2626' if t.get('crowded') else '#475569'
+            flag = ' ⚠拥挤' if t.get('crowded') else ''
+            rows += f'<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px"><span style="color:#475569">{t.get("track","")}</span><span style="color:{c};font-weight:500">{share:.1f}%{flag}</span></div>'
+        track_block = f'''
+        <div style="margin-top:10px">
+            <div style="font-size:12px;color:#64748b;margin-bottom:4px">热门赛道拥挤度(成交额占比)</div>
+            {rows}
+        </div>'''
+
     capital_section = f'''
     <div style="background:#f0f9ff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #bae6fd">
         <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#0369a1">二、资金与微观结构</h3>
         {''.join(capital_parts) if capital_parts else '<p style="color:#999;font-size:13px">资金数据暂不可用</p>'}
+        {etf_block}
+        {sentiment_block}
+        {track_block}
     </div>'''
 
     # ── 3. 波动率与情绪 ──
@@ -491,9 +589,76 @@ def generate_review_report(review_data):
     if not focus_rows:
         focus_rows = '<p style="color:#999;font-size:13px">暂无</p>'
 
+    # ── 5. 量价异动 ──
+    pva_section = ''
+    if price_volume_anomalies:
+        by_type = {}
+        for a in price_volume_anomalies:
+            by_type.setdefault(a.get('type', ''), []).append(a)
+        rows = ''
+        for kind, lst in by_type.items():
+            rows += f'<div style="font-size:12px;color:#64748b;margin:6px 0 2px">▶ {kind}（{len(lst)}只）</div>'
+            for a in lst[:8]:
+                c = '#dc2626' if a.get('change_pct', 0) > 0 else '#16a34a'
+                rows += f'<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:12px"><span style="color:#475569">{a.get("name","")}({a.get("code","")})</span><span style="color:{c}">{a.get("change_pct",0):+.2f}%</span><span style="color:#94a3b8">量比{a.get("vol_ratio",0):.1f}</span></div>'
+        pva_section = f'''
+    <div style="background:#eef2ff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #c7d2fe">
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#4338ca">五、量价异动</h3>
+        {rows}
+    </div>'''
+
+    # ── 6. 龙虎榜机构异动 ──
+    lhb_section = ''
+    if lhb_capital and lhb_capital.get('lhb_institution'):
+        rows = ''
+        for it in lhb_capital['lhb_institution'][:12]:
+            net = it.get('inst_net_buy_yi', 0) or 0
+            c = '#dc2626' if net > 0 else '#16a34a'
+            rows += f'<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px"><span style="color:#475569">{it.get("name","")}({it.get("code","")})</span><span style="color:{c};font-weight:500">机构净买{net:+.2f}亿</span></div>'
+        lhb_section = f'''
+    <div style="background:#fef2f2;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #fecaca">
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#dc2626">六、龙虎榜机构异动</h3>
+        {rows}
+    </div>'''
+
+    # ── 7. 个股排名 (14子字段) ──
+    rank_section = ''
+    if stock_rank and stock_rank.get('top_inflow'):
+        def _rank_row(r, with_flow=True):
+            pct = r.get('change_pct') or 0
+            c = '#dc2626' if pct > 0 else '#16a34a'
+            net = r.get('main_net_inflow_yi')
+            net_s = f'{net:+.2f}' if net is not None else '—'
+            nc = '#dc2626' if (net or 0) > 0 else '#16a34a'
+            cells = f'<td style="padding:4px 6px;font-size:11px;color:#475569">{r.get("name","")}</td><td style="padding:4px 6px;font-size:11px;color:#94a3b8">{r.get("industry","") or "-"}</td><td style="padding:4px 6px;font-size:11px;color:{c}">{pct:+.2f}%</td>'
+            if with_flow:
+                cells += f'<td style="padding:4px 6px;font-size:11px;color:{nc};font-weight:500">{net_s}亿</td>'
+                n5 = r.get('net_5d_yi'); n10 = r.get('net_10d_yi')
+                cells += f'<td style="padding:4px 6px;font-size:11px;color:#64748b">{n5 if n5 is not None else "-"}</td><td style="padding:4px 6px;font-size:11px;color:#64748b">{n10 if n10 is not None else "-"}</td>'
+            else:
+                cells += f'<td style="padding:4px 6px;font-size:11px;color:{nc};font-weight:500">{net_s}亿</td>'
+            return f'<tr>{cells}</tr>'
+
+        head_flow = '<th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">名称</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">行业</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">涨跌幅</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">主力净流入</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">5日净量</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">10日净量</th>'
+        head_simple = '<th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">名称</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">行业</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">涨跌幅</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">主力净流入</th>'
+
+        inflow_rows = ''.join(_rank_row(r) for r in stock_rank['top_inflow'][:15])
+        gain_rows = ''.join(_rank_row(r, False) for r in stock_rank.get('top_gainers', [])[:10])
+        loss_rows = ''.join(_rank_row(r, False) for r in stock_rank.get('top_losers', [])[:10])
+        rank_section = f'''
+    <div style="background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e5e7eb">
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 8px 0;color:#1e293b">七、个股排名（主力净流入 TOP15）</h3>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:10px"><thead><tr style="background:#eef2ff">{head_flow}</tr></thead><tbody>{inflow_rows}</tbody></table>
+        <h3 style="font-size:13px;font-weight:600;margin:8px 0 4px;color:#16a34a">涨幅 TOP10</h3>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:8px"><thead><tr style="background:#f0fdf4">{head_simple}</tr></thead><tbody>{gain_rows}</tbody></table>
+        <h3 style="font-size:13px;font-weight:600;margin:8px 0 4px;color:#dc2626">跌幅 TOP10</h3>
+        <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#fef2f2">{head_simple}</tr></thead><tbody>{loss_rows}</tbody></table>
+        <div style="font-size:10px;color:#94a3b8;margin-top:6px">单位：主力净流入/净量为亿元；概念字段批次C补充；5日/10日涨幅经东财clist补充（CI验证）</div>
+    </div>'''
+
     focus_section = f'''
     <div style="background:#f0fdf4;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #bbf7d0">
-        <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#16a34a">五、明日关注</h3>
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#16a34a">八、明日关注</h3>
         {focus_rows}
     </div>'''
 
@@ -516,6 +681,9 @@ def generate_review_report(review_data):
             {capital_section}
             {volatility_section}
             {anomaly_section}
+            {pva_section}
+            {lhb_section}
+            {rank_section}
             {focus_section}
             {source_note}
 
