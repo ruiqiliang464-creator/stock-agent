@@ -233,6 +233,46 @@ function buildRank(d) {
 }
 function setRank(t) { rankTab = t; ['top_inflow','top_gainers','top_losers'].forEach(k=>{const b=document.getElementById('t_'+(k==='top_inflow'?'in':k==='top_gainers'?'up':'dn')); if(b) b.classList.toggle('active', k===t);}); renderRankTable(window.__DATA__); }
 
+let stockSel = 0, stockChart = null;
+function buildStockChart(d) {
+  const list = (d.stock_technicals||[]).filter(x=>x.close_series && x.close_series.length>=2);
+  const host = document.getElementById('c_stock');
+  if (!list.length) { host.innerHTML='<div class="empty">暂无个股走势数据</div>'; return; }
+  host.innerHTML = `
+    <div style="margin-bottom:8px"><select id="stock_sel" onchange="stockSel=this.selectedIndex; drawStockLine()"></select>
+    <span id="stock_meta" style="font-size:12px;color:var(--muted);margin-left:10px"></span></div>
+    <div id="c_stock_line" style="width:100%;height:340px"></div>`;
+  const sel = document.getElementById('stock_sel');
+  list.forEach((x,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=`${x.name||''} ${x.code||''}`.trim(); sel.appendChild(o); });
+  sel.selectedIndex = Math.min(stockSel, list.length-1);
+  stockSel = sel.selectedIndex;
+  window.__STOCK_LIST__ = list;
+  drawStockLine();
+}
+function drawStockLine() {
+  const list = window.__STOCK_LIST__||[];
+  const it = list[stockSel]||list[0];
+  if (!it) return;
+  const dates = it.date_series||it.close_series.map((_,i)=>i+1);
+  const series = it.close_series;
+  const markLines = [];
+  if (it.high20!=null) markLines.push({yAxis:it.high20, lineStyle:{color:COLORS.up,type:'dashed'}, label:{formatter:'高 '+it.high20, fontSize:10}});
+  if (it.low20!=null) markLines.push({yAxis:it.low20, lineStyle:{color:COLORS.down,type:'dashed'}, label:{formatter:'低 '+it.low20, fontSize:10}});
+  if (stockChart) stockChart.dispose();
+  stockChart = echarts.init(document.getElementById('c_stock_line'),'light'); charts.push(stockChart);
+  stockChart.setOption({
+    tooltip:{trigger:'axis', formatter:p=>`${p[0].name}<br/>收盘: ${fmt(p[0].value)}`},
+    grid:{left:54, right:24, top:18, bottom:30},
+    xAxis:{type:'category', data:dates, axisLabel:{fontSize:10, interval:Math.floor(dates.length/4)}},
+    yAxis:{type:'value', scale:true, axisLabel:{formatter:v=>fmt(v)}},
+    series:[{type:'line', data:series, smooth:true, symbol:'none', lineStyle:{color:COLORS.brand,width:2},
+      areaStyle:{color:'rgba(37,99,235,0.08)'},
+      markLine:{symbol:'none', data:markLines},
+      markPoint:{data:[{type:'max',name:'最高'},{type:'min',name:'最低'}], symbolSize:34, label:{fontSize:10}}}]
+  });
+  document.getElementById('stock_meta').textContent = `收盘 ${fmt(it.close)} · 20日高 ${fmt(it.high20)} · 低 ${fmt(it.low20)} · MACD ${it.macd_state||'-'} · 获利% ${fmt(it.cyq_profit_pct)}`;
+}
+
 function layout(d) {
   document.getElementById('meta').textContent = `日期 ${d.date||'-'} ｜ 来源: 美股IP/GitHub Actions 自动采集`;
   const s = d.summary||'';
@@ -247,9 +287,10 @@ function layout(d) {
     <div class="card"><h2>涨停情绪</h2><div id="c_sentiment"></div></div>
     <div class="card"><h2>量价异动 <span class="tag">放量突破/缩量回调/底部放量</span></h2><div id="c_pva" class="chart"></div></div>
     <div class="card"><h2>龙虎榜机构净买 <span class="tag">TOP15</span></h2><div id="c_lhb" class="chart"></div></div>
-    <div class="card" style="grid-column:1/-1"><h2>个股排名</h2><div id="c_rank"></div></div>`;
+    <div class="card" style="grid-column:1/-1"><h2>个股排名</h2><div id="c_rank"></div></div>
+    <div class="card" style="grid-column:1/-1"><h2>个股走势 <span class="tag">主力净流入TOP20 · 近30日收盘</span></h2><div id="c_stock"></div></div>`;
   buildIndexChart(d); buildMarginChart(d); buildEtfChart(d); buildSectorChart(d);
-  buildTrackChart(d); buildSentimentKpi(d); buildPvaChart(d); buildLhbChart(d); buildRank(d);
+  buildTrackChart(d); buildSentimentKpi(d); buildPvaChart(d); buildLhbChart(d); buildRank(d); buildStockChart(d);
   window.addEventListener('resize', ()=>charts.forEach(c=>c.resize()));
 }
 

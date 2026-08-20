@@ -2455,6 +2455,16 @@ def fetch_stock_technicals(top_inflow):
                     item['macd_dea'] = dea
                     item['macd_bar'] = bar
                     item['macd_state'] = state
+                    # 保留近30日收盘价序列 + 日期, 供 PDF/看板画走势折线图
+                    try:
+                        item['close_series'] = [round(float(x), 2) for x in closes[-30:]]
+                        if '日期' in df.columns:
+                            dts = df['日期'].astype(str).tolist()[-30:]
+                            item['date_series'] = [d[5:] if len(d) >= 10 else d for d in dts]
+                        else:
+                            item['date_series'] = list(range(1, len(item['close_series']) + 1))
+                    except Exception:
+                        pass
         except Exception as e:
             print(f'  [MarketReview] K线/MACD {code} 失败: {e}')
         # ── 筹码分布 ──

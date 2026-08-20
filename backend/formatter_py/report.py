@@ -6,6 +6,8 @@ formatter.py — 报告生成 + 邮件发送 (Python版)
 
 import json
 import smtplib
+import base64
+import io
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr, formatdate
@@ -307,6 +309,96 @@ def format_number_yi(val):
         return f'{val:.1f}亿'
     else:
         return f'{val:.2f}亿'
+
+
+# ── 个股走势折线图 (matplotlib, 供 PDF 嵌入；weasyprint 不执行 JS 故不用 ECharts) ──
+_CJK_FONT_CACHE = None
+
+
+def _get_cjk_font():
+    """探测一个可用的中文字体名, 找不到返回 None(标题回退为代码避免方块)。"""
+    global _CJK_FONT_CACHE
+    if _CJK_FONT_CACHE is not None:
+        return _CJK_FONT_CACHE or None
+    _CJK_FONT_CACHE = ''  # 标记已探测
+    try:
+        from matplotlib.font_manager import fontManager
+        available = {f.name for f in fontManager.ttflist}
+        for kw in ['Microsoft YaHei', 'SimHei', 'Noto Sans CJK', 'WenQuanYi Micro Hei',
+                   'WenQuanYi Zen Hei', 'Source Han Sans', 'PingFang', 'Heiti',
+                   'Noto Serif CJK', 'Source Han Serif', 'AR PL UMing', 'AR PL UKai',
+                   'Droid Sans Fallback']:
+            for a in available:
+                if kw.lower() in a.lower():
+                    _CJK_FONT_CACHE = a
+                    return a
+    except Exception:
+        pass
+    return None
+
+
+def _render_stock_line_png(item):
+    """画近30日收盘价折线图, 标注20日高/低点与最新价, 返回 PNG bytes。失败返回 None。"""
+    series = item.get('close_series') or []
+    if not series or len(series) < 2:
+        return None
+    dates = item.get('date_series') or list(range(1, len(series) + 1))
+    try:
+        import matplotlib
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
+        from matplotlib.font_manager import FontProperties
+    except Exception as e:
+        print(f'[Report] matplotlib 不可用, 跳过折线图: {e}')
+        return None
+    cjk = _get_cjk_font()
+    fp = FontProperties(family=cjk) if cjk else None
+    fig, ax = plt.subplots(figsize=(4.0, 1.85), dpi=135)
+    x = list(range(len(series)))
+    lo_all, hi_all = min(series), max(series)
+    pad = (hi_all - lo_all) * 0.12 if hi_all > lo_all else max(abs(hi_all) * 0.02, 0.05)
+    ax.plot(x, series, color='#2563eb', linewidth=1.5, zorder=3)
+    ax.fill_between(x, series, lo_all - pad, color='#2563eb', alpha=0.08, zorder=1)
+    hi20 = item.get('high20')
+    lo20 = item.get('low20')
+    if hi20 is not None:
+        ax.axhline(hi20, color='#dc2626', linewidth=0.7, linestyle='--', alpha=0.7)
+    if lo20 is not None:
+        ax.axhline(lo20, color='#16a34a', linewidth=0.7, linestyle='--', alpha=0.7)
+    ax.scatter([x[-1]], [series[-1]], color='#dc2626', s=16, zorder=5)
+    name = item.get('name') or ''
+    code = item.get('code') or ''
+    title = (f'{name} {code}') if (cjk and name) else (code or name)
+    ax.set_title(title, fontsize=8.5, color='#1e293b', pad=3, fontproperties=fp)
+    ax.set_ylim(lo_all - pad, hi_all + pad)
+    ax.tick_params(axis='both', labelsize=6, colors='#94a3b8')
+    try:
+        t = [0, len(dates) // 2, len(dates) - 1]
+        ax.set_xticks(t)
+        ax.set_xticklabels([str(dates[i]) for i in t], fontsize=6, fontproperties=fp)
+    except Exception:
+        pass
+    for s in ('top', 'right'):
+        ax.spines[s].set_visible(False)
+    for s in ('left', 'bottom'):
+        ax.spines[s].set_color('#cbd5e1')
+    ax.grid(axis='y', linestyle=':', linewidth=0.4, color='#e2e8f0')
+    fig.tight_layout(pad=0.35)
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png', bbox_inches='tight', facecolor='white')
+    plt.close(fig)
+    return buf.getvalue()
+
+
+def _stock_line_img_tag(item):
+    """渲染个股折线图并返回 <img> 标签(base64 嵌入), 无数据返回空串。"""
+    png = _render_stock_line_png(item)
+    if not png:
+        return ''
+    b64 = base64.b64encode(png).decode('ascii')
+    alt = item.get('name') or item.get('code') or ''
+    return (f'<img alt="{alt}" src="data:image/png;base64,{b64}" '
+            f'style="width:100%;display:block;border:1px solid #e2e8f0;border-radius:6px"/>')
 
 
 def generate_review_report(review_data):
@@ -683,43 +775,27 @@ def generate_review_report(review_data):
         {blocks}
     </div>'''
 
-    # ── 十、高低点 / MACD / 筹码（主力净流入 TOP20）──
+    # ── 十、个股走势 / MACD / 筹码（主力净流入 TOP20）──
     technical_section = ''
     if stock_technicals:
-        rows = ''
+        cards = ''
         for r in stock_technicals[:20]:
             st = r.get('macd_state', '-')
-            stc = '#16a34a' if st in ('金叉','多头') else '#dc2626' if st in ('死叉','空头') else '#64748b'
+            stc = '#16a34a' if st in ('金叉', '多头') else '#dc2626' if st in ('死叉', '空头') else '#64748b'
             draw = r.get('drawdown_from_high_pct')
             draw_s = f'{draw:+.2f}%' if draw is not None else '-'
-            rows += f'''<tr>
-<td style="padding:3px 6px;font-size:11px;color:#475569">{r.get('name','')}</td>
-<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('high20','-')}</td>
-<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('low20','-')}</td>
-<td style="padding:3px 6px;font-size:11px;color:#64748b">{draw_s}</td>
-<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('macd_dif','-')}</td>
-<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('macd_dea','-')}</td>
-<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('macd_bar','-')}</td>
-<td style="padding:3px 6px;font-size:11px;color:{stc};font-weight:500">{st}</td>
-<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('cyq_profit_pct','-')}</td>
-<td style="padding:3px 6px;font-size:11px;color:#64748b">{r.get('cyq_avg_cost','-')}</td>
-</tr>'''
+            img = _stock_line_img_tag(r)
+            img_html = img if img else '<div style="height:70px;color:#cbd5e1;font-size:10px;text-align:center;line-height:70px;border:1px dashed #e2e8f0;border-radius:6px">无走势数据</div>'
+            cards += f'''<div style="display:inline-block;width:48%;vertical-align:top;margin:0 1.5% 10px 0;box-sizing:border-box;border:1px solid #e2e8f0;border-radius:8px;padding:7px 8px;page-break-inside:avoid">
+<div style="font-size:11px;font-weight:600;color:#1e293b;margin-bottom:3px">{r.get('name','')} <span style="color:#94a3b8;font-weight:400;font-size:10px">{r.get('code','')}</span></div>
+{img_html}
+<div style="font-size:9px;color:#475569;margin-top:3px;line-height:1.55">收盘<b>{r.get('close','-')}</b> · 高<b style="color:#dc2626">{r.get('high20','-')}</b> · 低<b style="color:#16a34a">{r.get('low20','-')}</b> · 回撤<b>{draw_s}</b> · MACD<b style="color:{stc}">{st}</b> · 获利<b>{r.get('cyq_profit_pct','-')}</b></div>
+</div>'''
         technical_section = f'''
-    <div style="background:#f5f3ff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #ddd6fe">
-        <h3 style="font-size:14px;font-weight:600;margin:0 0 8px 0;color:#6d28d9">十、高低点 / MACD / 筹码（主力净流入 TOP20）</h3>
-        <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#ede9fe">
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">名称</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">20日高</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">20日低</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">距高回撤%</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">DIF</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">DEA</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">MACD柱</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">状态</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">获利%</th>
-<th style="padding:3px 6px;text-align:left;font-size:11px;color:#666">平均成本</th>
-</tr></thead><tbody>{rows}</tbody></table>
-        <div style="font-size:10px;color:#94a3b8;margin-top:6px">MACD(12,26,9)；筹码经东财 cyq 接口（CI）；K线不足35日则 MACD 为空</div>
+    <div style="background:#f5f3ff;border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid #ddd6fe;page-break-inside:avoid">
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 10px 0;color:#6d28d9">十、个股走势 / MACD / 筹码（主力净流入 TOP20）</h3>
+        <div>{cards}</div>
+        <div style="font-size:9.5px;color:#94a3b8;margin-top:6px">折线=近30日收盘价(前复权)；红虚线=20日高，绿虚线=20日低，红点=最新价；MACD(12,26,9)；K线不足则图/指标为空</div>
     </div>'''
 
     focus_section = f'''
@@ -732,7 +808,14 @@ def generate_review_report(review_data):
     source_note = '<div style="font-size:11px;color:#94a3b8;padding:8px 0;text-align:center">数据来源: akshare / 东方财富 / yfinance | 仅供参考，不构成投资建议</div>'
 
     html = f'''
-    <div style="max-width:600px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#333;line-height:1.6">
+    <style>
+      @page {{ size: A4; margin: 12mm 10mm; }}
+      .sec {{ page-break-inside: avoid; }}
+      tr {{ page-break-inside: avoid; }}
+      img {{ max-width: 100%; }}
+      h3 {{ page-break-after: avoid; }}
+    </style>
+    <div style="max-width:720px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;color:#333;line-height:1.6">
         <div style="background:linear-gradient(135deg,#7c2d12,#b45309);border-radius:12px 12px 0 0;padding:24px;text-align:center">
             <h1 style="color:#fff;font-size:18px;margin:0;font-weight:600">市场复盘与异动简报</h1>
             <p style="color:#fef3c7;font-size:14px;margin:8px 0 0">{date_display}</p>

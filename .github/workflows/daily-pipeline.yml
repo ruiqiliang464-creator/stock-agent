@@ -28,10 +28,10 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: Install system deps (weasyprint / pandas)
+      - name: Install system deps (weasyprint / matplotlib / 中文字体)
         run: |
           sudo apt-get update
-          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev fonts-liberation
+          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev fonts-liberation fonts-wqy-zenhei
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt

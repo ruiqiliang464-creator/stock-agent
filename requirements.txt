@@ -2,3 +2,4 @@ yfinance>=0.2.36
 akshare>=1.14
 requests>=2.31
 weasyprint>=62.0
+matplotlib>=3.7
