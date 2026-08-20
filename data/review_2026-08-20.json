@@ -5,64 +5,64 @@
     {
       "name": "上证指数",
       "code": "000001",
-      "close": 3904.58,
-      "change_pct": -0.07,
-      "volume": 261432575,
-      "amount": 532921571669.0,
+      "close": 3904.17,
+      "change_pct": -0.08,
+      "volume": 312242528,
+      "amount": 640836847749.0,
       "source": "sina"
     },
     {
       "name": "深证成指",
       "code": "399001",
-      "close": 13998.5,
-      "change_pct": -0.25,
-      "volume": 30999263473,
-      "amount": 547031324292.453,
+      "close": 13987.13,
+      "change_pct": -0.33,
+      "volume": 36982359886,
+      "amount": 660109903340.446,
       "source": "sina"
     },
     {
       "name": "创业板指",
       "code": "399006",
-      "close": 3501.23,
-      "change_pct": -0.47,
-      "volume": 9526966672,
-      "amount": 272574894006.27,
+      "close": 3495.71,
+      "change_pct": -0.62,
+      "volume": 11483411217,
+      "amount": 330866148257.35,
       "source": "sina"
     },
     {
       "name": "沪深300",
       "code": "000300",
-      "close": 4598.93,
-      "change_pct": -0.31,
-      "volume": 100442064,
-      "amount": 281811013209.0,
+      "close": 4595.49,
+      "change_pct": -0.39,
+      "volume": 121585606,
+      "amount": 341062216534.0,
       "source": "sina"
     },
     {
       "name": "科创50",
       "code": "000688",
-      "close": 1668.05,
-      "change_pct": -1.03,
-      "volume": 4283386,
-      "amount": 46881468005.0,
+      "close": 1664.97,
+      "change_pct": -1.22,
+      "volume": 5247208,
+      "amount": 58113650061.0,
       "source": "sina"
     },
     {
       "name": "北证50",
       "code": "899050",
-      "close": 1088.01,
-      "change_pct": -0.23,
-      "volume": 378282490,
-      "amount": 7759753536.0,
+      "close": 1090.4,
+      "change_pct": -0.01,
+      "volume": 443997255,
+      "amount": 9276945481.0,
       "source": "sina"
     },
     {
       "name": "科创综指",
       "code": "000680",
-      "close": 1971.91,
-      "change_pct": -0.43,
-      "volume": 27109657,
-      "amount": 179857029866.0,
+      "close": 1970.16,
+      "change_pct": -0.52,
+      "volume": 32665474,
+      "amount": 219499543172.0,
       "source": "sina"
     }
   ],
@@ -71,24 +71,24 @@
       "name": "恒生指数",
       "symbol": "^HSI",
       "region": "香港",
-      "close": 25668.49,
-      "change_pct": 0.68,
+      "close": 25661.87,
+      "change_pct": 0.65,
       "source": "yfinance"
     },
     {
       "name": "日经225",
       "symbol": "^N225",
       "region": "日本",
-      "close": 65952.94,
-      "change_pct": 0.96,
+      "close": 65982.49,
+      "change_pct": 1.0,
       "source": "yfinance"
     },
     {
       "name": "韩国综合",
       "symbol": "^KS11",
       "region": "韩国",
-      "close": 6870.99,
-      "change_pct": 6.18,
+      "close": 6821.22,
+      "change_pct": 5.41,
       "source": "yfinance"
     },
     {
@@ -111,7 +111,7 @@
       "name": "道琼斯",
       "symbol": "^DJI",
       "region": "美国",
-      "close": 53463.05,
+      "close": 53463.1,
       "change_pct": 0.22,
       "source": "yfinance"
     },
@@ -125,12 +125,12 @@
     }
   ],
   "market_breadth": {
-    "advance_count": 4212,
-    "decline_count": 1157,
-    "flat_count": 131,
-    "limit_up_count": 109,
-    "limit_down_count": 15,
-    "advance_ratio": 0.7658,
+    "advance_count": 4119,
+    "decline_count": 1226,
+    "flat_count": 155,
+    "limit_up_count": 117,
+    "limit_down_count": 16,
+    "advance_ratio": 0.7489,
     "total_count": 5500,
     "source": "sina"
   },
@@ -153,180 +153,130 @@
     "source": "eastmoney",
     "financing_buy": 215511837044.0,
     "financing_buy_yi": 2155.12,
-    "financing_buy_ratio_pct": 66.56,
     "total_balance_yi": 26676.05,
     "finance_balance_yi": 26411.51,
     "securities_balance_yi": 264.53,
     "balance_change": -30308514140.0,
     "balance_change_yi": -303.09
   },
-  "etf_flow": [
-    {
-      "name": "沪深300ETF华泰柏瑞",
-      "code": "510300",
-      "close": 4.659,
-      "change_pct": 0.11,
-      "main_net_inflow_yi": null,
-      "source": "eastmoney"
-    },
-    {
-      "name": "中证500ETF南方",
-      "code": "510500",
-      "close": 7.882,
-      "change_pct": 1.0,
-      "main_net_inflow_yi": null,
-      "source": "eastmoney"
-    },
-    {
-      "name": "创业板ETF易方达",
-      "code": "159915",
-      "close": 3.52,
-      "change_pct": 0.63,
-      "main_net_inflow_yi": null,
-      "source": "eastmoney"
-    },
-    {
-      "name": "科创50ETF华夏",
-      "code": "588000",
-      "close": 1.76,
-      "change_pct": -0.06,
-      "main_net_inflow_yi": null,
-      "source": "eastmoney"
-    },
-    {
-      "name": "上证50ETF华夏",
-      "code": "510050",
-      "close": 3.0,
-      "change_pct": 0.03,
-      "main_net_inflow_yi": null,
-      "source": "eastmoney"
-    },
-    {
-      "name": "中证1000ETF南方",
-      "code": "512100",
-      "close": 3.081,
-      "change_pct": 1.08,
-      "main_net_inflow_yi": null,
-      "source": "eastmoney"
-    }
-  ],
+  "etf_flow": [],
   "sector_flow": [
     {
       "name": "电子",
       "stock_count": 100,
-      "net_inflow": 207922463377.0,
-      "net_inflow_yi": 2079.22,
-      "change_pct": 0.8,
-      "turnover_yi": 2079.22,
-      "up_count": 59,
-      "down_count": 39,
+      "net_inflow": 251112235719.0,
+      "net_inflow_yi": 2511.12,
+      "change_pct": 0.54,
+      "turnover_yi": 2511.12,
+      "up_count": 54,
+      "down_count": 44,
       "source": "sina"
     },
     {
       "name": "医药生物",
       "stock_count": 100,
-      "net_inflow": 94759893431.0,
-      "net_inflow_yi": 947.6,
-      "change_pct": 7.74,
-      "turnover_yi": 947.6,
-      "up_count": 98,
-      "down_count": 2,
+      "net_inflow": 108660396812.0,
+      "net_inflow_yi": 1086.6,
+      "change_pct": 6.92,
+      "turnover_yi": 1086.6,
+      "up_count": 95,
+      "down_count": 5,
       "source": "sina"
     },
     {
       "name": "通信",
       "stock_count": 100,
-      "net_inflow": 82491427971.0,
-      "net_inflow_yi": 824.91,
-      "change_pct": 2.31,
-      "turnover_yi": 824.91,
-      "up_count": 78,
-      "down_count": 21,
+      "net_inflow": 107258592974.0,
+      "net_inflow_yi": 1072.59,
+      "change_pct": 2.83,
+      "turnover_yi": 1072.59,
+      "up_count": 80,
+      "down_count": 20,
       "source": "sina"
     },
     {
       "name": "有色金属",
       "stock_count": 100,
-      "net_inflow": 79863891754.0,
-      "net_inflow_yi": 798.64,
-      "change_pct": 1.64,
-      "turnover_yi": 798.64,
-      "up_count": 75,
-      "down_count": 25,
+      "net_inflow": 94084962170.0,
+      "net_inflow_yi": 940.85,
+      "change_pct": 0.84,
+      "turnover_yi": 940.85,
+      "up_count": 64,
+      "down_count": 36,
       "source": "sina"
     },
     {
       "name": "机械设备",
       "stock_count": 100,
-      "net_inflow": 57120319279.0,
-      "net_inflow_yi": 571.2,
-      "change_pct": 0.73,
-      "turnover_yi": 571.2,
-      "up_count": 63,
-      "down_count": 37,
+      "net_inflow": 70820202433.0,
+      "net_inflow_yi": 708.2,
+      "change_pct": 1.05,
+      "turnover_yi": 708.2,
+      "up_count": 64,
+      "down_count": 35,
       "source": "sina"
     },
     {
       "name": "电力设备",
       "stock_count": 100,
-      "net_inflow": 53170846313.0,
-      "net_inflow_yi": 531.71,
-      "change_pct": -0.4,
-      "turnover_yi": 531.71,
-      "up_count": 53,
-      "down_count": 45,
+      "net_inflow": 64226493895.0,
+      "net_inflow_yi": 642.26,
+      "change_pct": -0.94,
+      "turnover_yi": 642.26,
+      "up_count": 35,
+      "down_count": 65,
       "source": "sina"
     },
     {
       "name": "基础化工",
       "stock_count": 100,
-      "net_inflow": 46039446941.0,
-      "net_inflow_yi": 460.39,
-      "change_pct": 0.01,
-      "turnover_yi": 460.39,
-      "up_count": 54,
-      "down_count": 45,
+      "net_inflow": 55525195962.0,
+      "net_inflow_yi": 555.25,
+      "change_pct": -0.21,
+      "turnover_yi": 555.25,
+      "up_count": 45,
+      "down_count": 53,
       "source": "sina"
     },
     {
       "name": "计算机",
       "stock_count": 100,
-      "net_inflow": 38258499335.0,
-      "net_inflow_yi": 382.58,
-      "change_pct": 0.27,
-      "turnover_yi": 382.58,
-      "up_count": 62,
-      "down_count": 37,
+      "net_inflow": 45829868468.0,
+      "net_inflow_yi": 458.3,
+      "change_pct": 0.07,
+      "turnover_yi": 458.3,
+      "up_count": 52,
+      "down_count": 44,
       "source": "sina"
     },
     {
       "name": "国防军工",
       "stock_count": 100,
-      "net_inflow": 20524208646.0,
-      "net_inflow_yi": 205.24,
-      "change_pct": 0.17,
-      "turnover_yi": 205.24,
-      "up_count": 67,
-      "down_count": 31,
+      "net_inflow": 24833331499.0,
+      "net_inflow_yi": 248.33,
+      "change_pct": 0.07,
+      "turnover_yi": 248.33,
+      "up_count": 63,
+      "down_count": 34,
       "source": "sina"
     },
     {
       "name": "汽车",
       "stock_count": 100,
-      "net_inflow": 19430620360.0,
-      "net_inflow_yi": 194.31,
-      "change_pct": 2.93,
-      "turnover_yi": 194.31,
-      "up_count": 56,
-      "down_count": 44,
+      "net_inflow": 24034665864.0,
+      "net_inflow_yi": 240.35,
+      "change_pct": 3.14,
+      "turnover_yi": 240.35,
+      "up_count": 55,
+      "down_count": 45,
       "source": "sina"
     }
   ],
   "sentiment_pools": {
-    "limit_up_count": 67,
+    "limit_up_count": 74,
     "yesterday_zt_count": 36,
-    "zhaban_count": 26,
-    "zhaban_rate": 28.0,
+    "zhaban_count": 30,
+    "zhaban_rate": 28.8,
     "limit_up_names": [
       "中 关 村",
       "双鹭药业",
@@ -350,258 +300,31 @@
       "诺唯赞"
     ],
     "yesterday_zt_names": [
-      "鲁信创投",
-      "中交发展",
       "红四方",
-      "京粮控股",
+      "陕西黑猫",
+      "南 京 港",
+      "宝泰隆",
+      "哈三联",
       "日出东方",
-      "江顺科技",
+      "万和电气",
+      "百合股份",
       "学大教育",
+      "好太太",
+      "尚太科技",
       "深华发Ａ",
       "我爱我家",
+      "美锦能源",
       "速达股份",
       "罗普斯金",
       "汉森制药",
       "金利华电",
       "亿田智能",
-      "西点药业",
-      "亨迪药业",
-      "金健米业",
-      "万向德农",
-      "宝泰隆",
-      "百合股份"
+      "西点药业"
     ],
     "source": "akshare"
   },
-  "track_crowding": [
-    {
-      "track": "AI/人工智能",
-      "turnover_yi": 4328.83,
-      "share_pct": 17.71,
-      "sectors": [
-        "计算机",
-        "传媒",
-        "通信",
-        "电子"
-      ],
-      "crowded": true
-    },
-    {
-      "track": "半导体",
-      "turnover_yi": 2834.45,
-      "share_pct": 11.6,
-      "sectors": [
-        "电子"
-      ],
-      "crowded": false
-    },
-    {
-      "track": "新能源",
-      "turnover_yi": 1734.12,
-      "share_pct": 7.1,
-      "sectors": [
-        "电力设备",
-        "有色金属",
-        "汽车"
-      ],
-      "crowded": false
-    },
-    {
-      "track": "周期资源",
-      "turnover_yi": 1613.12,
-      "share_pct": 6.6,
-      "sectors": [
-        "煤炭",
-        "石油石化",
-        "钢铁",
-        "基础化工",
-        "有色金属"
-      ],
-      "crowded": false
-    },
-    {
-      "track": "医药",
-      "turnover_yi": 1398.97,
-      "share_pct": 5.72,
-      "sectors": [
-        "医药生物"
-      ],
-      "crowded": false
-    },
-    {
-      "track": "金融",
-      "turnover_yi": 279.69,
-      "share_pct": 1.14,
-      "sectors": [
-        "银行",
-        "非银金融"
-      ],
-      "crowded": false
-    },
-    {
-      "track": "消费",
-      "turnover_yi": 236.47,
-      "share_pct": 0.97,
-      "sectors": [
-        "食品饮料",
-        "家用电器",
-        "商贸零售",
-        "社会服务"
-      ],
-      "crowded": false
-    },
-    {
-      "track": "军工",
-      "turnover_yi": 211.64,
-      "share_pct": 0.87,
-      "sectors": [
-        "国防军工"
-      ],
-      "crowded": false
-    }
-  ],
-  "price_volume_anomalies": [
-    {
-      "code": "600127",
-      "name": "金健米业",
-      "change_pct": 9.97,
-      "vol_ratio": 26.56,
-      "type": "放量突破"
-    },
-    {
-      "code": "300109",
-      "name": "新开源",
-      "change_pct": 17.94,
-      "vol_ratio": 21.23,
-      "type": "放量突破"
-    },
-    {
-      "code": "600250",
-      "name": "南京商旅",
-      "change_pct": 10.0,
-      "vol_ratio": 20.23,
-      "type": "放量突破"
-    },
-    {
-      "code": "601011",
-      "name": "宝泰隆",
-      "change_pct": 5.59,
-      "vol_ratio": 18.92,
-      "type": "放量突破"
-    },
-    {
-      "code": "300601",
-      "name": "康泰生物",
-      "change_pct": 17.5,
-      "vol_ratio": 17.24,
-      "type": "放量突破"
-    },
-    {
-      "code": "000421",
-      "name": "南京公用",
-      "change_pct": 6.64,
-      "vol_ratio": 16.52,
-      "type": "放量突破"
-    },
-    {
-      "code": "001277",
-      "name": "速达股份",
-      "change_pct": 10.01,
-      "vol_ratio": 16.35,
-      "type": "放量突破"
-    },
-    {
-      "code": "002743",
-      "name": "富煌钢构",
-      "change_pct": 9.95,
-      "vol_ratio": 16.02,
-      "type": "放量突破"
-    },
-    {
-      "code": "688670",
-      "name": "金迪克",
-      "change_pct": 13.51,
-      "vol_ratio": 15.67,
-      "type": "放量突破"
-    },
-    {
-      "code": "603199",
-      "name": "九华旅游",
-      "change_pct": 7.13,
-      "vol_ratio": 14.47,
-      "type": "放量突破"
-    },
-    {
-      "code": "002333",
-      "name": "罗普斯金",
-      "change_pct": -9.94,
-      "vol_ratio": 18.26,
-      "type": "底部放量"
-    },
-    {
-      "code": "002953",
-      "name": "日丰股份",
-      "change_pct": -6.22,
-      "vol_ratio": 12.4,
-      "type": "底部放量"
-    },
-    {
-      "code": "002040",
-      "name": "南 京 港",
-      "change_pct": -1.1,
-      "vol_ratio": 9.93,
-      "type": "底部放量"
-    },
-    {
-      "code": "603395",
-      "name": "红四方",
-      "change_pct": -5.76,
-      "vol_ratio": 9.89,
-      "type": "底部放量"
-    },
-    {
-      "code": "600610",
-      "name": "中毅达",
-      "change_pct": -2.18,
-      "vol_ratio": 9.34,
-      "type": "底部放量"
-    },
-    {
-      "code": "603506",
-      "name": "南都物业",
-      "change_pct": -10.02,
-      "vol_ratio": 9.27,
-      "type": "底部放量"
-    },
-    {
-      "code": "000526",
-      "name": "学大教育",
-      "change_pct": -4.66,
-      "vol_ratio": 8.49,
-      "type": "底部放量"
-    },
-    {
-      "code": "000059",
-      "name": "华锦股份",
-      "change_pct": -3.55,
-      "vol_ratio": 7.85,
-      "type": "底部放量"
-    },
-    {
-      "code": "603366",
-      "name": "日出东方",
-      "change_pct": -4.46,
-      "vol_ratio": 7.65,
-      "type": "底部放量"
-    },
-    {
-      "code": "600276",
-      "name": "恒瑞医药",
-      "change_pct": -2.89,
-      "vol_ratio": 7.49,
-      "type": "底部放量"
-    }
-  ],
+  "track_crowding": [],
+  "price_volume_anomalies": [],
   "lhb_capital": {
     "lhb_institution": [
       {
@@ -899,42 +622,42 @@
   "stock_technicals": [],
   "signals": {
     "market_breadth": "强势上涨",
-    "advance_ratio": 76.6,
+    "advance_ratio": 74.9,
     "sentiment": "偏热",
     "fund_flow_signals": [
       "两融余额减少303.1亿，杠杆资金减仓",
-      "电子板块成交活跃，成交额2079.2亿",
-      "医药生物板块均涨7.7%，领涨市场"
+      "电子板块成交活跃，成交额2511.1亿",
+      "医药生物板块均涨6.9%，领涨市场"
     ],
     "volatility_percentile": 65,
     "volatility_desc": "中等偏高",
-    "max_index_change": 1.03
+    "max_index_change": 1.22
   },
   "anomalies": [
     {
       "type": "sentiment_extreme",
-      "description": "涨停家数达109家，市场情绪过热",
+      "description": "涨停家数达117家，市场情绪过热",
       "severity": "高"
     },
     {
       "type": "sentiment_extreme",
-      "description": "跌停15家，亏钱效应明显",
+      "description": "跌停16家，亏钱效应明显",
       "severity": "中"
     },
     {
       "type": "breadth_extreme",
-      "description": "涨跌比4212:1157，多头全面占优",
+      "description": "涨跌比4119:1226，多头全面占优",
       "severity": "中"
     },
     {
       "type": "sector_rotation",
-      "description": "医药生物板块均涨7.7%，成交948亿，领涨资金方向",
+      "description": "医药生物板块均涨6.9%，成交1087亿，领涨资金方向",
       "severity": "中"
     }
   ],
   "tomorrow_focus": [
     "关注北向资金成交活跃度变化（净买额暂停披露）",
     "关注电子板块资金持续流入情况",
-    "涨停家数达109家，市场情绪过热"
+    "涨停家数达117家，市场情绪过热"
   ]
 }
