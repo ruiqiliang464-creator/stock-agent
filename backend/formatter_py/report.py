@@ -687,20 +687,22 @@ def generate_review_report(review_data):
 
     # ── 5. 量价异动 ──
     pva_section = ''
+    pva_rows = ''
     if price_volume_anomalies:
         by_type = {}
         for a in price_volume_anomalies:
             by_type.setdefault(a.get('type', ''), []).append(a)
-        rows = ''
         for kind, lst in by_type.items():
-            rows += f'<div style="font-size:12px;color:#64748b;margin:6px 0 2px">▶ {kind}（{len(lst)}只）</div>'
+            pva_rows += f'<div style="font-size:12px;color:#64748b;margin:6px 0 2px">▶ {kind}（{len(lst)}只）</div>'
             for a in lst[:8]:
                 c = '#dc2626' if a.get('change_pct', 0) > 0 else '#16a34a'
-                rows += f'<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:12px"><span style="color:#475569">{a.get("name","")}({a.get("code","")})</span><span style="color:{c}">{a.get("change_pct",0):+.2f}%</span><span style="color:#94a3b8">量比{a.get("vol_ratio",0):.1f}</span></div>'
-        pva_section = f'''
+                pva_rows += f'<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:12px"><span style="color:#475569">{a.get("name","")}({a.get("code","")})</span><span style="color:{c}">{a.get("change_pct",0):+.2f}%</span><span style="color:#94a3b8">量比{a.get("vol_ratio",0):.1f}</span></div>'
+    else:
+        pva_rows = '<p style="color:#999;font-size:13px;padding:8px 0">暂无数据（量价异动采集失败）</p>'
+    pva_section = f'''
     <div style="background:#eef2ff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #c7d2fe">
         <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#4338ca">五、量价异动</h3>
-        {rows}
+        {pva_rows}
     </div>'''
 
     # ── 6. 龙虎榜机构异动 ──
@@ -751,6 +753,12 @@ def generate_review_report(review_data):
         <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#fef2f2">{head_simple}</tr></thead><tbody>{loss_rows}</tbody></table>
         <div style="font-size:10px;color:#94a3b8;margin-top:6px">单位：主力净流入/净量为亿元；概念字段批次C补充；5日/10日涨幅经东财clist补充（CI验证）</div>
     </div>'''
+    else:
+        rank_section = f'''
+    <div style="background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e5e7eb">
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 8px 0;color:#1e293b">七、个股排名（主力净流入 TOP15）</h3>
+        <p style="color:#999;font-size:13px;padding:8px 0">暂无数据（主力资金流采集失败，晚些时候重跑或查看交互看板）</p>
+    </div>'''
 
     # ── 九、事件驱动 ──
     events_section = ''
@@ -797,6 +805,12 @@ def generate_review_report(review_data):
         <div>{cards}</div>
         <div style="font-size:9.5px;color:#94a3b8;margin-top:6px">折线=近30日收盘价(前复权)；红虚线=20日高，绿虚线=20日低，红点=最新价；MACD(12,26,9)；K线不足则图/指标为空</div>
     </div>'''
+    else:
+        technical_section = f'''
+    <div style="background:#f5f3ff;border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid #ddd6fe">
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 10px 0;color:#6d28d9">十、个股走势 / MACD / 筹码（主力净流入 TOP20）</h3>
+        <p style="color:#999;font-size:13px;padding:8px 0">暂无数据（上游个股排名缺失，走势折线图暂无法生成）</p>
+    </div>'''
 
     focus_section = f'''
     <div style="background:#f0fdf4;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #bbf7d0">
@@ -833,9 +847,9 @@ def generate_review_report(review_data):
             {pva_section}
             {lhb_section}
             {rank_section}
+            {focus_section}
             {events_section}
             {technical_section}
-            {focus_section}
             {source_note}
 
             <div style="text-align:center;padding:12px;font-size:11px;color:#999;border-top:1px solid #e5e7eb;margin-top:8px">

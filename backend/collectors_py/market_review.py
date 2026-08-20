@@ -2424,6 +2424,37 @@ def _compute_macd(closes):
     return round(dif_v, 3), round(dea_v, 3), round(bar_v, 3), state
 
 
+def _fallback_active_pool():
+    """兜底股票池: 主力资金流采集失败时, 用当日成交额TOP20作为技术指标标的(东财clist主, akshare兜底)"""
+    print('[MarketReview] 个股排名为空, 使用成交额TOP20兜底股票池...')
+    try:
+        diff = _em_clist('f12,f14,f6', 'm:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', pz=20, fid='f6', po='1')
+        pool = []
+        for it in diff:
+            code = str(it.get('f12', ''))
+            name = str(it.get('f14', ''))
+            if code:
+                pool.append({'code': code, 'name': name})
+        if pool:
+            print(f'  [MarketReview] 东财兜底股票池: {len(pool)}只')
+            return pool
+    except Exception as e:
+        print(f'  [MarketReview] 东财兜底股票池失败: {e}')
+    try:
+        func = getattr(ak, 'stock_zh_a_spot_em', None)
+        if func:
+            df = call_with_timeout(func, timeout=20)
+            if df is not None and len(df) > 0:
+                df = df.sort_values('成交额', ascending=False).head(20)
+                pool = [{'code': str(r['代码']), 'name': str(r['名称'])} for _, r in df.iterrows()]
+                if pool:
+                    print(f'  [MarketReview] akshare兜底股票池: {len(pool)}只')
+                    return pool
+    except Exception as e:
+        print(f'  [MarketReview] akshare兜底失败: {e}')
+    return []
+
+
 def fetch_stock_technicals(top_inflow):
     """技术指标: 对主力净流入 TOP20 算 MACD(12/26/9)+近20日高低点+筹码分布"""
     print('[MarketReview] 采集技术指标(高低点/MACD/筹码)...')
@@ -2520,7 +2551,11 @@ def run():
     lhb_capital = fetch_lhb_capital()
     stock_rank = fetch_stock_rank()
     market_events = fetch_market_events()
-    stock_technicals = fetch_stock_technicals(stock_rank.get('top_inflow'))
+    # 技术指标股票池: 优先主力净流入TOP, 个股排名失败时用成交额TOP20兜底, 保证走势图始终有数据
+    tech_pool = (stock_rank or {}).get('top_inflow')
+    if not tech_pool:
+        tech_pool = _fallback_active_pool()
+    stock_technicals = fetch_stock_technicals(tech_pool)
 
     # 2. 信号计算
     signals = calculate_signals(index_data, breadth, northbound, margin, sector_flow)
