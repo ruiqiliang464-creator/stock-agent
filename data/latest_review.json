@@ -1,7 +1,7 @@
 {
   "date": "2026-08-20",
-  "updatedAt": "2026-08-20T08:14:57.478589",
-  "summary": "缩量震荡，赚钱效应明显，北向资金成交总额约33亿（净买额因港交所披露调整暂停披露）；市场情绪偏热",
+  "updatedAt": "2026-08-20T10:16:38.020458",
+  "summary": "缩量震荡，赚钱效应明显，北向资金成交总额约29亿（净买额因港交所披露调整暂停披露）；市场情绪偏热",
   "indices": [
     {
       "name": "上证指数",
@@ -72,8 +72,8 @@
       "name": "恒生指数",
       "symbol": "^HSI",
       "region": "香港",
-      "close": 25730.29,
-      "change_pct": 0.92,
+      "close": 25698.49,
+      "change_pct": 0.8,
       "source": "yfinance"
     },
     {
@@ -120,8 +120,8 @@
       "name": "英国富时",
       "symbol": "^FTSE",
       "region": "英国",
-      "close": 10716.73,
-      "change_pct": -0.25,
+      "close": 10724.16,
+      "change_pct": -0.18,
       "source": "yfinance"
     }
   ],
@@ -138,8 +138,8 @@
   "northbound": {
     "net_buy": 0,
     "net_buy_yi": 0.0,
-    "amount_yi": 32.85,
-    "date": "2026-08-19",
+    "amount_yi": 28.62,
+    "date": "2026-08-20",
     "is_extreme": false,
     "extreme_note": "",
     "metric": "deal_amount",
@@ -160,7 +160,24 @@
     "balance_change": -30308514140.0,
     "balance_change_yi": -303.09
   },
-  "etf_flow": [],
+  "etf_flow": [
+    {
+      "name": "沪深300ETF华泰柏瑞",
+      "code": "510300",
+      "close": 4.653,
+      "change_pct": -0.02,
+      "main_net_inflow_yi": null,
+      "source": "eastmoney"
+    },
+    {
+      "name": "中证500ETF南方",
+      "code": "510500",
+      "close": 7.863,
+      "change_pct": 0.76,
+      "main_net_inflow_yi": null,
+      "source": "eastmoney"
+    }
+  ],
   "sector_flow": [
     {
       "name": "电子",
