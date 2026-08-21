@@ -1,0 +1,33 @@
+name: Tencent Source Probe
+
+# 临时探针: 验证腾讯/新浪数据源在美国 IP (GitHub Actions) 下的连通性
+# 触发: push 本文件/probe_tencent.py 自动跑, 或手动 workflow_dispatch
+on:
+  push:
+    paths:
+      - 'probe_tencent.py'
+      - '.github/workflows/probe-tencent.yml'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Run probe (US IP)
+        run: python probe_tencent.py
+
+      - name: Show public IP
+        run: curl -s --max-time 10 https://ipinfo.io/json | head -20 || echo "ipinfo unavailable"
