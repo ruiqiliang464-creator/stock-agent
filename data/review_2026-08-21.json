@@ -71,8 +71,8 @@
       "name": "恒生指数",
       "symbol": "^HSI",
       "region": "香港",
-      "close": 25966.65,
-      "change_pct": 1.04,
+      "close": 25976.05,
+      "change_pct": 1.08,
       "source": "yfinance"
     },
     {
@@ -119,8 +119,8 @@
       "name": "英国富时",
       "symbol": "^FTSE",
       "region": "英国",
-      "close": 10763.84,
-      "change_pct": 0.15,
+      "close": 10783.34,
+      "change_pct": 0.33,
       "source": "yfinance"
     }
   ],
@@ -146,16 +146,18 @@
     "source": "eastmoney(datacenter-web)"
   },
   "margin": {
-    "date": "2026-08-20",
-    "finance_balance": 2639500368567.0,
-    "finance_balance_yi": 26395.0,
-    "securities_balance": 26845294696.000004,
-    "securities_balance_yi": 268.45,
-    "total_balance_yi": 26663.45,
-    "total_balance": 2666345663263.0,
-    "balance_change_yi": -12.52,
-    "balance_change": -1252000000.0,
-    "source": "akshare_account"
+    "total_balance": 2666356485483.0,
+    "finance_balance": 2639521849011.0,
+    "securities_balance": 26834636472.0,
+    "date": "",
+    "source": "eastmoney",
+    "financing_buy": 188829242476.0,
+    "financing_buy_yi": 1888.29,
+    "total_balance_yi": 26663.56,
+    "finance_balance_yi": 26395.22,
+    "securities_balance_yi": 268.35,
+    "balance_change": -1248092264.0,
+    "balance_change_yi": -12.48
   },
   "etf_flow": [
     {
