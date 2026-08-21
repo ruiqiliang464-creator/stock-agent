@@ -28,6 +28,7 @@ import math
 import os
 import time
 import yfinance as yf
+import pandas as pd
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError, as_completed
 
@@ -63,6 +64,132 @@ SINA_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
     'Referer': 'https://vip.stock.finance.sina.com.cn/',
 }
+
+# 腾讯行情请求头
+TX_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+    'Referer': 'https://gu.qq.com/',
+}
+
+# ═══════════════════════════════════════════════════
+# 稳定源公共工具 (腾讯 qt.gtimg.cn + 新浪 getHQNodeData/moneyflow)
+# 美国 IP (GHA) 实测 ALL OK; 东财 push2 系在美国 IP 间歇故障, 榜单/资金流一律走此处
+# ═══════════════════════════════════════════════════
+
+def _is_junk_name(name):
+    """退市/ST 垃圾过滤 (龙虎榜/榜单数据清洗): 名称含 退 或 ST"""
+    if not name:
+        return True
+    n = str(name)
+    return ('退' in n) or ('ST' in n.upper())
+
+
+def _sina_hq_node(sort='amount', num=100, node='hs_a'):
+    """新浪全市场/板块榜: Market_Center.getHQNodeData
+    返回 list[dict]: symbol/code/name/close/change_pct/amount_yi/turnover (成交额亿/涨跌幅%/换手%)"""
+    url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData'
+    try:
+        r = requests.get(url, params={'page': 1, 'num': num, 'sort': sort, 'asc': 0, 'node': node, '_s_r_a': 'page'},
+                         headers=SINA_HEADERS, timeout=(4, 10))
+        data = r.json()
+        if not isinstance(data, list) or not data:
+            return []
+        out = []
+        for it in data:
+            code = it.get('code')
+            name = it.get('name')
+            if not code or not name or _is_junk_name(name):
+                continue
+            try:
+                out.append({
+                    'code': str(code), 'name': str(name),
+                    'close': round(float(it.get('trade', 0) or 0), 2),
+                    'change_pct': round(float(it.get('changepercent', 0) or 0), 2),
+                    'amount_yi': round(float(it.get('amount', 0) or 0) / 1e8, 2),
+                    'turnover': round(float(it.get('turnoverratio', 0) or 0), 2),
+                    'symbol': str(it.get('symbol', '')),
+                })
+            except (ValueError, TypeError):
+                continue
+        return out
+    except Exception as e:
+        print(f'  [MarketReview] 新浪榜({node}/{sort})失败: {e}')
+        return []
+
+
+def _tx_batch_quote(codes, batch=50):
+    """腾讯批量行情: qt.gtimg.cn/q=sh600519,... (美国IP实测稳定, 50只/批)
+    返回 {code: {name, close, change_pct, amount_yi, turnover, vol_ratio}}
+    字段: [1]名称 [3]现价 [32]涨跌幅% [37]成交额(万元) [38]换手% [49]量比"""
+    out = {}
+    if not codes:
+        return out
+    for i in range(0, len(codes), batch):
+        chunk = codes[i:i + batch]
+        url = 'https://qt.gtimg.cn/q=' + ','.join(chunk)
+        try:
+            r = requests.get(url, headers=TX_HEADERS, timeout=(4, 10))
+            r.encoding = 'gbk'
+            for ln in r.text.strip().splitlines():
+                m = re.match(r'v_(\w+)="([^"]*)"', ln.strip())
+                if not m:
+                    continue
+                key, val = m.group(1), m.group(2)
+                if not key.startswith(('sh', 'sz', 'bj')):
+                    continue
+                f = val.split('~')
+                if len(f) < 50:
+                    continue
+                code = key[2:]
+                try:
+                    out[code] = {
+                        'name': f[1], 'close': float(f[3]),
+                        'change_pct': round(float(f[32]), 2),
+                        'amount_yi': round(float(f[37]) / 1e4, 2),  # 万元→亿
+                        'turnover': round(float(f[38]), 2),
+                        'vol_ratio': round(float(f[49]), 2),
+                    }
+                except (ValueError, TypeError, IndexError):
+                    continue
+        except Exception as e:
+            print(f'  [MarketReview] 腾讯批量行情失败({len(chunk)}只): {e}')
+    return out
+
+
+def _sina_moneyflow_net(code):
+    """新浪个股资金流: MoneyFlow.ssl_qsfx_zjlrqs (最近交易日口径, 元)
+    返回 {main_net_inflow_yi, main_net_pct, net_5d_yi, net_10d_yi} 或 None
+    字段: netamount=主力净流入(元) ratioamount=净占比(小数)
+    5日/10日净额 = 最近5/10个交易日 netamount 之和 (num=11 拉 11 个交易日)"""
+    url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/MoneyFlow.ssl_qsfx_zjlrqs'
+    try:
+        r = requests.get(url, params={'page': 1, 'num': 11, 'sort': 'opendate', 'asc': 0, 'daima': code},
+                         headers=SINA_HEADERS, timeout=(4, 10))
+        r.encoding = 'gbk'
+        txt = r.text.strip()
+        data = json.loads(re.sub(r'^/\*.*?\*/', '', txt, flags=re.S)) if not (txt.startswith('[') and txt.endswith(']')) else json.loads(txt)
+        if not isinstance(data, list) or not data:
+            return None
+        latest = data[0]
+        nets = []
+        for row in data[:11]:
+            v = row.get('netamount')
+            if v is not None:
+                try:
+                    nets.append(float(v))
+                except (ValueError, TypeError):
+                    pass
+        net = float(latest.get('netamount') or 0)
+        ratio = float(latest.get('ratioamount') or 0)
+        return {
+            'main_net_inflow_yi': round(net / 1e8, 2),
+            'main_net_pct': round(ratio * 100, 2) if abs(ratio) < 1 else round(ratio, 2),
+            'net_5d_yi': round(sum(nets[:5]) / 1e8, 2) if nets else None,
+            'net_10d_yi': round(sum(nets[:10]) / 1e8, 2) if nets else None,
+        }
+    except Exception as e:
+        print(f'  [MarketReview] 新浪资金流 {code} 失败: {e}')
+        return None
 
 # 申万一级行业分类 (31个板块)
 SW1_SECTORS = [
@@ -1781,13 +1908,37 @@ def fetch_etf_flow():
     except Exception as e:
         print(f'  [MarketReview] akshare ETF失败: {e}')
 
-    # 方法2: 东财 push2 stock/get 兜底 (价/涨跌, 资金流标记为近似)
+    # 方法2: 腾讯 qt.gtimg.cn 批量行情兜底 (US IP 稳定; 腾讯无资金流字段 → main_net_inflow_yi=None)
+    try:
+        tx_map = _tx_batch_quote(['sh510300', 'sh510500', 'sz159915', 'sh588000', 'sh510050', 'sh512100'])
+        for code in ['510300', '510500', '159915', '588000', '510050', '512100']:
+            d = tx_map.get(code)
+            if not d:
+                continue
+            if code in seen:
+                continue
+            seen.add(code)
+            result.append({
+                'name': d['name'], 'code': code,
+                'close': d['close'], 'change_pct': d['change_pct'],
+                'amount_yi': d['amount_yi'], 'main_net_inflow_yi': None,
+                'source': 'tencent',
+            })
+        if result:
+            print(f'[MarketReview] 宽基ETF(腾讯兜底): {len(result)}只')
+            return result
+    except Exception as e:
+        print(f'  [MarketReview] 腾讯 ETF兜底失败: {e}')
+
+    # 方法3: 东财 push2 stock/get 兜底 (价/涨跌, 资金流标记为近似)
     try:
         for code, name in [('510300', '沪深300ETF'), ('510500', '中证500ETF'), ('159915', '创业板ETF'),
                            ('588000', '科创50ETF'), ('510050', '上证50ETF'), ('512100', '中证1000ETF')]:
-            secid = ('1.' if code.startswith('5') and code[0] == '5' and code != '512100' else ('0.' if code.startswith('0') or code == '159915' else '1.')) + code
             # 沪深/科创/中证1000 在上交所(1.), 创业板在深交所(0.)
             secid = ('1.' if code in ('510300', '510500', '588000', '510050', '512100') else '0.') + code
+            if code in seen:
+                continue
+            seen.add(code)
             d = _em_clist_stock_get(secid)
             if d:
                 result.append(d)
@@ -1974,9 +2125,22 @@ def _fetch_industry_turnover():
 
 
 def fetch_track_crowding():
-    """赛道拥挤度: 赛道=所属行业集合, 计算各赛道成交额占全市场比"""
+    """赛道拥挤度: 赛道=所属行业集合, 计算各赛道成交额占全市场比
+    主源: 新浪 sw1 板块榜(与五板块同源, 美国IP稳定); 兜底: 东财 clist 行业板块"""
     print('[MarketReview] 采集赛道拥挤度...')
-    ind_turn = _fetch_industry_turnover()
+    ind_turn = {}
+    source = 'sina(sw1)'
+    # ── 主源: 新浪 sw1 板块成交额 (复用 _fetch_sector_flow_sina, 零新增端点) ──
+    try:
+        sectors = _fetch_sector_flow_sina()
+        if sectors:
+            ind_turn = {s['name']: float(s.get('net_inflow') or 0) for s in sectors}
+    except Exception as e:
+        print(f'  [MarketReview] 新浪 sw1 板块成交额失败: {e}')
+    if not ind_turn:
+        # ── 兜底: 东财行业板块 (push2, 美国IP间歇断) ──
+        ind_turn = _fetch_industry_turnover()
+        source = 'eastmoney'
     if not ind_turn:
         print('  [MarketReview] 行业成交额获取失败')
         return []
@@ -1984,16 +2148,17 @@ def fetch_track_crowding():
     if total == 0:
         return []
     tracks = []
-    for track, sectors in TRACK_SECTORS.items():
-        amt = sum(ind_turn.get(s, 0) for s in sectors)
+    for track, sector_names in TRACK_SECTORS.items():
+        amt = sum(ind_turn.get(s, 0) for s in sector_names)
         share = round(amt / total * 100, 2) if total else 0
         tracks.append({
             'track': track, 'turnover_yi': round(amt / 1e8, 2),
-            'share_pct': share, 'sectors': sectors,
+            'share_pct': share, 'sectors': sector_names,
             'crowded': share >= 15,  # 占比>=15% 视为拥挤预警
+            'source': source,
         })
     tracks.sort(key=lambda x: x['share_pct'], reverse=True)
-    print(f'[MarketReview] 赛道拥挤度: {len(tracks)}条, 最高{ (tracks[0]["track"] if tracks else "-") } { (tracks[0]["share_pct"] if tracks else 0) }%')
+    print(f'[MarketReview] 赛道拥挤度: {len(tracks)}条({source}), 最高{ (tracks[0]["track"] if tracks else "-") } { (tracks[0]["share_pct"] if tracks else 0) }%')
     return tracks
 
 
@@ -2002,36 +2167,44 @@ def fetch_track_crowding():
 # ═══════════════════════════════════════════════════
 
 def fetch_price_volume_anomalies():
-    """量价异动: 东财 clist 按量比/涨幅筛选, 分类为 放量突破/缩量回调/底部放量"""
+    """量价异动: 新浪成交额TOP100候选池 + 腾讯批量量比 → 放量突破/缩量回调/底部放量
+    降级: 腾讯失败 → 换手率代理分类(阈值10%/1.5%), 不再裸奔"""
     print('[MarketReview] 采集量价异动...')
-    fs = 'm:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23'
-    diff = _em_clist('f12,f14,f2,f3,f10,f8', fs, pz=600, fid='f10', po='1')
-    if not diff:
+    pool = _sina_hq_node('amount', 100)  # 成交额TOP100, 自带涨跌幅/换手
+    if not pool:
+        print('  [MarketReview] 量价异动: 新浪候选池失败')
         return []
+    tx_map = _tx_batch_quote([p['code'] for p in pool])  # 腾讯批量补量比
+    if tx_map:
+        source = 'sina+tencent'
+        hi, lo = 3.0, 0.6  # 量比阈值
+    else:
+        source = 'sina-fallback'
+        print('  [MarketReview] 腾讯批量失败, 换手率代理分类')
+        hi, lo = 10.0, 1.5  # 换手率阈值
     items = []
-    for it in diff:
-        code = it.get('f12')
-        name = it.get('f14')
-        if not code or not name:
+    for p in pool:
+        tx = tx_map.get(p['code'])
+        if tx_map:
+            vol_ratio = tx.get('vol_ratio') if tx else None
+        else:
+            vol_ratio = p['turnover'] if p['turnover'] > 0 else None
+        if vol_ratio is None or vol_ratio <= 0:
             continue
-        try:
-            chg = float(it.get('f3', 0) or 0) / 100
-            vol_ratio = float(it.get('f10', 0) or 0) / 100  # 量比*100
-        except (ValueError, TypeError):
-            continue
-        if vol_ratio <= 0:
-            continue
+        chg = p['change_pct']
         kind = None
-        if vol_ratio >= 3 and chg >= 3:
+        if vol_ratio >= hi and chg >= 3:
             kind = '放量突破'
-        elif 0 < vol_ratio <= 0.6 and -3 <= chg < 0:
+        elif 0 < vol_ratio <= lo and -3 <= chg < 0:
             kind = '缩量回调'
-        elif vol_ratio >= 3 and chg < 0:
+        elif vol_ratio >= hi and chg < 0:
             kind = '底部放量'
         if kind:
             items.append({
-                'code': code, 'name': name, 'change_pct': round(chg, 2),
+                'code': p['code'], 'name': p['name'], 'change_pct': round(chg, 2),
                 'vol_ratio': round(vol_ratio, 2), 'type': kind,
+                'amount_yi': tx.get('amount_yi') if tx else p['amount_yi'],
+                'source': source,
             })
     # 每类取前 10
     by_type = {}
@@ -2040,7 +2213,7 @@ def fetch_price_volume_anomalies():
     out = []
     for kind, lst in by_type.items():
         out.extend(sorted(lst, key=lambda x: x['vol_ratio'], reverse=True)[:10])
-    print(f'[MarketReview] 量价异动: {len(out)}条')
+    print(f'[MarketReview] 量价异动: {len(out)}条({source})')
     return out
 
 
@@ -2049,37 +2222,45 @@ def fetch_price_volume_anomalies():
 # ═══════════════════════════════════════════════════
 
 def _em_lhb_detail():
-    """东财 datacenter-web 龙虎榜直连: 取最近交易日个股净买TOP. 字段: SECURITY_CODE/NAME_ABBR/BILLBOARD_NET_AMT/BILLBOARD_BUY_AMT/BILLBOARD_SELL_AMT"""
+    """东财 datacenter-web 龙虎榜直连: 两步查询取最近交易日个股净买TOP (过滤退市/ST)
+    ①sortColumns=TRADE_DATE desc, pageSize=1 取最近交易日 → ②filter 当日全量明细
+    字段: SECURITY_CODE/NAME_ABBR/BILLBOARD_NET_AMT/BILLBOARD_BUY_AMT/BILLBOARD_SELL_AMT"""
     url = 'https://datacenter-web.eastmoney.com/api/data/v1/get'
-    params = {
-        'reportName': 'RPT_DAILYBILLBOARD_DETAILSNEW',
-        'columns': 'ALL',
-        'pageNumber': 1, 'pageSize': 500,
-        'sortColumns': 'SECURITY_CODE',
-        'sortTypes': 1,
-    }
-    try:
+
+    def _query(params):
         r = requests.get(url, params=params, headers=EM_HEADERS, timeout=(4, 12))
         j = r.json()
-        # 鲁棒解析: result.data 或 result 直接 list
         res = j.get('result')
         if isinstance(res, dict):
-            rows = res.get('data') or []
-        elif isinstance(res, list):
-            rows = res
-        else:
-            rows = j.get('data') or []
-        if not rows:
+            return res.get('data') or []
+        if isinstance(res, list):
+            return res
+        return j.get('data') or []
+
+    try:
+        # ① 最近交易日
+        rows0 = _query({
+            'reportName': 'RPT_DAILYBILLBOARD_DETAILSNEW', 'columns': 'ALL',
+            'pageNumber': 1, 'pageSize': 1,
+            'sortColumns': 'TRADE_DATE', 'sortTypes': -1,
+        })
+        if not rows0:
             return [], None
-        # 取最近交易日
-        dates = sorted({row.get('TRADE_DATE', '') for row in rows if row.get('TRADE_DATE')}, reverse=True)
-        latest = dates[0] if dates else None
-        if latest:
-            rows = [row for row in rows if row.get('TRADE_DATE') == latest]
+        latest = str(rows0[0].get('TRADE_DATE') or '')[:10]
+        if not latest:
+            return [], None
+        # ② 当日全量
+        rows = _query({
+            'reportName': 'RPT_DAILYBILLBOARD_DETAILSNEW', 'columns': 'ALL',
+            'pageNumber': 1, 'pageSize': 500,
+            'filter': f"(TRADE_DATE='{latest}')",
+        })
         ranked = []
         for row in rows:
             code = row.get('SECURITY_CODE')
             name = row.get('NAME_ABBR') or row.get('SECURITY_NAME_ABBR') or ''
+            if _is_junk_name(name):
+                continue
             net = row.get('BILLBOARD_NET_AMT')
             buy = row.get('BILLBOARD_BUY_AMT')
             sell = row.get('BILLBOARD_SELL_AMT')
@@ -2108,9 +2289,10 @@ def fetch_lhb_capital():
 
     # ── 主源: 东财 datacenter-web 直连 ──
     ranked, latest_date = _em_lhb_detail()
-    if ranked:
+    if ranked and len(ranked) >= 3:  # 门槛: 防 1 条退市垃圾堵死兜底
         result['lhb_institution'] = ranked[:15]
         result['source'] = 'eastmoney'
+        result['latest_date'] = latest_date
         print(f'[MarketReview] 龙虎榜(东财直连 date={latest_date}): {len(ranked)}只, 取TOP15')
         return result
 
@@ -2125,7 +2307,7 @@ def fetch_lhb_capital():
                 for _, row in df.iterrows():
                     name = row.get('名称') or row.get('name')
                     code = row.get('代码') or row.get('code')
-                    if not name:
+                    if not name or _is_junk_name(name):
                         continue
                     key = (str(code), str(name))
                     buy = sell = 0.0
@@ -2151,9 +2333,10 @@ def fetch_lhb_capital():
                         'inst_sell_yi': round(v['inst_sell'] / 1e8, 2),
                     })
                 ak_ranked.sort(key=lambda x: x['inst_net_buy_yi'], reverse=True)
-                result['lhb_institution'] = ak_ranked[:15]
-                result['source'] = 'akshare'
-                print(f'[MarketReview] 龙虎榜(akshare兜底): {len(ak_ranked)}只, 取TOP15')
+                if len(ak_ranked) >= 3:  # 同样加门槛, 宁缺毋滥
+                    result['lhb_institution'] = ak_ranked[:15]
+                    result['source'] = 'akshare'
+                    print(f'[MarketReview] 龙虎榜(akshare兜底): {len(ak_ranked)}只, 取TOP15')
     except Exception as e:
         print(f'  [MarketReview] akshare 龙虎榜失败: {e}')
     return result
@@ -2241,44 +2424,58 @@ def _parse_akshare_stock_rank(df):
 
 
 def fetch_stock_rank():
-    """个股排名: akshare 主源(主力流入/流出/概念命名列), 东财 clist 兜底并补充5日/10日涨幅"""
+    """个股排名: 新浪资金流主源(主力净流入TOP) — 美国IP稳定, 替代东财push2系
+    链路: 新浪成交额榜TOP60候选池 → 并发新浪moneyflow主力净流入 → 排序TOP30
+    降级: moneyflow失败率>50% → 成交额榜直接排序 → 东财clist兜底(push2, 最后网络兜底) → run()蓝筹池"""
     print('[MarketReview] 采集个股排名(主力净流入/涨跌)...')
     rows = []
-    # 主源: akshare
-    try:
-        func = getattr(ak, 'stock_individual_fund_flow_rank', None)
-        if func:
-            df = call_with_timeout(func, timeout=20, indicator='今日')
-            if df is not None and len(df) > 0:
-                rows = _parse_akshare_stock_rank(df)
-    except Exception as e:
-        print(f'  [MarketReview] akshare 个股排名失败: {e}')
+    source = 'sina(moneyflow)'
 
-    # 东财 clist: 兜底 + 补充 5日/10日涨幅/行业
-    em_map = {}
+    # ── 主源: 新浪成交额TOP60候选池 + 并发资金流 ──
     try:
-        diff = _em_clist('f12,f14,f2,f3,f62,f184,f100,f164,f166,f163,f169',
-                         'm:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', pz=4000, fid='f62', po='1')
-        for it in diff:
-            r = _parse_em_stock_row(it)
-            if r:
-                em_map[r['code']] = r
+        pool = _sina_hq_node('amount', 60)
+        if pool:
+            mf_map = {}
+            with ThreadPoolExecutor(max_workers=8) as executor:
+                futures = {executor.submit(_sina_moneyflow_net, p['code']): p['code'] for p in pool}
+                for fut in as_completed(futures):
+                    mf = fut.result()
+                    if mf:
+                        mf_map[futures[fut]] = mf
+            for p in pool:
+                mf = mf_map.get(p['code'])
+                rows.append({
+                    'code': p['code'], 'name': p['name'],
+                    'close': p['close'], 'change_pct': p['change_pct'],
+                    'main_net_inflow_yi': mf['main_net_inflow_yi'] if mf else None,
+                    'main_net_pct': mf['main_net_pct'] if mf else None,
+                    'industry': '',
+                    'net_5d_yi': mf['net_5d_yi'] if mf else None,
+                    'net_10d_yi': mf['net_10d_yi'] if mf else None,
+                    'chg_5d': None, 'chg_10d': None,
+                    'concept': '', 'source': source,
+                })
+            fail_rate = 1 - len(mf_map) / max(len(pool), 1)
+            if fail_rate > 0.5:
+                print(f'  [MarketReview] 新浪资金流失败率{fail_rate:.0%} >50%, 降级为成交额榜')
+                source = 'sina(amount)'
+                for r in rows:
+                    r['main_net_inflow_yi'] = None
+                    r['source'] = source
     except Exception as e:
-        print(f'  [MarketReview] 东财 个股排名失败: {e}')
+        print(f'  [MarketReview] 新浪个股排名失败: {e}')
 
-    if not rows and em_map:
-        rows = list(em_map.values())
-    else:
-        # 用东财补 5日/10日涨幅 与 行业
-        for r in rows:
-            em = em_map.get(r.get('code'))
-            if em:
-                if r.get('chg_5d') is None:
-                    r['chg_5d'] = em.get('chg_5d')
-                if r.get('chg_10d') is None:
-                    r['chg_10d'] = em.get('chg_10d')
-                if not r.get('industry'):
-                    r['industry'] = em.get('industry')
+    # ── 降级: 东财 clist (push2 在美国IP间歇断, 仅作最后网络兜底) ──
+    if not rows:
+        try:
+            diff = _em_clist('f12,f14,f2,f3,f62,f184,f100,f164,f166,f163,f169',
+                             'm:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23', pz=4000, fid='f62', po='1')
+            rows = [r for r in (_parse_em_stock_row(it) for it in diff) if r and not _is_junk_name(r.get('name'))]
+            if rows:
+                source = 'eastmoney'
+                print(f'  [MarketReview] 东财clist兜底: {len(rows)}只')
+        except Exception as e:
+            print(f'  [MarketReview] 东财 个股排名失败: {e}')
 
     if not rows:
         print('  [MarketReview] 个股排名无数据')
@@ -2288,8 +2485,8 @@ def fetch_stock_rank():
                         key=lambda x: x['main_net_inflow_yi'], reverse=True)[:30]
     top_gainers = sorted(rows, key=lambda x: (x.get('change_pct') if x.get('change_pct') is not None else -999), reverse=True)[:30]
     top_losers = sorted(rows, key=lambda x: (x.get('change_pct') if x.get('change_pct') is not None else 999))[:30]
-    print(f'[MarketReview] 个股排名: 共{len(rows)}只, 净流入TOP{len(top_inflow)}, 涨TOP{len(top_gainers)}, 跌TOP{len(top_losers)}')
-    return {'top_inflow': top_inflow, 'top_gainers': top_gainers, 'top_losers': top_losers, 'count': len(rows)}
+    print(f'[MarketReview] 个股排名: 共{len(rows)}只({source}), 净流入TOP{len(top_inflow)}, 涨TOP{len(top_gainers)}, 跌TOP{len(top_losers)}')
+    return {'top_inflow': top_inflow, 'top_gainers': top_gainers, 'top_losers': top_losers, 'count': len(rows), 'source': source}
 
 
 # ═══════════════════════════════════════════════════
@@ -2304,10 +2501,35 @@ def _ak_cell(row, df, *keywords):
             return row[col]
     return None
 
+
+def _norm_date(s):
+    """日期归一化: '2026-08-20' / '20260820' / '2026-08-20 00:00:00' → '2026-08-20'; 无效返回 None"""
+    if not s:
+        return None
+    t = str(s).strip()[:10]
+    if len(t) == 8 and t.isdigit():
+        return f'{t[:4]}-{t[4:6]}-{t[6:8]}'
+    if len(t) == 10 and t[4] in '-/':
+        return f'{t[:4]}-{t[5:7]}-{t[8:10]}'
+    return None
+
+
+def _recent_days(rows, days=7):
+    """只保留近 days 天记录; 日期缺失/解析失败/超期 丢弃 (过滤旧闻垃圾)"""
+    cutoff = (datetime.now() - timedelta(days=days)).strftime('%Y-%m-%d')
+    out = []
+    for r in rows:
+        d = _norm_date(r.get('date'))
+        if not d or d < cutoff:
+            continue
+        r['date'] = d
+        out.append(r)
+    return out
+
 def fetch_market_events():
-    """事件驱动: 聚合当日重大公告/财报预告/停复牌/解禁 (akshare 主源, 单类隔离降级)"""
+    """事件驱动: 聚合近期重大公告/财报预告/停复牌/解禁 (akshare 主源, 单类隔离降级)
+    日期过滤: 只保留近 7 天记录 (丢弃旧闻垃圾); 解禁遍历近 7 天逐日查询"""
     print('[MarketReview] 采集事件驱动(公告/财报/停复牌/解禁)...')
-    today_str = datetime.now().strftime('%Y%m%d')
     result = {'notices': [], 'earnings': [], 'suspension': [], 'unlocks': [],
               'source': 'akshare', 'has_data': False}
 
@@ -2327,7 +2549,7 @@ def fetch_market_events():
                             'code': str(code), 'name': str(name or ''),
                             'title': str(title or ''), 'date': str(date or '')[:10],
                         })
-                result['notices'] = result['notices'][:15]
+                result['notices'] = _recent_days(result['notices'])[:15]
     except Exception as e:
         print(f'  [MarketReview] 重大事项公告失败: {e}')
 
@@ -2347,7 +2569,7 @@ def fetch_market_events():
                             'code': str(code), 'name': str(name or ''),
                             'type': str(typ or ''), 'date': str(date or '')[:10],
                         })
-                result['earnings'] = result['earnings'][:15]
+                result['earnings'] = _recent_days(result['earnings'])[:15]
     except Exception as e:
         print(f'  [MarketReview] 财报预告失败: {e}')
 
@@ -2367,19 +2589,24 @@ def fetch_market_events():
                             'code': str(code), 'name': str(name or ''),
                             'type': str(typ or ''), 'date': str(date or '')[:10],
                         })
-                result['suspension'] = result['suspension'][:15]
+                result['suspension'] = _recent_days(result['suspension'])[:15]
     except Exception as e:
         print(f'  [MarketReview] 停复牌失败: {e}')
 
-    # ── 解禁 ──
+    # ── 解禁 (遍历近 7 天逐日查询合并) ──
     try:
         func = getattr(ak, 'stock_restricted_release_detail_em', None)
         if func:
-            df = call_with_timeout(func, timeout=15, date=today_str)
-            if df is not None and len(df) > 0:
+            for off in range(7):
+                d_str = (datetime.now() - timedelta(days=off)).strftime('%Y%m%d')
+                df = call_with_timeout(func, timeout=15, start_date=d_str, end_date=d_str)
+                if df is None or len(df) == 0:
+                    continue
                 for _, row in df.iterrows():
                     code = _ak_cell(row, df, '代码')
                     name = _ak_cell(row, df, '名称', '简称')
+                    if not code or _is_junk_name(name):
+                        continue
                     amt = _ak_cell(row, df, '解禁数量', '解禁市值', '解禁股数')
                     date = _ak_cell(row, df, '解禁日期', '上市日期', '日期')
                     item = {'code': str(code), 'name': str(name or ''), 'date': str(date or '')[:10]}
@@ -2388,9 +2615,8 @@ def fetch_market_events():
                             item['amount_yi'] = round(float(amt) / 1e8, 2) if float(amt) > 1e8 else round(float(amt), 2)
                     except (ValueError, TypeError):
                         pass
-                    if code:
-                        result['unlocks'].append(item)
-                result['unlocks'] = result['unlocks'][:15]
+                    result['unlocks'].append(item)
+            result['unlocks'] = _recent_days(result['unlocks'])[:15]
     except Exception as e:
         print(f'  [MarketReview] 解禁失败: {e}')
 
@@ -2479,6 +2705,39 @@ def _fallback_active_pool():
     return []
 
 
+def _tx_fqkline(code, days=40):
+    """腾讯日K第三源: web.ifzq.gtimg.cn/appstock/app/fqkline/get (US IP 稳定)
+    返回 pandas.DataFrame(日期/收盘/开盘/最高/最低/成交量) 或 None
+    行序: 升序(已实测: 首行最旧末行最新); 行格式 [date, open, close, high, low, volume]"""
+    try:
+        prefix = 'sh' if code.startswith('6') else ('sz' if code.startswith(('0', '3')) else 'bj')
+        url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get'
+        r = requests.get(url, params={'param': f'{prefix}{code},day,,,{days},qfq'}, headers=TX_HEADERS, timeout=(4, 10))
+        d = r.json()
+        if d.get('code') not in (0, None):
+            return None
+        data = (d.get('data') or {}).get(f'{prefix}{code}') or {}
+        rows = data.get('qfqday') or data.get('day') or []
+        if not rows:
+            return None
+        out = []
+        for row in rows:
+            if not isinstance(row, list) or len(row) < 6:
+                continue
+            try:
+                out.append([str(row[0]), float(row[2]), float(row[1]), float(row[3]), float(row[4]), float(row[5])])
+            except (ValueError, TypeError):
+                continue
+        if not out:
+            return None
+        df = pd.DataFrame(out, columns=['日期', '收盘', '开盘', '最高', '最低', '成交量'])
+        print(f'  [MarketReview] 腾讯K线兜底成功 {code} ({len(df)}行, 升序)')
+        return df
+    except Exception as e:
+        print(f'  [MarketReview] 腾讯K线 {code} 失败: {e}')
+        return None
+
+
 def fetch_stock_technicals(top_inflow):
     """技术指标: 对主力净流入 TOP20 算 MACD(12/26/9)+近20日高低点+筹码分布"""
     print('[MarketReview] 采集技术指标(高低点/MACD/筹码)...')
@@ -2510,9 +2769,18 @@ def fetch_stock_technicals(top_inflow):
                     print(f'  [MarketReview] 新浪K线兜底成功 {code}')
             except Exception as e:
                 print(f'  [MarketReview] 新浪K线 {code} 失败: {e}')
+        # 第三源: 腾讯 fqkline (东财/新浪均失败时兜底, US IP 稳定)
+        if df is None or len(df) == 0:
+            df = _tx_fqkline(code, days=40)
         try:
             if df is not None and len(df) > 0:
-                close = df['收盘'] if '收盘' in df.columns else df.iloc[:, 0]
+                # 列名兼容: 东财/腾讯=中文(收盘), 新浪 stock_zh_a_daily=英文(close), 均缺失时取首列
+                if '收盘' in df.columns:
+                    close = df['收盘']
+                elif 'close' in df.columns:
+                    close = df['close']
+                else:
+                    close = df.iloc[:, 0]
                 closes = [float(x) for x in close.tolist()]
                 last = closes[-1]
                 hi20 = max(closes[-20:])
@@ -2531,6 +2799,9 @@ def fetch_stock_technicals(top_inflow):
                     item['close_series'] = [round(float(x), 2) for x in closes[-30:]]
                     if '日期' in df.columns:
                         dts = df['日期'].astype(str).tolist()[-30:]
+                        item['date_series'] = [d[5:] if len(d) >= 10 else d for d in dts]
+                    elif 'date' in df.columns:
+                        dts = df['date'].astype(str).tolist()[-30:]
                         item['date_series'] = [d[5:] if len(d) >= 10 else d for d in dts]
                     else:
                         item['date_series'] = list(range(1, len(item['close_series']) + 1))
@@ -2563,6 +2834,301 @@ def fetch_stock_technicals(top_inflow):
     ok = [x for x in out if x.get('macd_state') and x.get('macd_state') != 'NA']
     print(f'[MarketReview] 技术指标: {len(out)}只, 有效MACD {len(ok)}只')
     return out
+
+
+# ═══════════════════════════════════════════════════
+# 每日对比: 上一份复盘加载 + 近5日序列 + vs_prev 构建
+# (任务0: 每日复盘突出"当天新数据", 与之前对比; 数据源自仓库内历史 review JSON, 零新增网络依赖)
+# ═══════════════════════════════════════════════════
+
+def _data_dir():
+    """复盘数据目录 (本文件在 backend/collectors_py/ 下, data 在项目根)"""
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'data')
+
+
+def _load_prev_review():
+    """加载日期 < today 的最近一份复盘 JSON (用于"较昨日"对比)
+    缺失时兜底 latest_review.json (date != today); 失败返回 None (渲染层降级为"无历史对比")"""
+    try:
+        today = datetime.now().strftime('%Y-%m-%d')
+        ddir = _data_dir()
+        best_date, best_path = None, None
+        if os.path.isdir(ddir):
+            for fn in os.listdir(ddir):
+                m = re.match(r'review_(\d{4}-\d{2}-\d{2})\.json$', fn)
+                if not m:
+                    continue
+                d = m.group(1)
+                if d >= today:
+                    continue
+                if best_date is None or d > best_date:
+                    best_date, best_path = d, os.path.join(ddir, fn)
+        if best_path:
+            with open(best_path, encoding='utf-8') as f:
+                return json.load(f)
+        lr = os.path.join(ddir, 'latest_review.json')
+        if os.path.exists(lr):
+            with open(lr, encoding='utf-8') as f:
+                data = json.load(f)
+            return data if data.get('date') != today else None
+    except Exception as e:
+        print(f'  [MarketReview] 加载上一份复盘失败: {e}')
+    return None
+
+
+def _load_recent_reviews(days=5):
+    """加载最近 days 份复盘 (日期 < today, 升序), 供近5日迷你趋势"""
+    try:
+        today = datetime.now().strftime('%Y-%m-%d')
+        ddir = _data_dir()
+        items = {}
+        if os.path.isdir(ddir):
+            for fn in os.listdir(ddir):
+                m = re.match(r'review_(\d{4}-\d{2}-\d{2})\.json$', fn)
+                if not m or m.group(1) >= today:
+                    continue
+                try:
+                    with open(os.path.join(ddir, fn), encoding='utf-8') as f:
+                        items[m.group(1)] = json.load(f)
+                except Exception:
+                    pass
+        return [items[d] for d in sorted(items.keys())[-days:]]
+    except Exception:
+        return []
+
+
+def _fetch_turnover_total_sina():
+    """两市成交额(元): 上证指数(sh000001) + 深证综指(sz399106) 成交额求和
+    复用 _fetch_index_sina 同款 hq.sinajs.cn 端点 (字段[9]=成交额), 1次请求, US IP 稳定"""
+    try:
+        url = 'https://hq.sinajs.cn/list=sh000001,sz399106'
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Referer': 'https://finance.sina.com.cn/',
+        }
+        resp = requests.get(url, headers=headers, timeout=(3, 8))
+        resp.encoding = 'gbk'
+        total = 0.0
+        for line in resp.text.strip().split('\n'):
+            m = re.search(r'var hq_str_\w+="(.+)"', line)
+            if not m:
+                continue
+            parts = m.group(1).split(',')
+            if len(parts) < 10:
+                continue
+            try:
+                total += float(parts[9] or 0)
+            except (ValueError, TypeError):
+                pass
+        if total > 0:
+            print(f'[MarketReview] 两市成交额(新浪): {total / 1e8:.0f}亿')
+            return total
+    except Exception as e:
+        print(f'  [MarketReview] 两市成交额(新浪)失败: {e}')
+    return None
+
+
+def _nb_value(nb):
+    """北向统一口径: 净买额非0用净买额, 否则(港交所披露调整后)用成交总额"""
+    if not nb:
+        return None
+    try:
+        net = float(nb.get('net_buy_yi') or 0)
+        if net != 0:
+            return round(net, 2)
+        amt = nb.get('amount_yi')
+        return round(float(amt), 2) if amt else None
+    except (ValueError, TypeError):
+        return None
+
+
+def _limit_up_value(rv):
+    """涨停家数统一口径: 情绪池优先(更准), 缺则广度"""
+    sp = rv.get('sentiment_pools') or {}
+    v = sp.get('limit_up_count')
+    if v:
+        return int(v)
+    bd = rv.get('market_breadth') or {}
+    v = bd.get('limit_up_count')
+    return int(v) if v else None
+
+
+def _idx_map(rv):
+    return {str(x.get('code')): x for x in (rv.get('indices') or []) if x.get('code')}
+
+
+def _pv_codes(pv):
+    """量价异动各分类 code 集合"""
+    out = set()
+    items = pv.values() if isinstance(pv, dict) else (pv or [])
+    for lst in items:
+        if isinstance(lst, list):
+            for x in lst:
+                if isinstance(x, dict) and x.get('code'):
+                    out.add(str(x['code']))
+    return out
+
+
+def _pv_count(pv):
+    """量价异动总数"""
+    if isinstance(pv, dict):
+        return sum(len(v) for v in pv.values() if isinstance(v, list))
+    return len(pv or [])
+
+
+def build_vs_prev(cur):
+    """构建"较昨日/近5日"对比数据
+    无历史数据时返回 None, 渲染层显示"无历史对比"而非报错; 各板块自身 latest_date 为基准"""
+    prev = _load_prev_review()
+    if not prev:
+        return None
+    vs = {'date': prev.get('date')}
+
+    # ── 两市成交额 (放量/缩量%) + 近5日序列 ──
+    cur_turn = cur.get('turnover_total_yi')
+    prev_turn = prev.get('turnover_total_yi')
+    if cur_turn and prev_turn:
+        vs['turnover'] = {
+            'cur_yi': round(cur_turn, 0), 'prev_yi': round(prev_turn, 0),
+            'change_pct': round((cur_turn - prev_turn) / prev_turn * 100, 2),
+        }
+    recents = _load_recent_reviews(days=5)
+    recents.append(cur)  # 今日置末 → 序列升序
+    turn_series = {'values': [], 'dates': []}
+    for rv in recents:
+        v = rv.get('turnover_total_yi')
+        if v:
+            turn_series['values'].append(round(float(v), 0))
+            turn_series['dates'].append((rv.get('date') or '')[-5:])
+    vs['turnover_series'] = turn_series
+
+    # ── 指数: 昨涨跌幅 + 涨跌幅差 + 近5日收盘序列 ──
+    prev_idx = _idx_map(prev)
+    vs['indices'] = []
+    for c in (cur.get('indices') or []):
+        code = str(c.get('code'))
+        p = prev_idx.get(code) or {}
+        item = {
+            'name': c.get('name'), 'code': code,
+            'close': c.get('close'), 'change_pct': c.get('change_pct'),
+            'prev_close': p.get('close'), 'prev_change_pct': p.get('change_pct'),
+        }
+        if item['change_pct'] is not None and item['prev_change_pct'] is not None:
+            item['chg_diff'] = round(item['change_pct'] - item['prev_change_pct'], 2)
+        vs['indices'].append(item)
+    series = {}
+    for rv in recents:
+        d = rv.get('date')
+        for x in (rv.get('indices') or []):
+            code = str(x.get('code'))
+            if not code:
+                continue
+            s = series.setdefault(code, {'name': x.get('name'), 'closes': [], 'dates': []})
+            if x.get('close') is not None:
+                s['closes'].append(x['close'])
+                s['dates'].append((d or '')[-5:])
+    vs['indices_series'] = series
+
+    # ── 广度: 昨涨跌家数/昨涨停 → 差值 ──
+    pb = prev.get('market_breadth') or {}
+    cb = cur.get('market_breadth') or {}
+    vs['breadth'] = {
+        'prev_up': pb.get('advance_count'),
+        'prev_down': pb.get('decline_count'),
+        'up_diff': (cb.get('advance_count') - pb['advance_count']) if (pb.get('advance_count') is not None and cb.get('advance_count') is not None) else None,
+        'down_diff': (cb.get('decline_count') - pb['decline_count']) if (pb.get('decline_count') is not None and cb.get('decline_count') is not None) else None,
+    }
+
+    # ── 北向: 昨值 + 近5日序列 ──
+    pnb = prev.get('northbound') or {}
+    cnb = cur.get('northbound') or {}
+    prev_nb = _nb_value(pnb)
+    cur_nb = _nb_value(cnb)
+    vs['northbound'] = {
+        'prev': prev_nb, 'cur': cur_nb,
+        'diff': round(cur_nb - prev_nb, 2) if (cur_nb is not None and prev_nb is not None) else None,
+        'metric': cnb.get('metric') or pnb.get('metric'),
+    }
+    nb_series = {'values': [], 'dates': []}
+    for rv in recents:
+        v = _nb_value(rv.get('northbound') or {})
+        if v is not None:
+            nb_series['values'].append(v)
+            nb_series['dates'].append((rv.get('date') or '')[-5:])
+    vs['northbound_series'] = nb_series
+
+    # ── 涨停/炸板: 昨值对照 + 近5日涨停序列 ──
+    ps = prev.get('sentiment_pools') or {}
+    cs = cur.get('sentiment_pools') or {}
+    prev_lu = ps.get('limit_up_count') or pb.get('limit_up_count')
+    cur_lu = _limit_up_value(cur)
+    prev_zb = ps.get('zhaban_count')
+    cur_zb = cs.get('zhaban_count')
+    vs['sentiment'] = {
+        'prev_limit_up': prev_lu, 'cur_limit_up': cur_lu,
+        'limit_up_diff': (cur_lu - prev_lu) if (cur_lu is not None and prev_lu is not None) else None,
+        'prev_zhaban': prev_zb, 'cur_zhaban': cur_zb,
+        'zhaban_diff': (cur_zb - prev_zb) if (cur_zb is not None and prev_zb is not None) else None,
+    }
+    lu_series = {'values': [], 'dates': []}
+    for rv in recents:
+        v = _limit_up_value(rv)
+        if v is not None:
+            lu_series['values'].append(v)
+            lu_series['dates'].append((rv.get('date') or '')[-5:])
+    vs['limit_up_series'] = lu_series
+
+    # ── 行业资金流: 昨TOP3 → 轮动/延续 ──
+    pt = [x.get('name') for x in (prev.get('sector_flow') or [])[:3] if x.get('name')]
+    ct = [x.get('name') for x in (cur.get('sector_flow') or [])[:3] if x.get('name')]
+    vs['sector'] = {
+        'prev_top3': pt, 'cur_top3': ct,
+        'new_in_top3': [n for n in ct if n not in pt],
+        'sustained': [n for n in ct if n in pt],
+    }
+
+    # ── 个股排名: 昨TOP code → 连续净流入标记 ──
+    pr = prev.get('stock_rank') or {}
+    cr = cur.get('stock_rank') or {}
+    prev_codes = [str(x.get('code')) for x in (pr.get('top_inflow') or []) if x.get('code')]
+    cur_codes = [str(x.get('code')) for x in (cr.get('top_inflow') or []) if x.get('code')]
+    sustained_codes = [c for c in cur_codes if c in prev_codes]
+    cur_name_map = {str(x.get('code')): x.get('name') for x in (cr.get('top_inflow') or [])}
+    vs['stock_rank'] = {
+        'prev_top_codes': prev_codes[:20], 'cur_top_codes': cur_codes[:20],
+        'sustained_codes': sustained_codes[:10],
+        'sustained_names': [cur_name_map.get(c, c) for c in sustained_codes[:10]],
+    }
+
+    # ── 量价异动: 昨数量 + 新进个数 ──
+    prev_pv = prev.get('price_volume_anomalies') or {}
+    cur_pv = cur.get('price_volume_anomalies') or {}
+    prev_pv_codes = _pv_codes(prev_pv)
+    cur_pv_codes = _pv_codes(cur_pv)
+    vs['pv_anomalies'] = {
+        'prev_count': _pv_count(prev_pv), 'cur_count': _pv_count(cur_pv),
+        'new_count': len(cur_pv_codes - prev_pv_codes),
+    }
+
+    # ── 龙虎榜: 昨数量 + 昨/今TOP名单 ──
+    pl = prev.get('lhb_capital') or {}
+    cl = cur.get('lhb_capital') or {}
+    prev_lhb = pl.get('lhb_institution') or []
+    cur_lhb = cl.get('lhb_institution') or []
+    vs['lhb'] = {
+        'prev_count': len(prev_lhb), 'cur_count': len(cur_lhb),
+        'prev_top_names': [x.get('name') for x in prev_lhb[:5] if x.get('name')],
+        'cur_top_names': [x.get('name') for x in cur_lhb[:5] if x.get('name')],
+    }
+
+    # ── 赛道拥挤度: 昨TOP3 vs 今TOP3 (字段兼容: 采集层用 'track', 兼容 'name') ──
+    def _track_name(x):
+        return x.get('name') or x.get('track') or ''
+    ptc = [_track_name(x) for x in (prev.get('track_crowding') or [])[:3] if _track_name(x)]
+    ctc = [_track_name(x) for x in (cur.get('track_crowding') or [])[:3] if _track_name(x)]
+    vs['track'] = {'prev_top3': ptc, 'cur_top3': ctc}
+
+    return vs
 
 
 # ═══════════════════════════════════════════════════
@@ -2633,6 +3199,20 @@ def run():
         'anomalies': anomalies,
         'tomorrow_focus': tomorrow_focus,
     }
+
+    # 6. 每日对比 (任务0): 两市成交额 + 较昨日/近5日对比数据 (无历史时 vs_prev=None, 渲染层降级)
+    try:
+        turnover_total = _fetch_turnover_total_sina()
+        result['turnover_total_yi'] = round(turnover_total / 1e8, 2) if turnover_total else None
+        result['vs_prev'] = build_vs_prev(result)
+        if result.get('vs_prev'):
+            print(f'[MarketReview] 每日对比: 基准 {result["vs_prev"].get("date")}, 成交额 {result.get("turnover_total_yi")}亿')
+        else:
+            print('[MarketReview] 每日对比: 无历史复盘数据, vs_prev 降级为 None')
+    except Exception as e:
+        print(f'  [MarketReview] 每日对比构建失败: {e}')
+        result['turnover_total_yi'] = None
+        result['vs_prev'] = None
 
     print(f'[MarketReview] ═══ 复盘完成: {len(index_data)}指数, {len(anomalies)}异动, 情绪={signals.get("sentiment")} ═══')
     return result

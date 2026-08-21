@@ -401,6 +401,132 @@ def _stock_line_img_tag(item):
             f'style="width:100%;display:block;border:1px solid #e2e8f0;border-radius:6px"/>')
 
 
+# ── 每日对比渲染: 近5日迷你趋势条 + 今日变化点 (任务0, weasyprint/邮件客户端兼容: 纯CSS无JS/SVG) ──
+def _mini_trend(values, dates=None, fmt='{:.0f}', h_max=26, w=16):
+    """纯CSS近5日迷你趋势条: 竖条高度按序列min-max归一化
+    颜色按A股习惯: 红=较前一日上升, 绿=下降, 灰=持平/首日"""
+    if not values:
+        return ''
+    try:
+        vals = [float(v) for v in values if v is not None]
+    except (ValueError, TypeError):
+        return ''
+    if not vals:
+        return ''
+    vmin, vmax = min(vals), max(vals)
+    span = (vmax - vmin) or 1.0
+    bars = []
+    prev = None
+    for i, v in enumerate(vals):
+        h = (6 + int((v - vmin) / span * (h_max - 6))) if span else h_max
+        if prev is None:
+            color = '#94a3b8'
+        else:
+            color = '#dc2626' if v > prev else '#16a34a' if v < prev else '#94a3b8'
+        try:
+            label = fmt.format(v)
+        except (ValueError, TypeError):
+            label = str(v)
+        date = (dates[i] or '')[-5:] if dates and i < len(dates) and dates[i] else ''
+        bars.append(
+            '<div style="display:flex;flex-direction:column;align-items:center;gap:1px">'
+            f'<span style="font-size:8.5px;color:#64748b;line-height:1;font-weight:500">{label}</span>'
+            f'<div style="width:{w}px;height:{h}px;background:{color};border-radius:2px;opacity:0.85"></div>'
+            f'<span style="font-size:8px;color:#cbd5e1;line-height:1">{date}</span></div>'
+        )
+    return '<div style="display:flex;align-items:flex-end;gap:3px">' + ''.join(bars) + '</div>'
+
+
+def _vs_badge(diff, suffix='', unit='', up_good=True):
+    """「较昨日」徽标: diff>0 红, <0 绿 (A股习惯); 无 diff 返回空"""
+    if diff is None:
+        return ''
+    sign = '+' if diff > 0 else ''
+    color = '#dc2626' if diff > 0 else '#16a34a' if diff < 0 else '#94a3b8'
+    return (f'<span style="display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;'
+            f'font-size:10px;font-weight:500;color:{color};background:{color}1a">'
+            f'较昨日 {sign}{diff:.2f}{unit}{suffix}</span>')
+
+
+def _build_change_points(review_data, vs_prev):
+    """构建「今日变化点」要点列表 (邮件文本摘要 + HTML summary 复用)"""
+    pts = []
+    if not vs_prev:
+        return pts
+    # 指数: 由跌转涨/由涨转跌/涨跌幅扩大或收窄
+    for it in vs_prev.get('indices', [])[:5]:
+        d = it.get('chg_diff')
+        if d is None:
+            continue
+        nm = it.get('name', '')
+        cur_p, prev_p = it.get('change_pct'), it.get('prev_change_pct')
+        if prev_p is not None and cur_p is not None:
+            if prev_p <= 0 < cur_p:
+                phrase = '由跌转涨'
+            elif prev_p >= 0 > cur_p:
+                phrase = '由涨转跌'
+            elif abs(d) >= abs(prev_p):
+                phrase = '涨跌幅扩大'
+            else:
+                phrase = '涨跌幅收窄'
+            pts.append(f'{nm}{phrase}（今{cur_p:+.2f}% vs 昨{prev_p:+.2f}%）')
+    # 成交额
+    t = vs_prev.get('turnover')
+    if t:
+        cp = t.get('change_pct')
+        if cp is not None:
+            pts.append(f'两市成交额{t["cur_yi"]:.0f}亿，较昨日{"放量" if cp > 0 else "缩量"}{abs(cp):.1f}%（昨{t["prev_yi"]:.0f}亿）')
+    # 北向
+    nb = vs_prev.get('northbound')
+    if nb and nb.get('prev') is not None and nb.get('cur') is not None:
+        diff = nb.get('diff')
+        if diff is not None:
+            if abs(diff) < 0.005:
+                pts.append(f'北向成交额{nb["cur"]:.0f}亿，较昨日持平')
+            elif nb.get('metric') == 'deal_amount':
+                pts.append(f'北向成交额{nb["cur"]:.0f}亿，较昨日{"增加" if diff > 0 else "减少"}{abs(diff):.0f}亿')
+            else:
+                pts.append(f'北向净买{nb["cur"]:+.2f}亿，较昨日{diff:+.2f}亿')
+    # 涨停/炸板
+    st = vs_prev.get('sentiment')
+    if st and st.get('limit_up_diff') is not None:
+        d = st['limit_up_diff']
+        pts.append(f'涨停{st.get("cur_limit_up", "")}家，较昨日{"增加" if d > 0 else "减少"}{abs(d)}家')
+    if st and st.get('zhaban_diff') is not None:
+        d = st['zhaban_diff']
+        pts.append(f'炸板{st.get("cur_zhaban", "")}家，较昨日{"增加" if d > 0 else "减少"}{abs(d)}家')
+    # 行业轮动
+    sec = vs_prev.get('sector')
+    if sec:
+        if sec.get('new_in_top3'):
+            pts.append(f'行业TOP3新进: {"、".join(sec["new_in_top3"])}')
+        if sec.get('sustained'):
+            pts.append(f'行业资金延续: {"、".join(sec["sustained"])}')
+    # 个股连续净流入
+    sr = vs_prev.get('stock_rank')
+    if sr and sr.get('sustained_names'):
+        pts.append(f'主力连续净流入: {"、".join(sr["sustained_names"][:5])}')
+    # 量价异动
+    pv = vs_prev.get('pv_anomalies')
+    if pv and pv.get('cur_count') is not None:
+        new_n = pv.get('new_count') or 0
+        if new_n > 0:
+            pts.append(f'量价异动{pv["cur_count"]}只，较昨日新增{new_n}只')
+        else:
+            pts.append(f'量价异动{pv["cur_count"]}只，较昨日无新进')
+    # 龙虎榜
+    lhb = vs_prev.get('lhb')
+    if lhb and lhb.get('cur_count') is not None:
+        d = lhb['cur_count'] - (lhb.get('prev_count') or 0)
+        if d > 0:
+            pts.append(f'龙虎榜机构上榜{lhb["cur_count"]}只，较昨日增加{d}只')
+        elif d < 0:
+            pts.append(f'龙虎榜机构上榜{lhb["cur_count"]}只，较昨日减少{abs(d)}只')
+        else:
+            pts.append(f'龙虎榜机构上榜{lhb["cur_count"]}只，较昨日持平')
+    return pts
+
+
 def generate_review_report(review_data):
     """生成市场复盘与异动简报 HTML邮件"""
     today = review_data.get('date', '')
@@ -432,9 +558,15 @@ def generate_review_report(review_data):
     tech_from_rank = bool(stock_rank and stock_rank.get('top_inflow'))
     tech_subtitle = '主力净流入 TOP20' if tech_from_rank else '市场活跃个股（兜底蓝筹池）'
 
+    # ── 每日对比 (任务0): 较昨日 + 近5日趋势 ──
+    vs_prev = review_data.get('vs_prev') or {}
+    turnover_total_yi = review_data.get('turnover_total_yi')
+    change_points = _build_change_points(review_data, vs_prev)
+
     # ── 1. 市场概况 ──
     index_cards = ''
     total_amount_yi = 0
+    vs_idx_map = {str(it.get('code')): it for it in (vs_prev.get('indices') or [])}
     for idx in indices:
         pct = idx.get('change_pct', 0)
         color = '#dc2626' if pct > 0 else '#16a34a' if pct < 0 else '#6b7280'
@@ -442,11 +574,13 @@ def generate_review_report(review_data):
         close = idx.get('close', 0)
         amount = idx.get('amount', 0)
         total_amount_yi += amount / 1e8 if amount else 0
+        vdiff = vs_idx_map.get(str(idx.get('code')), {}).get('chg_diff')
+        vbadge = _vs_badge(vdiff, suffix='pct')
         index_cards += f'''
         <div style="flex:1;text-align:center;padding:10px;background:#fff;border-radius:8px;border:1px solid #e5e7eb">
             <div style="font-size:11px;color:#94a3b8;margin-bottom:2px">{idx.get('name','')}</div>
             <div style="font-size:16px;font-weight:600;color:#1e293b">{close:.2f}</div>
-            <div style="font-size:13px;font-weight:500;color:{color}">{sign}{pct:.2f}%</div>
+            <div style="font-size:13px;font-weight:500;color:{color}">{sign}{pct:.2f}%{vbadge}</div>
         </div>'''
 
     breadth_html = ''
@@ -456,12 +590,22 @@ def generate_review_report(review_data):
         flat = breadth.get('flat_count', 0)
         limit_up = breadth.get('limit_up_count', 0)
         limit_down = breadth.get('limit_down_count', 0)
+        bv = vs_prev.get('breadth') or {}
+        up_diff, down_diff = bv.get('up_diff'), bv.get('down_diff')
+
+        def _diff_tag(d):
+            if d is None:
+                return ''
+            c = '#dc2626' if d > 0 else '#16a34a' if d < 0 else '#6b7280'
+            s = '+' if d > 0 else ''
+            return f'<span style="font-size:10px;font-weight:600;color:{c}"> {s}{d}</span>'
+
         breadth_html = f'''
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
             <span style="padding:3px 10px;border-radius:4px;font-size:12px;color:#dc2626;background:#fee2e2">涨停 {limit_up}</span>
             <span style="padding:3px 10px;border-radius:4px;font-size:12px;color:#16a34a;background:#dcfce7">跌停 {limit_down}</span>
-            <span style="padding:3px 10px;border-radius:4px;font-size:12px;color:#dc2626;background:#fef2f2">上涨 {advance}</span>
-            <span style="padding:3px 10px;border-radius:4px;font-size:12px;color:#16a34a;background:#f0fdf4">下跌 {decline}</span>
+            <span style="padding:3px 10px;border-radius:4px;font-size:12px;color:#dc2626;background:#fef2f2">上涨 {advance}{_diff_tag(up_diff)}</span>
+            <span style="padding:3px 10px;border-radius:4px;font-size:12px;color:#16a34a;background:#f0fdf4">下跌 {decline}{_diff_tag(down_diff)}</span>
             <span style="padding:3px 10px;border-radius:4px;font-size:12px;color:#6b7280;background:#f3f4f6">平盘 {flat}</span>
         </div>'''
 
@@ -486,13 +630,51 @@ def generate_review_report(review_data):
     else:
         intl_block = ''
 
+    # ── 关键指标近5日迷你趋势 (指数/北向/涨停数/成交额) ──
+    key_trends = ''
+    series_blocks = []
+    idx_series = vs_prev.get('indices_series') or {}
+    sh = idx_series.get('000001')
+    if sh and len(sh.get('closes') or []) >= 2:
+        series_blocks.append((f'<div style="font-size:11px;color:#94a3b8">上证指数</div>', _mini_trend(sh['closes'], sh['dates'], fmt='{:.0f}')))
+    nb_s = vs_prev.get('northbound_series') or {}
+    if len(nb_s.get('values') or []) >= 2:
+        nb_label = '北向成交' if (vs_prev.get('northbound') or {}).get('metric') == 'deal_amount' else '北向净买'
+        series_blocks.append((f'<div style="font-size:11px;color:#94a3b8">{nb_label}</div>', _mini_trend(nb_s['values'], nb_s['dates'], fmt='{:.0f}亿')))
+    lu_s = vs_prev.get('limit_up_series') or {}
+    if len(lu_s.get('values') or []) >= 2:
+        series_blocks.append(('<div style="font-size:11px;color:#94a3b8">涨停数</div>', _mini_trend(lu_s['values'], lu_s['dates'], fmt='{:.0f}家')))
+    to_s = vs_prev.get('turnover_series') or {}
+    if len(to_s.get('values') or []) >= 2:
+        series_blocks.append(('<div style="font-size:11px;color:#94a3b8">两市成交</div>', _mini_trend(to_s['values'], to_s['dates'], fmt='{:.0f}亿')))
+    if series_blocks:
+        blocks_html = ''.join(f'<div style="flex:1;min-width:104px">{lbl}<div style="margin-top:4px">{tr}</div></div>' for lbl, tr in series_blocks)
+        key_trends = f'''
+        <div style="margin-top:10px;padding:8px 10px;background:#fff;border-radius:8px;border:1px solid #e5e7eb">
+            <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">关键指标近5日</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">{blocks_html}</div>
+        </div>'''
+
+    turnover_line = ''
+    if turnover_total_yi:
+        tline = f'两市合计成交约 <strong style="color:#1e293b">{turnover_total_yi:.0f}亿元</strong>'
+        tv = vs_prev.get('turnover')
+        if tv and tv.get('change_pct') is not None:
+            cp = tv['change_pct']
+            ccol = '#dc2626' if cp > 0 else '#16a34a'
+            tline += f' <span style="color:{ccol}">（较昨日{"放量" if cp > 0 else "缩量"}{abs(cp):.1f}%）</span>'
+        turnover_line = f'<div style="margin-top:8px;font-size:12px;color:#64748b">{tline}</div>'
+    elif total_amount_yi > 0:
+        turnover_line = f'<div style="margin-top:8px;font-size:12px;color:#64748b">两市合计成交约 <strong style="color:#1e293b">{total_amount_yi:.0f}亿元</strong></div>'
+
     overview_section = f'''
     <div style="background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e5e7eb">
         <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#1e293b">一、市场概况</h3>
         <div style="display:flex;gap:8px;margin-bottom:8px">{index_cards if index_cards else '<p style="color:#999;font-size:13px">指数数据暂不可用</p>'}</div>
         {breadth_html}
         {intl_block}
-        {f'<div style="margin-top:8px;font-size:12px;color:#64748b">两市合计成交约 <strong style="color:#1e293b">{total_amount_yi:.0f}亿元</strong></div>' if total_amount_yi > 0 else ''}
+        {turnover_line}
+        {key_trends}
     </div>'''
 
     # ── 2. 资金与微观结构 ──
@@ -501,26 +683,30 @@ def generate_review_report(review_data):
     # 北向资金
     if northbound and northbound.get('amount_yi', 0) > 0:
         nb_metric = northbound.get('metric', 'net_buy')
+        nb_vs = vs_prev.get('northbound') or {}
+        nb_diff = nb_vs.get('diff')
         if nb_metric == 'deal_amount':
             # 净买额因港交所披露调整暂停披露, 展示成交总额
             amt = northbound.get('amount_yi', 0)
+            nb_badge = _vs_badge(nb_diff, suffix='亿')
             capital_parts.append(f'''
         <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9">
             <span style="font-size:13px;color:#475569;width:80px">北向成交</span>
-            <span style="font-size:14px;font-weight:600;color:#1e293b">成交额 {amt:.0f}亿</span>
+            <span style="font-size:14px;font-weight:600;color:#1e293b">成交额 {amt:.0f}亿{nb_badge}</span>
             <span style="font-size:11px;color:#94a3b8;margin-left:8px">净买额因港交所披露调整暂停披露</span>
         </div>''')
         else:
             nb = northbound.get('net_buy_yi', 0)
             nb_color = '#dc2626' if nb > 0 else '#16a34a'
             nb_label = '净买入' if nb > 0 else '净卖出'
+            nb_badge = _vs_badge(nb_diff, suffix='亿')
             extreme_badge = ''
             if northbound.get('is_extreme'):
                 extreme_badge = '<span style="padding:2px 6px;border-radius:4px;font-size:10px;color:#fff;background:#f59e0b;margin-left:6px">极端值</span>'
             capital_parts.append(f'''
         <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9">
             <span style="font-size:13px;color:#475569;width:80px">北向资金</span>
-            <span style="font-size:14px;font-weight:600;color:{nb_color}">{nb_label} {abs(nb):.2f}亿</span>{extreme_badge}
+            <span style="font-size:14px;font-weight:600;color:{nb_color}">{nb_label} {abs(nb):.2f}亿{nb_badge}</span>{extreme_badge}
         </div>''')
 
     # 两融
@@ -562,10 +748,20 @@ def generate_review_report(review_data):
                 flow_rows += f'<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:#475569">{s.get("name","")}</span><span style="color:#16a34a;font-weight:500">{outflow:.1f}亿</span></div>'
 
         if flow_rows:
+            sector_vs = vs_prev.get('sector') or {}
+            rot_note = ''
+            if sector_vs.get('new_in_top3') or sector_vs.get('sustained'):
+                bits = []
+                if sector_vs.get('sustained'):
+                    bits.append(f'延续: {"、".join(sector_vs["sustained"])}')
+                if sector_vs.get('new_in_top3'):
+                    bits.append(f'TOP3新进: {"、".join(sector_vs["new_in_top3"])}')
+                rot_note = f'<div style="font-size:10px;color:#94a3b8;margin-top:4px">轮动观察 · {"；".join(bits)}</div>'
             capital_parts.append(f'''
             <div style="margin-top:8px">
                 <div style="font-size:12px;color:#64748b;margin-bottom:4px">行业资金流向TOP5</div>
                 {flow_rows}
+                {rot_note}
             </div>''')
 
     # ── 2.1 宽基 ETF 资金流向 ──
@@ -589,13 +785,14 @@ def generate_review_report(review_data):
     sentiment_block = ''
     if sentiment_pools:
         sp = sentiment_pools
+        sv = vs_prev.get('sentiment') or {}
         sent_items = []
         if sp.get('limit_up_count') is not None:
-            sent_items.append(f'涨停 <strong>{sp["limit_up_count"]}</strong> 家')
+            sent_items.append(f'涨停 <strong>{sp["limit_up_count"]}</strong> 家{_vs_badge(sv.get("limit_up_diff"), suffix="家")}')
         if sp.get('yesterday_zt_count') is not None:
             sent_items.append(f'昨日涨停 <strong>{sp["yesterday_zt_count"]}</strong> 家')
         if sp.get('zhaban_count'):
-            sent_items.append(f'炸板 <strong>{sp["zhaban_count"]}</strong> 家')
+            sent_items.append(f'炸板 <strong>{sp["zhaban_count"]}</strong> 家{_vs_badge(sv.get("zhaban_diff"), suffix="家")}')
         if sp.get('zhaban_rate') is not None:
             sent_items.append(f'炸板率 <strong>{sp["zhaban_rate"]}%</strong>')
         if sent_items:
@@ -607,6 +804,13 @@ def generate_review_report(review_data):
 
     # ── 2.3 赛道拥挤度 ──
     track_block = ''
+    _track_vs_note = ''
+    tv = vs_prev.get('track') or {}
+    if tv.get('cur_top3') or tv.get('prev_top3'):
+        if tv.get('cur_top3'):
+            _track_vs_note = f'<div style="font-size:10px;color:#94a3b8;margin-top:4px">较昨日 TOP3: {"、".join(tv["cur_top3"])}</div>'
+        else:
+            _track_vs_note = f'<div style="font-size:10px;color:#94a3b8;margin-top:4px">昨TOP3: {"、".join(tv["prev_top3"])}（今日数据缺失）</div>'
     if track_crowding:
         rows = ''
         for t in track_crowding[:8]:
@@ -618,6 +822,7 @@ def generate_review_report(review_data):
         <div style="margin-top:10px">
             <div style="font-size:12px;color:#64748b;margin-bottom:4px">热门赛道拥挤度(成交额占比)</div>
             {rows}
+            {_track_vs_note}
         </div>'''
 
     capital_section = f'''
@@ -702,13 +907,25 @@ def generate_review_report(review_data):
                 pva_rows += f'<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:12px"><span style="color:#475569">{a.get("name","")}({a.get("code","")})</span><span style="color:{c}">{a.get("change_pct",0):+.2f}%</span><span style="color:#94a3b8">量比{a.get("vol_ratio",0):.1f}</span></div>'
     else:
         pva_rows = '<p style="color:#999;font-size:13px;padding:8px 0">暂无数据（量价异动采集失败）</p>'
+    pva_vs = vs_prev.get('pv_anomalies') or {}
+    pva_vs_note = ''
+    if pva_vs.get('cur_count') is not None:
+        pva_vs_note = (f'<div style="font-size:11px;color:#94a3b8;margin:0 0 8px">'
+                       f'今日{pva_vs["cur_count"]}只（昨{pva_vs.get("prev_count", 0)}只'
+                       f'，新进{pva_vs.get("new_count", 0)}只）</div>')
     pva_section = f'''
     <div style="background:#eef2ff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #c7d2fe">
         <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#4338ca">五、量价异动</h3>
+        {pva_vs_note}
         {pva_rows}
     </div>'''
 
     # ── 6. 龙虎榜机构异动 ──
+    lhb_vs = vs_prev.get('lhb') or {}
+    lhb_vs_note = ''
+    if lhb_vs.get('cur_count') is not None and lhb_vs.get('prev_count') is not None:
+        lhb_vs_note = (f'<div style="font-size:11px;color:#94a3b8;margin:0 0 8px">'
+                       f'较昨日 {lhb_vs["cur_count"] - lhb_vs["prev_count"]:+d} 只（昨{lhb_vs["prev_count"]}只）</div>')
     lhb_section = ''
     if lhb_capital and lhb_capital.get('lhb_institution'):
         rows = ''
@@ -719,6 +936,7 @@ def generate_review_report(review_data):
         lhb_section = f'''
     <div style="background:#fef2f2;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #fecaca">
         <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;color:#dc2626">六、龙虎榜机构异动</h3>
+        {lhb_vs_note}
         {rows}
     </div>'''
 
@@ -746,9 +964,16 @@ def generate_review_report(review_data):
         inflow_rows = ''.join(_rank_row(r) for r in stock_rank['top_inflow'][:15])
         gain_rows = ''.join(_rank_row(r, False) for r in stock_rank.get('top_gainers', [])[:10])
         loss_rows = ''.join(_rank_row(r, False) for r in stock_rank.get('top_losers', [])[:10])
+        sr_vs = vs_prev.get('stock_rank') or {}
+        sustained_note = ''
+        if sr_vs.get('sustained_names'):
+            sustained_note = (f'<div style="font-size:11px;color:#b45309;margin:6px 0;padding:4px 8px;background:#fffbeb;'
+                              f'border-radius:6px">连续净流入（昨/今均在TOP）: '
+                              f'<strong>{"、".join(sr_vs["sustained_names"][:6])}</strong></div>')
         rank_section = f'''
     <div style="background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e5e7eb">
         <h3 style="font-size:14px;font-weight:600;margin:0 0 8px 0;color:#1e293b">七、个股排名（主力净流入 TOP15）</h3>
+        {sustained_note}
         <table style="width:100%;border-collapse:collapse;margin-bottom:10px"><thead><tr style="background:#eef2ff">{head_flow}</tr></thead><tbody>{inflow_rows}</tbody></table>
         <h3 style="font-size:13px;font-weight:600;margin:8px 0 4px;color:#16a34a">涨幅 TOP10</h3>
         <table style="width:100%;border-collapse:collapse;margin-bottom:8px"><thead><tr style="background:#f0fdf4">{head_simple}</tr></thead><tbody>{gain_rows}</tbody></table>
@@ -822,7 +1047,17 @@ def generate_review_report(review_data):
     </div>'''
 
     # 数据来源
-    source_note = '<div style="font-size:11px;color:#94a3b8;padding:8px 0;text-align:center">数据来源: akshare / 东方财富 / yfinance | 仅供参考，不构成投资建议</div>'
+    source_note = '<div style="font-size:11px;color:#94a3b8;padding:8px 0;text-align:center">数据来源: akshare / 新浪财经 / 腾讯行情 / 东方财富 | 仅供参考，不构成投资建议</div>'
+
+    # 今日变化点 (HTML摘要块下方)
+    change_pts_html = ''
+    if change_points:
+        items = ''.join(f'<li style="margin:2px 0">{p}</li>' for p in change_points[:10])
+        change_pts_html = f'''
+        <div style="background:#f0fdf4;border-radius:10px;padding:12px 14px;margin-bottom:16px;border-left:4px solid #16a34a">
+            <div style="font-size:12px;font-weight:600;color:#166534;margin-bottom:6px">今日变化点（较昨日 / 近5日）</div>
+            <ul style="margin:0;padding-left:18px;font-size:12.5px;color:#475569;line-height:1.7">{items}</ul>
+        </div>'''
 
     html = f'''
     <style>
@@ -842,6 +1077,8 @@ def generate_review_report(review_data):
             <div style="background:#fffbeb;border-radius:10px;padding:14px;margin-bottom:16px;border-left:4px solid #f59e0b">
                 <p style="font-size:14px;color:#78350f;margin:0;line-height:1.6">{summary}</p>
             </div>
+
+            {change_pts_html if change_points else ''}
 
             {overview_section}
             {capital_section}
@@ -878,12 +1115,17 @@ def generate_review_pdf(review_data, base_url=None):
 
 
 def generate_review_summary_text(review_data):
-    """生成复盘简要文字摘要"""
+    """生成复盘简要文字摘要 (含今日变化点)"""
     summary = review_data.get('summary', '')
     anomalies = review_data.get('anomalies', [])
     parts = [summary]
     if anomalies:
         parts.append(f'异动提醒{len(anomalies)}条')
+    vs_prev = review_data.get('vs_prev') or {}
+    if vs_prev:
+        cps = _build_change_points(review_data, vs_prev)
+        if cps:
+            parts.append('今日变化点: ' + '；'.join(cps[:6]))
     return ' | '.join(parts)
 
 
