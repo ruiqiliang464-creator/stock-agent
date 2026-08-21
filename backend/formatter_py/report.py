@@ -947,7 +947,7 @@ def generate_review_report(review_data):
 
     # ── 7. 个股排名 (14子字段) ──
     rank_section = ''
-    if stock_rank and stock_rank.get('top_inflow'):
+    if stock_rank and (stock_rank.get('top_inflow') or stock_rank.get('top_gainers') or stock_rank.get('top_losers')):
         def _rank_row(r, with_flow=True):
             pct = r.get('change_pct') or 0
             c = '#dc2626' if pct > 0 else '#16a34a'
@@ -967,6 +967,9 @@ def generate_review_report(review_data):
         head_simple = '<th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">名称</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">行业</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">涨跌幅</th><th style="padding:4px 6px;text-align:left;font-size:11px;color:#666">主力净流入</th>'
 
         inflow_rows = ''.join(_rank_row(r) for r in stock_rank['top_inflow'][:15])
+        if not stock_rank.get('top_inflow'):
+            inflow_rows = ('<tr><td colspan="6" style="padding:8px;font-size:11px;color:#999;text-align:center">'
+                           '主力净流入数据暂缺（资金流源失败，已降级为成交额榜）</td></tr>')
         gain_rows = ''.join(_rank_row(r, False) for r in stock_rank.get('top_gainers', [])[:10])
         loss_rows = ''.join(_rank_row(r, False) for r in stock_rank.get('top_losers', [])[:10])
         sr_vs = vs_prev.get('stock_rank') or {}

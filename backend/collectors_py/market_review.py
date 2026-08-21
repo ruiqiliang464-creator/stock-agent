@@ -160,10 +160,19 @@ def _sina_moneyflow_net(code):
     """新浪个股资金流: MoneyFlow.ssl_qsfx_zjlrqs (最近交易日口径, 元)
     返回 {main_net_inflow_yi, main_net_pct, net_5d_yi, net_10d_yi} 或 None
     字段: netamount=主力净流入(元) ratioamount=净占比(小数)
-    5日/10日净额 = 最近5/10个交易日 netamount 之和 (num=11 拉 11 个交易日)"""
+    5日/10日净额 = 最近5/10个交易日 netamount 之和 (num=11 拉 11 个交易日)
+    注意: daima 必须带市场前缀(sh/sz/bj), 纯数字会返回空 [] → 按 code 首位自动补全"""
     url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/MoneyFlow.ssl_qsfx_zjlrqs'
     try:
-        r = requests.get(url, params={'page': 1, 'num': 11, 'sort': 'opendate', 'asc': 0, 'daima': code},
+        dm = str(code).strip().lower()
+        if dm and dm[0].isdigit():  # 纯数字 → 补市场前缀
+            if dm.startswith(('6', '9')):
+                dm = 'sh' + dm
+            elif dm.startswith(('0', '3')):
+                dm = 'sz' + dm
+            elif dm.startswith(('4', '8')):
+                dm = 'bj' + dm
+        r = requests.get(url, params={'page': 1, 'num': 11, 'sort': 'opendate', 'asc': 0, 'daima': dm},
                          headers=SINA_HEADERS, timeout=(4, 10))
         r.encoding = 'gbk'
         txt = r.text.strip()
@@ -2437,7 +2446,7 @@ def fetch_stock_rank():
         if pool:
             mf_map = {}
             with ThreadPoolExecutor(max_workers=8) as executor:
-                futures = {executor.submit(_sina_moneyflow_net, p['code']): p['code'] for p in pool}
+                futures = {executor.submit(_sina_moneyflow_net, p.get('symbol') or p['code']): p['code'] for p in pool}
                 for fut in as_completed(futures):
                     mf = fut.result()
                     if mf:
