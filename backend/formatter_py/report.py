@@ -530,7 +530,12 @@ def _build_change_points(review_data, vs_prev):
 def generate_review_report(review_data):
     """生成市场复盘与异动简报 HTML邮件"""
     today = review_data.get('date', '')
-    date_display = today.replace('-', '年').replace('-', '月') + '日' if '-' in today else today
+    # 2026-08-21 → 2026年08月21日 (replace 会替换全部匹配, 不能链式使用)
+    if '-' in today:
+        _y, _m, _d = today.split('-')[:3]
+        date_display = f'{_y}年{_m}月{_d}日'
+    else:
+        date_display = today
 
     summary = review_data.get('summary', '')
     indices = review_data.get('indices', [])
