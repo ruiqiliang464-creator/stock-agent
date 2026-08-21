@@ -288,7 +288,7 @@ function layout(d) {
     <div class="card"><h2>量价异动 <span class="tag">放量突破/缩量回调/底部放量</span></h2><div id="c_pva" class="chart"></div></div>
     <div class="card"><h2>龙虎榜机构净买 <span class="tag">TOP15</span></h2><div id="c_lhb" class="chart"></div></div>
     <div class="card" style="grid-column:1/-1"><h2>个股排名</h2><div id="c_rank"></div></div>
-    <div class="card" style="grid-column:1/-1"><h2>个股走势 <span class="tag">主力净流入TOP20 · 近30日收盘</span></h2><div id="c_stock"></div></div>`;
+    <div class="card" style="grid-column:1/-1"><h2>个股走势 <span class="tag">${(d.stock_rank&&d.stock_rank.top_inflow&&d.stock_rank.top_inflow.length)?'主力净流入TOP20':'市场活跃个股(兜底蓝筹池)'} · 近30日收盘</span></h2><div id="c_stock"></div></div>`;
   buildIndexChart(d); buildMarginChart(d); buildEtfChart(d); buildSectorChart(d);
   buildTrackChart(d); buildSentimentKpi(d); buildPvaChart(d); buildLhbChart(d); buildRank(d); buildStockChart(d);
   window.addEventListener('resize', ()=>charts.forEach(c=>c.resize()));

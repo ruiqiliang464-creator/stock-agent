@@ -428,6 +428,9 @@ def generate_review_report(review_data):
     # ── Batch C 新增字段提取 ──
     market_events = review_data.get('market_events', {})
     stock_technicals = review_data.get('stock_technicals', [])
+    # 技术指标数据来源: 有主力净流入排名=主力TOP, 否则=兜底蓝筹池
+    tech_from_rank = bool(stock_rank and stock_rank.get('top_inflow'))
+    tech_subtitle = '主力净流入 TOP20' if tech_from_rank else '市场活跃个股（兜底蓝筹池）'
 
     # ── 1. 市场概况 ──
     index_cards = ''
@@ -801,15 +804,15 @@ def generate_review_report(review_data):
 </div>'''
         technical_section = f'''
     <div style="background:#f5f3ff;border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid #ddd6fe;page-break-inside:avoid">
-        <h3 style="font-size:14px;font-weight:600;margin:0 0 10px 0;color:#6d28d9">十、个股走势 / MACD / 筹码（主力净流入 TOP20）</h3>
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 10px 0;color:#6d28d9">十、个股走势 / MACD / 筹码（{tech_subtitle}）</h3>
         <div>{cards}</div>
         <div style="font-size:9.5px;color:#94a3b8;margin-top:6px">折线=近30日收盘价(前复权)；红虚线=20日高，绿虚线=20日低，红点=最新价；MACD(12,26,9)；K线不足则图/指标为空</div>
     </div>'''
     else:
         technical_section = f'''
     <div style="background:#f5f3ff;border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid #ddd6fe">
-        <h3 style="font-size:14px;font-weight:600;margin:0 0 10px 0;color:#6d28d9">十、个股走势 / MACD / 筹码（主力净流入 TOP20）</h3>
-        <p style="color:#999;font-size:13px;padding:8px 0">暂无数据（上游个股排名缺失，走势折线图暂无法生成）</p>
+        <h3 style="font-size:14px;font-weight:600;margin:0 0 10px 0;color:#6d28d9">十、个股走势 / MACD / 筹码（{tech_subtitle}）</h3>
+        <p style="color:#999;font-size:13px;padding:8px 0">暂无数据（K线采集失败，走势折线图暂无法生成）</p>
     </div>'''
 
     focus_section = f'''

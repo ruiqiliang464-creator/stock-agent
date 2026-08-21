@@ -1549,21 +1549,30 @@ def generate_tomorrow_focus(signals, anomalies, sector_flow, northbound):
 # ─────────────────────────────────────────────────────
 
 def _em_clist(fields, fs, pz=50, fid='f3', po='1', kw=None):
-    """东财 push2 clist 通用查询, 返回 list(dict)"""
+    """东财 push2 clist 通用查询, 返回 list(dict). 带1次重试(应对push2间歇断)"""
     url = 'https://push2.eastmoney.com/api/qt/clist/get'
     params = {'fid': fid, 'po': po, 'pz': str(pz), 'pn': '1', 'fs': fs, 'fields': fields}
     if kw:
         params['kw'] = kw
-    try:
-        r = requests.get(url, params=params, headers=EM_HEADERS, timeout=(4, 10))
-        d = r.json().get('data') or {}
-        diff = d.get('diff', [])
-        if isinstance(diff, dict):
-            diff = list(diff.values())
-        return diff
-    except Exception as e:
-        print(f'  [MarketReview] _em_clist 失败(fs={fs}): {e}')
-        return []
+    for attempt in range(2):  # 首次 + 1次重试
+        try:
+            r = requests.get(url, params=params, headers=EM_HEADERS, timeout=(4, 10))
+            d = r.json().get('data') or {}
+            diff = d.get('diff', [])
+            if isinstance(diff, dict):
+                diff = list(diff.values())
+            if diff:  # 有数据直接返回
+                return diff
+            # 空diff: 首次空则重试一次(push2偶发返回空), 仍空则返回[]
+        except Exception as e:
+            if attempt == 0:
+                print(f'  [MarketReview] _em_clist 首次失败(fs={fs}), 重试中: {e}')
+            else:
+                print(f'  [MarketReview] _em_clist 重试仍失败(fs={fs}): {e}')
+                return []
+        if attempt == 0:
+            time.sleep(0.8)
+    return []
 
 
 # ═══════════════════════════════════════════════════
@@ -2424,6 +2433,21 @@ def _compute_macd(closes):
     return round(dif_v, 3), round(dea_v, 3), round(bar_v, 3), state
 
 
+# 蓝筹股终极兜底池: 所有动态采集(东财clist/akshare)都失败时, 用这批高流动性蓝筹画走势图
+# 跨行业、成交活跃、K线数据稳定可得, 代表性强
+_BLUECHIP_POOL = [
+    {'code': '600519', 'name': '贵州茅台'}, {'code': '300750', 'name': '宁德时代'},
+    {'code': '601318', 'name': '中国平安'}, {'code': '600036', 'name': '招商银行'},
+    {'code': '000858', 'name': '五粮液'}, {'code': '002594', 'name': '比亚迪'},
+    {'code': '601012', 'name': '隆基绿能'}, {'code': '300059', 'name': '东方财富'},
+    {'code': '600030', 'name': '中信证券'}, {'code': '600276', 'name': '恒瑞医药'},
+    {'code': '601899', 'name': '紫金矿业'}, {'code': '600900', 'name': '长江电力'},
+    {'code': '000725', 'name': '京东方A'}, {'code': '002415', 'name': '海康威视'},
+    {'code': '000333', 'name': '美的集团'}, {'code': '600887', 'name': '伊利股份'},
+    {'code': '002230', 'name': '科大讯飞'},
+]
+
+
 def _fallback_active_pool():
     """兜底股票池: 主力资金流采集失败时, 用当日成交额TOP20作为技术指标标的(东财clist主, akshare兜底)"""
     print('[MarketReview] 个股排名为空, 使用成交额TOP20兜底股票池...')
@@ -2464,38 +2488,54 @@ def fetch_stock_technicals(top_inflow):
     codes = [(r.get('code'), r.get('name')) for r in top_inflow[:20] if r.get('code')]
     out = []
     hist_func = getattr(ak, 'stock_zh_a_hist', None)
+    sina_func = getattr(ak, 'stock_zh_a_daily', None)  # 新浪K线次源(东财hist失败时兜底)
     cyq_func = getattr(ak, 'stock_cyq_em', None)
     for i, (code, name) in enumerate(codes):
         item = {'code': code, 'name': name or ''}
         # ── K线 + MACD + 高低点 ──
+        df = None
+        # 主源: 东财 stock_zh_a_hist
         try:
             if hist_func:
                 df = call_with_timeout(hist_func, timeout=8, symbol=code, period='daily', adjust='qfq')
+        except Exception as e:
+            print(f'  [MarketReview] 东财K线 {code} 失败: {e}')
+        # 次源: 新浪 stock_zh_a_daily (东财空/失败时兜底)
+        if (df is None or len(df) == 0) and sina_func:
+            try:
+                # 新浪需带交易所前缀: sh/sz + 6位代码
+                prefix = 'sh' if code.startswith('6') else ('sz' if code.startswith(('0','3')) else 'bj')
+                df = call_with_timeout(sina_func, timeout=8, symbol=f'{prefix}{code}', adjust='qfq')
                 if df is not None and len(df) > 0:
-                    close = df['收盘'] if '收盘' in df.columns else df.iloc[:, 0]
-                    closes = [float(x) for x in close.tolist()]
-                    last = closes[-1]
-                    hi20 = max(closes[-20:])
-                    lo20 = min(closes[-20:])
-                    item['close'] = round(last, 2)
-                    item['high20'] = round(hi20, 2)
-                    item['low20'] = round(lo20, 2)
-                    item['drawdown_from_high_pct'] = round((last - hi20) / hi20 * 100, 2) if hi20 else None
-                    dif, dea, bar, state = _compute_macd(closes)
-                    item['macd_dif'] = dif
-                    item['macd_dea'] = dea
-                    item['macd_bar'] = bar
-                    item['macd_state'] = state
-                    # 保留近30日收盘价序列 + 日期, 供 PDF/看板画走势折线图
-                    try:
-                        item['close_series'] = [round(float(x), 2) for x in closes[-30:]]
-                        if '日期' in df.columns:
-                            dts = df['日期'].astype(str).tolist()[-30:]
-                            item['date_series'] = [d[5:] if len(d) >= 10 else d for d in dts]
-                        else:
-                            item['date_series'] = list(range(1, len(item['close_series']) + 1))
-                    except Exception:
-                        pass
+                    print(f'  [MarketReview] 新浪K线兜底成功 {code}')
+            except Exception as e:
+                print(f'  [MarketReview] 新浪K线 {code} 失败: {e}')
+        try:
+            if df is not None and len(df) > 0:
+                close = df['收盘'] if '收盘' in df.columns else df.iloc[:, 0]
+                closes = [float(x) for x in close.tolist()]
+                last = closes[-1]
+                hi20 = max(closes[-20:])
+                lo20 = min(closes[-20:])
+                item['close'] = round(last, 2)
+                item['high20'] = round(hi20, 2)
+                item['low20'] = round(lo20, 2)
+                item['drawdown_from_high_pct'] = round((last - hi20) / hi20 * 100, 2) if hi20 else None
+                dif, dea, bar, state = _compute_macd(closes)
+                item['macd_dif'] = dif
+                item['macd_dea'] = dea
+                item['macd_bar'] = bar
+                item['macd_state'] = state
+                # 保留近30日收盘价序列 + 日期, 供 PDF/看板画走势折线图
+                try:
+                    item['close_series'] = [round(float(x), 2) for x in closes[-30:]]
+                    if '日期' in df.columns:
+                        dts = df['日期'].astype(str).tolist()[-30:]
+                        item['date_series'] = [d[5:] if len(d) >= 10 else d for d in dts]
+                    else:
+                        item['date_series'] = list(range(1, len(item['close_series']) + 1))
+                except Exception:
+                    pass
         except Exception as e:
             print(f'  [MarketReview] K线/MACD {code} 失败: {e}')
         # ── 筹码分布 ──
@@ -2551,10 +2591,13 @@ def run():
     lhb_capital = fetch_lhb_capital()
     stock_rank = fetch_stock_rank()
     market_events = fetch_market_events()
-    # 技术指标股票池: 优先主力净流入TOP, 个股排名失败时用成交额TOP20兜底, 保证走势图始终有数据
+    # 技术指标股票池: 优先主力净流入TOP → 成交额TOP20兜底 → 蓝筹股终极兜底, 保证走势图始终有数据
     tech_pool = (stock_rank or {}).get('top_inflow')
     if not tech_pool:
         tech_pool = _fallback_active_pool()
+    if not tech_pool:
+        print('[MarketReview] 动态股票池全部失败, 启用蓝筹股终极兜底池(17只)')
+        tech_pool = _BLUECHIP_POOL
     stock_technicals = fetch_stock_technicals(tech_pool)
 
     # 2. 信号计算
