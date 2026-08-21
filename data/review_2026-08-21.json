@@ -1,6 +1,6 @@
 {
   "date": "2026-08-21",
-  "summary": "放量上涨，北向资金成交总额约29亿（净买额因港交所披露调整暂停披露），市场情绪中性",
+  "summary": "放量上涨，北向资金成交总额约27亿（净买额因港交所披露调整暂停披露），市场情绪中性",
   "indices": [
     {
       "name": "上证指数",
@@ -119,8 +119,8 @@
       "name": "英国富时",
       "symbol": "^FTSE",
       "region": "英国",
-      "close": 10773.33,
-      "change_pct": 0.23,
+      "close": 10736.69,
+      "change_pct": -0.11,
       "source": "yfinance"
     }
   ],
@@ -137,8 +137,8 @@
   "northbound": {
     "net_buy": 0,
     "net_buy_yi": 0.0,
-    "amount_yi": 28.62,
-    "date": "2026-08-20",
+    "amount_yi": 26.81,
+    "date": "2026-08-21",
     "is_extreme": false,
     "extreme_note": "",
     "metric": "deal_amount",
@@ -153,7 +153,6 @@
     "source": "eastmoney",
     "financing_buy": 188829242476.0,
     "financing_buy_yi": 1888.29,
-    "financing_buy_ratio_pct": 33.36,
     "total_balance_yi": 26663.56,
     "finance_balance_yi": 26395.22,
     "securities_balance_yi": 268.35,
@@ -623,6 +622,13 @@
   "lhb_capital": {
     "lhb_institution": [
       {
+        "code": "600547",
+        "name": "山东黄金",
+        "inst_net_buy_yi": 8.56,
+        "inst_buy_yi": 33.72,
+        "inst_sell_yi": 25.16
+      },
+      {
         "code": "300142",
         "name": "沃森生物",
         "inst_net_buy_yi": 5.06,
@@ -644,6 +650,48 @@
         "inst_sell_yi": 2.35
       },
       {
+        "code": "603330",
+        "name": "天洋新材",
+        "inst_net_buy_yi": 2.08,
+        "inst_buy_yi": 2.66,
+        "inst_sell_yi": 0.58
+      },
+      {
+        "code": "603330",
+        "name": "天洋新材",
+        "inst_net_buy_yi": 2.08,
+        "inst_buy_yi": 2.66,
+        "inst_sell_yi": 0.58
+      },
+      {
+        "code": "603330",
+        "name": "天洋新材",
+        "inst_net_buy_yi": 2.08,
+        "inst_buy_yi": 2.66,
+        "inst_sell_yi": 0.58
+      },
+      {
+        "code": "688185",
+        "name": "康希诺",
+        "inst_net_buy_yi": 2.02,
+        "inst_buy_yi": 4.15,
+        "inst_sell_yi": 2.14
+      },
+      {
+        "code": "688185",
+        "name": "康希诺",
+        "inst_net_buy_yi": 1.98,
+        "inst_buy_yi": 4.23,
+        "inst_sell_yi": 2.25
+      },
+      {
+        "code": "600110",
+        "name": "诺德股份",
+        "inst_net_buy_yi": 1.88,
+        "inst_buy_yi": 4.58,
+        "inst_sell_yi": 2.7
+      },
+      {
         "code": "300016",
         "name": "北陆药业",
         "inst_net_buy_yi": 1.65,
@@ -651,81 +699,32 @@
         "inst_sell_yi": 1.01
       },
       {
-        "code": "002491",
-        "name": "通鼎互联",
-        "inst_net_buy_yi": 1.07,
-        "inst_buy_yi": 8.71,
-        "inst_sell_yi": 7.64
+        "code": "688114",
+        "name": "华大智造",
+        "inst_net_buy_yi": 1.6,
+        "inst_buy_yi": 6.09,
+        "inst_sell_yi": 4.49
       },
       {
-        "code": "002491",
-        "name": "通鼎互联",
-        "inst_net_buy_yi": 1.07,
-        "inst_buy_yi": 8.71,
-        "inst_sell_yi": 7.64
+        "code": "600664",
+        "name": "哈药股份",
+        "inst_net_buy_yi": 1.49,
+        "inst_buy_yi": 3.49,
+        "inst_sell_yi": 2.0
       },
       {
-        "code": "002038",
-        "name": "双鹭药业",
-        "inst_net_buy_yi": 1.04,
-        "inst_buy_yi": 2.16,
-        "inst_sell_yi": 1.12
+        "code": "688828",
+        "name": "国仪公司",
+        "inst_net_buy_yi": 1.29,
+        "inst_buy_yi": 2.61,
+        "inst_sell_yi": 1.32
       },
       {
-        "code": "000603",
-        "name": "盛达资源",
-        "inst_net_buy_yi": 0.89,
-        "inst_buy_yi": 6.1,
-        "inst_sell_yi": 5.21
-      },
-      {
-        "code": "300214",
-        "name": "日科化学",
-        "inst_net_buy_yi": 0.75,
-        "inst_buy_yi": 1.48,
-        "inst_sell_yi": 0.73
-      },
-      {
-        "code": "000931",
-        "name": "中关村",
-        "inst_net_buy_yi": 0.68,
-        "inst_buy_yi": 1.26,
-        "inst_sell_yi": 0.59
-      },
-      {
-        "code": "301520",
-        "name": "万邦医药",
-        "inst_net_buy_yi": 0.6,
-        "inst_buy_yi": 0.94,
-        "inst_sell_yi": 0.34
-      },
-      {
-        "code": "002365",
-        "name": "永安药业",
-        "inst_net_buy_yi": 0.35,
-        "inst_buy_yi": 2.1,
-        "inst_sell_yi": 1.75
-      },
-      {
-        "code": "300839",
-        "name": "博汇股份",
-        "inst_net_buy_yi": 0.3,
-        "inst_buy_yi": 0.64,
-        "inst_sell_yi": 0.34
-      },
-      {
-        "code": "300615",
-        "name": "欣天科技",
-        "inst_net_buy_yi": 0.3,
-        "inst_buy_yi": 0.99,
-        "inst_sell_yi": 0.69
-      },
-      {
-        "code": "301591",
-        "name": "肯特股份",
-        "inst_net_buy_yi": 0.28,
-        "inst_buy_yi": 0.76,
-        "inst_sell_yi": 0.48
+        "code": "600227",
+        "name": "赤天化",
+        "inst_net_buy_yi": 1.26,
+        "inst_buy_yi": 1.95,
+        "inst_sell_yi": 0.7
       }
     ],
     "source": "eastmoney",
@@ -2096,6 +2095,18 @@
     "earnings": [],
     "suspension": [
       {
+        "code": "200016",
+        "name": "*ST康佳B",
+        "type": "2026-08-24",
+        "date": "2026-08-24"
+      },
+      {
+        "code": "000016",
+        "name": "*ST康佳A",
+        "type": "2026-08-24",
+        "date": "2026-08-24"
+      },
+      {
         "code": "002155",
         "name": "湖南黄金",
         "type": "2026-08-20",
@@ -2279,16 +2290,15 @@
     {
       "code": "300308",
       "name": "中际旭创",
-      "close": 904.2,
+      "close": 943.0,
       "high20": 1076.94,
       "low20": 864.0,
-      "drawdown_from_high_pct": -16.04,
-      "macd_dif": -38.585,
-      "macd_dea": -45.486,
-      "macd_bar": 13.803,
+      "drawdown_from_high_pct": -12.44,
+      "macd_dif": -35.385,
+      "macd_dea": -43.466,
+      "macd_bar": 16.162,
       "macd_state": "多头",
       "close_series": [
-        1093.98,
         1108.0,
         1184.05,
         1169.31,
@@ -2317,10 +2327,10 @@
         1001.03,
         988.1,
         895.6,
-        904.2
+        904.2,
+        943.0
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -2349,22 +2359,22 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
       "code": "300502",
       "name": "新易盛",
-      "close": 414.02,
+      "close": 442.0,
       "high20": 491.0,
       "low20": 371.1,
-      "drawdown_from_high_pct": -15.68,
-      "macd_dif": -16.727,
-      "macd_dea": -20.378,
-      "macd_bar": 7.302,
+      "drawdown_from_high_pct": -9.98,
+      "macd_dif": -14.688,
+      "macd_dea": -19.24,
+      "macd_bar": 9.104,
       "macd_state": "多头",
       "close_series": [
-        523.05,
         512.5,
         568.82,
         556.0,
@@ -2393,10 +2403,10 @@
         466.68,
         452.21,
         411.5,
-        414.02
+        414.02,
+        442.0
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -2425,22 +2435,22 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
       "code": "002716",
       "name": "湖南白银",
-      "close": 9.47,
-      "high20": 9.78,
-      "low20": 7.21,
-      "drawdown_from_high_pct": -3.17,
-      "macd_dif": 0.357,
-      "macd_dea": 0.275,
-      "macd_bar": 0.165,
+      "close": 10.42,
+      "high20": 10.42,
+      "low20": 7.55,
+      "drawdown_from_high_pct": 0.0,
+      "macd_dif": 0.437,
+      "macd_dea": 0.307,
+      "macd_bar": 0.26,
       "macd_state": "多头",
       "close_series": [
-        7.93,
         7.36,
         7.65,
         7.45,
@@ -2469,10 +2479,10 @@
         9.49,
         9.43,
         9.1,
-        9.47
+        9.47,
+        10.42
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -2501,7 +2511,8 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
@@ -2583,16 +2594,15 @@
     {
       "code": "300750",
       "name": "宁德时代",
-      "close": 385.0,
+      "close": 391.15,
       "high20": 403.74,
-      "low20": 381.63,
-      "drawdown_from_high_pct": -4.64,
-      "macd_dif": 1.93,
-      "macd_dea": 2.612,
-      "macd_bar": -1.362,
+      "low20": 385.0,
+      "drawdown_from_high_pct": -3.12,
+      "macd_dif": 1.739,
+      "macd_dea": 2.437,
+      "macd_bar": -1.395,
       "macd_state": "空头",
       "close_series": [
-        347.5,
         357.76,
         362.69,
         371.65,
@@ -2621,10 +2631,10 @@
         399.98,
         396.26,
         389.0,
-        385.0
+        385.0,
+        391.15
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -2653,22 +2663,22 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
       "code": "002491",
       "name": "通鼎互联",
-      "close": 19.27,
-      "high20": 20.3,
+      "close": 21.2,
+      "high20": 21.2,
       "low20": 13.8,
-      "drawdown_from_high_pct": -5.07,
-      "macd_dif": -0.307,
-      "macd_dea": -0.943,
-      "macd_bar": 1.272,
+      "drawdown_from_high_pct": 0.0,
+      "macd_dif": -0.052,
+      "macd_dea": -0.765,
+      "macd_bar": 1.427,
       "macd_state": "多头",
       "close_series": [
-        22.08,
         19.87,
         20.86,
         20.37,
@@ -2697,10 +2707,10 @@
         20.3,
         19.47,
         17.52,
-        19.27
+        19.27,
+        21.2
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -2729,22 +2739,22 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
       "code": "300285",
       "name": "国瓷材料",
-      "close": 62.92,
+      "close": 67.86,
       "high20": 76.06,
       "low20": 56.38,
-      "drawdown_from_high_pct": -17.28,
-      "macd_dif": 0.152,
-      "macd_dea": 0.09,
-      "macd_bar": 0.123,
+      "drawdown_from_high_pct": -10.78,
+      "macd_dif": 0.095,
+      "macd_dea": 0.091,
+      "macd_bar": 0.007,
       "macd_state": "多头",
       "close_series": [
-        74.05,
         63.97,
         69.96,
         67.84,
@@ -2773,10 +2783,10 @@
         73.52,
         74.26,
         64.12,
-        62.92
+        62.92,
+        67.86
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -2805,7 +2815,8 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
@@ -2887,16 +2898,15 @@
     {
       "code": "300142",
       "name": "沃森生物",
-      "close": 15.12,
-      "high20": 15.12,
-      "low20": 11.94,
+      "close": 16.1,
+      "high20": 16.1,
+      "low20": 12.0,
       "drawdown_from_high_pct": 0.0,
-      "macd_dif": 0.254,
-      "macd_dea": 0.103,
-      "macd_bar": 0.303,
+      "macd_dif": 0.46,
+      "macd_dea": 0.174,
+      "macd_bar": 0.572,
       "macd_state": "多头",
       "close_series": [
-        13.14,
         13.2,
         13.46,
         13.79,
@@ -2925,10 +2935,10 @@
         13.3,
         13.08,
         12.6,
-        15.12
+        15.12,
+        16.1
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -2957,22 +2967,22 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
       "code": "002475",
       "name": "立讯精密",
-      "close": 53.34,
+      "close": 54.65,
       "high20": 62.89,
       "low20": 53.34,
-      "drawdown_from_high_pct": -15.19,
-      "macd_dif": -1.759,
-      "macd_dea": -1.786,
-      "macd_bar": 0.055,
+      "drawdown_from_high_pct": -13.1,
+      "macd_dif": -1.753,
+      "macd_dea": -1.78,
+      "macd_bar": 0.054,
       "macd_state": "多头",
       "close_series": [
-        61.99,
         58.84,
         61.52,
         60.33,
@@ -3001,10 +3011,10 @@
         58.84,
         57.74,
         53.5,
-        53.34
+        53.34,
+        54.65
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -3033,7 +3043,8 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
@@ -3343,16 +3354,15 @@
     {
       "code": "002851",
       "name": "麦格米特",
-      "close": 118.28,
+      "close": 128.06,
       "high20": 135.5,
       "low20": 96.77,
-      "drawdown_from_high_pct": -12.71,
-      "macd_dif": -3.091,
-      "macd_dea": -4.745,
-      "macd_bar": 3.308,
+      "drawdown_from_high_pct": -5.49,
+      "macd_dif": -2.537,
+      "macd_dea": -4.304,
+      "macd_bar": 3.532,
       "macd_state": "多头",
       "close_series": [
-        161.75,
         158.65,
         172.12,
         168.59,
@@ -3381,10 +3391,10 @@
         135.5,
         131.7,
         118.53,
-        118.28
+        118.28,
+        128.06
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -3413,7 +3423,8 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     },
     {
@@ -3703,16 +3714,15 @@
     {
       "code": "002436",
       "name": "兴森科技",
-      "close": 33.81,
+      "close": 35.35,
       "high20": 38.3,
       "low20": 26.3,
-      "drawdown_from_high_pct": -11.72,
-      "macd_dif": -0.431,
-      "macd_dea": -1.139,
-      "macd_bar": 1.416,
+      "drawdown_from_high_pct": -7.7,
+      "macd_dif": -0.319,
+      "macd_dea": -0.975,
+      "macd_bar": 1.312,
       "macd_state": "多头",
       "close_series": [
-        41.13,
         38.5,
         40.85,
         38.71,
@@ -3741,10 +3751,10 @@
         38.3,
         37.56,
         33.8,
-        33.81
+        33.81,
+        35.35
       ],
       "date_series": [
-        "07-10",
         "07-13",
         "07-14",
         "07-15",
@@ -3773,7 +3783,8 @@
         "08-17",
         "08-18",
         "08-19",
-        "08-20"
+        "08-20",
+        "08-21"
       ]
     }
   ],
@@ -4024,8 +4035,8 @@
     },
     "northbound": {
       "prev": 28.62,
-      "cur": 28.62,
-      "diff": 0.0,
+      "cur": 26.81,
+      "diff": -1.81,
       "metric": "deal_amount"
     },
     "northbound_series": {
@@ -4035,7 +4046,7 @@
         29.97,
         32.85,
         28.62,
-        28.62
+        26.81
       ],
       "dates": [
         "08-16",
@@ -4130,11 +4141,11 @@
         "国华退"
       ],
       "cur_top_names": [
+        "山东黄金",
         "沃森生物",
         "湖南白银",
         "星网锐捷",
-        "北陆药业",
-        "通鼎互联"
+        "天洋新材"
       ]
     },
     "track": {
