@@ -1,6 +1,6 @@
 {
   "date": "2026-08-21",
-  "updatedAt": "2026-08-21T08:01:30.055621",
+  "updatedAt": "2026-08-21T08:12:23.229265",
   "summary": "放量上涨，北向资金成交总额约29亿（净买额因港交所披露调整暂停披露），市场情绪中性",
   "indices": [
     {
@@ -72,8 +72,8 @@
       "name": "恒生指数",
       "symbol": "^HSI",
       "region": "香港",
-      "close": 25976.05,
-      "change_pct": 1.08,
+      "close": 25981.53,
+      "change_pct": 1.1,
       "source": "yfinance"
     },
     {
@@ -120,8 +120,8 @@
       "name": "英国富时",
       "symbol": "^FTSE",
       "region": "英国",
-      "close": 10783.34,
-      "change_pct": 0.33,
+      "close": 10780.31,
+      "change_pct": 0.3,
       "source": "yfinance"
     }
   ],
