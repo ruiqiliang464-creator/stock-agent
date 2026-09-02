@@ -1,7 +1,11 @@
 name: Daily Market Pipeline
 
 on:
-  # 主要靠 Vercel Cron Jobs 触发 workflow_dispatch (保留单一调度源, 避免与 Vercel 重复触发早上推送)
+  # GitHub 原生定时调度 (不依赖任何 PAT, GITHUB_TOKEN 自动可用, 永不因 token 过期断链)
+  schedule:
+    - cron: '0 22 * * *'   # UTC 22:00 = 北京 06:00 常规推送 (morning)
+    - cron: '0 10 * * *'   # UTC 10:00 = 北京 18:00 市场复盘 (review, 收盘后)
+  # 手动 / Vercel Cron 外部触发
   workflow_dispatch:
     inputs:
       mode:
@@ -39,9 +43,16 @@ jobs:
       - name: Determine pipeline mode
         id: mode
         run: |
-          # GitHub schedule 触发时 inputs 为空，默认 morning
-          # Vercel Cron 触发时通过 inputs.mode 传入
-          MODE="${{ github.event.inputs.mode || 'morning' }}"
+          # 手动/Vercel dispatch: inputs.mode 传入
+          # GitHub schedule 触发: inputs 为空, 按 cron 表达式区分 (10:00 UTC = review, 其余 = morning)
+          MODE="${{ github.event.inputs.mode || '' }}"
+          if [ -z "$MODE" ]; then
+            if [ "${{ github.event.schedule }}" = "0 10 * * *" ]; then
+              MODE="review"
+            else
+              MODE="morning"
+            fi
+          fi
           echo "PIPELINE_MODE=${MODE}" >> $GITHUB_ENV
           echo "Mode: ${MODE}"
 
